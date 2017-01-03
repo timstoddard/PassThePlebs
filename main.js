@@ -11,42 +11,15 @@ function getPolyratingData(nameElem) {
   var lastName = removeAllSingleLetters(names[0].trim());
   var firstName = onlyFirstName(removeAllSingleLetters(names[1].trim()));
   var name = firstName + ' ' + lastName;
-  chrome.runtime.sendMessage(
-    {
-      method: 'GET',
-      action: 'xhttp',
-      url: 'http://polyratings.com/search.php?type=ProfName&terms=' + name.replace(/ /g, '+') + '&format=long&sort=name',
-      data: '',
-    },
-    function (response) {
-      if (response != 'error') {
-        try {
-          var polyratingPage = $($.parseHTML(response));
-          var ratingElem = polyratingPage.find('.hidden-xs span .text-primary');
-          var rating = ratingElem[0].innerText;
-          var evals = ratingElem.next()[0].innerText.replace('uation', '');
-          var profId = response.match(/profid=(\d+)/)[1];
-          var href = 'http://polyratings.com/eval.php?profid=' + profId;
-          var numericalRating = parseFloat(rating, 10);
-          nameElem.css('background', calculateBgRGBA(numericalRating));
-          nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
-
-        } catch (e) {
-          getPolyratingData2ndAttempt(nameElem, lastName);
-        }
-      } else {
-        getPolyratingData2ndAttempt(nameElem, lastName);
-      }
-    }
-  );
+  getDataAndUpdatePage(nameElem, name, lastName, true);
 }
 
-function getPolyratingData2ndAttempt(nameElem, lastName) {
+function getDataAndUpdatePage(nameElem, name, lastName, firstAttempt) {
   chrome.runtime.sendMessage(
     {
       method: 'GET',
       action: 'xhttp',
-      url: 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name',
+      url: 'http://polyratings.com/search.php?type=ProfName&terms=' + (firstAttempt ? name.replace(/ /g, '+') : lastName) + '&format=long&sort=name',
       data: '',
     },
     function (response) {
@@ -61,9 +34,11 @@ function getPolyratingData2ndAttempt(nameElem, lastName) {
           var numericalRating = parseFloat(rating, 10);
           nameElem.css('background', calculateBgRGBA(numericalRating));
           nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
-        } catch (e) {
-          addLinkToSearchPage(nameElem, lastName);
-        }
+          return;
+        } catch (e) { }
+      }
+      if (firstAttempt) {
+        getDataAndUpdatePage(nameElem, name, lastName, false);
       } else {
         addLinkToSearchPage(nameElem, lastName);
       }
