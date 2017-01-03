@@ -20,14 +20,16 @@ function getPolyratingData(nameElem) {
     },
     function (response) {
       if (response != 'error') {
-        var polyratingPage = $($.parseHTML(response));
         try {
-          var rating = polyratingPage.find('.hidden-xs span .text-primary')[0].innerText;
+          var polyratingPage = $($.parseHTML(response));
+          var ratingElem = polyratingPage.find('.hidden-xs span .text-primary');
+          var rating = ratingElem[0].innerText;
+          var evals = ratingElem.next()[0].innerText.replace('uation', '');
           var profId = response.match(/profid=(\d+)/)[1];
           var href = 'http://polyratings.com/eval.php?profid=' + profId;
           var numericalRating = parseFloat(rating, 10);
           nameElem.css('background', calculateBgRGBA(numericalRating));
-          nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span></a>');
+          nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
 
         } catch (e) {
           getPolyratingData2ndAttempt(nameElem, lastName);
@@ -49,14 +51,16 @@ function getPolyratingData2ndAttempt(nameElem, lastName) {
     },
     function (response) {
       if (response != 'error') {
-        var polyratingPage = $($.parseHTML(response));
         try {
-          var rating = polyratingPage.find('.hidden-xs span .text-primary')[0].innerText;
+          var polyratingPage = $($.parseHTML(response));
+          var ratingElem = polyratingPage.find('.hidden-xs span .text-primary');
+          var rating = ratingElem[0].innerText;
           var profId = response.match(/profid=(\d+)/)[1];
+          var evals = ratingElem.next()[0].innerText.replace('uation', '');
           var href = 'http://polyratings.com/eval.php?profid=' + profId;
           var numericalRating = parseFloat(rating, 10);
           nameElem.css('background', calculateBgRGBA(numericalRating));
-          nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span></a>');
+          nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
         } catch (e) {
           addLinkToSearchPage(nameElem, lastName);
         }
