@@ -4,6 +4,9 @@ $('.select-course table tbody tr .sectionNumber').each(function () {
 });
 
 function getPolyratingData(nameElem) {
+  if (nameElem[0].innerText === 'STAFF') {
+    return;
+  }
   var names = nameElem[0].innerText.split(',');
   var lastName = removeAllSingleLetters(names[0].trim());
   var firstName = onlyFirstName(removeAllSingleLetters(names[1].trim()));
