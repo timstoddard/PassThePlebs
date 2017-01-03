@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "Pass the Plebs",
+  "description": "Adds Polyratings to PASS pages",
+  "version": "0.1",
+  "background": {
+    "persistent": true,
+    "scripts": [
+      "bg.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://pass.calpoly.edu/main.html"
+      ],
+      "js": [
+        "jquery-3.1.1.min.js",
+        "main.js"
+      ],
+      "css": [
+        "main.css"
+      ]
+    }
+  ],
+  "permissions": [
+    "http://polyratings.com/*",
+    "activeTab"
+  ]
+}

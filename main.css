@@ -1,0 +1,9 @@
+.rating {
+  font-weight: bold;
+}
+
+.ratingLink {
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+}
