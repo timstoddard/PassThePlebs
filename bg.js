@@ -8,8 +8,7 @@ chrome.runtime.onMessage.addListener(
         callback(xhttp.responseText);
       };
       xhttp.onerror = function() {
-        // invoke the callback to clean up the communication port
-        callback('error with: ' + request.url);
+        callback('error');
       };
       xhttp.open(method, request.url, true);
       if (method == 'POST') {

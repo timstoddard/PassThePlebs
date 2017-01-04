@@ -1,4 +1,4 @@
-(function() {
+(function () {
   var nameGroups = {};
 
   $('.select-course table tbody tr .sectionNumber').each(function () {
@@ -13,6 +13,11 @@
     }
   });
 
+  // TODO: add option to hide cancelled classes
+  // $('.key-cancel').each(function() {
+  //   $(this).hide();
+  // });
+
   for (var rawName in nameGroups) {
     getPolyratingData(nameGroups[rawName]);
   }
@@ -20,18 +25,25 @@
   function getPolyratingData(nameElems) {
     var names = nameElems[0][0].innerText.split(',');
     var lastName = removeAllSingleLetters(names[0].trim());
-    var firstName = onlyFirstName(removeAllSingleLetters(names[1].trim()));
-    var name = firstName + ' ' + lastName;
-    console.log(name);
-    getDataAndUpdatePage(nameElems, name, lastName, true);
+    var firstNames = removeAllSingleLetters(names[1].trim());
+    var firstName = onlyFirstName(firstNames);
+    var name1 = urlFormat(firstNames + ' ' + lastName);
+    var name2 = urlFormat(firstName + ' ' + lastName);
+    var namesList = [lastName, urlFormat(firstNames), name1];
+    if (name2 !== name1) {
+      namesList.push(firstName);
+      namesList.push(name2);
+    }
+    getDataAndUpdatePage(nameElems, namesList);
   }
 
-  function getDataAndUpdatePage(nameElems, name, lastName, firstAttempt) {
+  function getDataAndUpdatePage(nameElems, namesList) {
+    var nextName = namesList.pop();
     chrome.runtime.sendMessage(
       {
         method: 'GET',
         action: 'xhttp',
-        url: 'http://polyratings.com/search.php?type=ProfName&terms=' + (firstAttempt ? name.replace(/ /g, '+') : lastName) + '&format=long&sort=name',
+        url: 'http://polyratings.com/search.php?type=ProfName&terms=' + nextName + '&format=long&sort=name',
         data: '',
       },
       function (response) {
@@ -45,17 +57,17 @@
             var href = 'http://polyratings.com/eval.php?profid=' + profId;
             var numericalRating = parseFloat(rating, 10);
             var bgColor = calculateBgRGBA(numericalRating);
-            nameElems.forEach(function(nameElem) {
+            nameElems.forEach(function (nameElem) {
               nameElem.css('background', bgColor);
               nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
             });
             return;
           } catch (e) { }
         }
-        if (firstAttempt) {
-          getDataAndUpdatePage(nameElems, name, lastName, false);
+        if (namesList.length > 0) {
+          getDataAndUpdatePage(nameElems, namesList);
         } else {
-          addLinkToSearchPage(nameElems, lastName);
+          addLinkToSearchPage(nameElems, nextName);
         }
       }
     );
@@ -77,6 +89,10 @@
     return modified.trim();
   }
 
+  function urlFormat(str) {
+    return str.replace(/ /g, '+');
+  }
+
   function calculateBgRGBA(rating) {
     var r = rating < 3 ? 255 : 255 * (4 - rating) / 4;
     var g = rating < 3 ? 255 * rating / 3 : 255;
@@ -85,8 +101,8 @@
 
   function addLinkToSearchPage(nameElems, lastName) {
     var href = 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name';
-    nameElems.forEach(function(nameElem) {
+    nameElems.forEach(function (nameElem) {
       nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '</a>');
     });
   }
-}());
+} ());
