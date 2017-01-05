@@ -23,21 +23,31 @@
   }
 
   function getPolyratingData(nameElems) {
-    var names = nameElems[0][0].innerText.split(',');
-    var lastName = removeAllSingleLetters(names[0].trim());
-    var firstNames = removeAllSingleLetters(names[1].trim());
-    var firstName = onlyFirstName(firstNames);
-    var name1 = urlFormat(firstNames + ' ' + lastName);
-    var name2 = urlFormat(firstName + ' ' + lastName);
-    var namesList = [lastName, urlFormat(firstNames), name1];
-    if (name2 !== name1) {
-      namesList.push(firstName);
-      namesList.push(name2);
-    }
-    getDataAndUpdatePage(nameElems, namesList);
+    var rawName = nameElems[0][0].innerText;
+    chrome.storage.local.get(rawName, function (data) {
+      if (Object.keys(data).length > 0) {
+        var info = JSON.parse(data[rawName]);
+        if ((Date.now() - info.timeAdded) / (1000 * 60) < 10) {
+          updateInstructorName(rawName, nameElems, info.bgColor, info.href, info.rating, info.evals);
+        }
+      } else {
+        var names = rawName.split(',');
+        var lastName = removeAllSingleLetters(names[0].trim());
+        var firstNames = removeAllSingleLetters(names[1].trim());
+        var firstName = onlyFirstName(firstNames);
+        var name1 = urlFormat(firstNames + ' ' + lastName);
+        var name2 = urlFormat(firstName + ' ' + lastName);
+        var namesList = [lastName, urlFormat(firstNames), name1];
+        if (name2 !== name1) {
+          namesList.push(firstName);
+          namesList.push(name2);
+        }
+        getDataAndUpdatePage(nameElems, rawName, namesList);
+      }
+    });
   }
 
-  function getDataAndUpdatePage(nameElems, namesList) {
+  function getDataAndUpdatePage(nameElems, rawName, namesList) {
     var nextName = namesList.pop();
     chrome.runtime.sendMessage(
       {
@@ -57,20 +67,34 @@
             var href = 'http://polyratings.com/eval.php?profid=' + profId;
             var numericalRating = parseFloat(rating, 10);
             var bgColor = calculateBgRGBA(numericalRating);
-            nameElems.forEach(function (nameElem) {
-              nameElem.css('background', bgColor);
-              nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
-            });
+            updateInstructorName(rawName, nameElems, bgColor, href, rating, evals);
             return;
           } catch (e) { }
         }
         if (namesList.length > 0) {
-          getDataAndUpdatePage(nameElems, namesList);
+          getDataAndUpdatePage(nameElems, rawName, namesList);
         } else {
           addLinkToSearchPage(nameElems, nextName);
         }
       }
     );
+  }
+
+  function updateInstructorName(rawName, nameElems, bgColor, href, rating, evals) {
+    nameElems.forEach(function (nameElem) {
+      nameElem.css('background', bgColor);
+      nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
+    });
+    var info = {
+      bgColor: bgColor,
+      href: href,
+      rating: rating,
+      evals: evals,
+      timeAdded: Date.now()
+    };
+    var data = {};
+    data[rawName] = JSON.stringify(info);
+    chrome.storage.local.set(data);
   }
 
   function onlyFirstName(name) {
