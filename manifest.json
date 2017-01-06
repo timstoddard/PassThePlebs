@@ -23,6 +23,7 @@
       ]
     }
   ],
+  "options_page": "options.html",
   "permissions": [
     "http://polyratings.com/*",
     "activeTab",

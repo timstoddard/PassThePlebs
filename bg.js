@@ -4,10 +4,10 @@ chrome.runtime.onMessage.addListener(
       var xhttp = new XMLHttpRequest();
       var method = request.method ? request.method.toUpperCase() : 'GET';
 
-      xhttp.onload = function() {
+      xhttp.onload = function () {
         callback(xhttp.responseText);
       };
-      xhttp.onerror = function() {
+      xhttp.onerror = function () {
         callback('error');
       };
       xhttp.open(method, request.url, true);

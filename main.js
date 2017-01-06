@@ -1,5 +1,6 @@
 (function () {
   var nameGroups = {};
+  var showBackgroundColors;
 
   $('.select-course table tbody tr .sectionNumber').each(function () {
     var nameElem = $(this).next().next().next();
@@ -13,14 +14,22 @@
     }
   });
 
-  // TODO: add option to hide cancelled classes
-  // $('.key-cancel').each(function() {
-  //   $(this).hide();
-  // });
-
-  for (var rawName in nameGroups) {
-    getPolyratingData(nameGroups[rawName]);
-  }
+  chrome.storage.sync.get([
+    'showBackgroundColors',
+    'showCancelledClasses'
+  ], function (options) {
+    if (options['showCancelledClasses'] === false) {
+      $('tr.key-cancel').each(function () {
+        $(this).hide();
+      });
+    }
+    showBackgroundColors = DNE(options.showBackgroundColors)
+      ? true
+      : options.showBackgroundColors;
+    for (var rawName in nameGroups) {
+      getPolyratingData(nameGroups[rawName]);
+    }
+  });
 
   function getPolyratingData(nameElems) {
     var rawName = nameElems[0][0].innerText;
@@ -29,22 +38,28 @@
         var info = JSON.parse(data[rawName]);
         if ((Date.now() - info.timeAdded) / (1000 * 60) < 10) {
           updateInstructorName(rawName, nameElems, info.bgColor, info.href, info.rating, info.evals);
+        } else {
+          generateNameCombos(nameElems, rawName);
         }
       } else {
-        var names = rawName.split(',');
-        var lastName = removeAllSingleLetters(names[0].trim());
-        var firstNames = removeAllSingleLetters(names[1].trim());
-        var firstName = onlyFirstName(firstNames);
-        var name1 = urlFormat(firstNames + ' ' + lastName);
-        var name2 = urlFormat(firstName + ' ' + lastName);
-        var namesList = [lastName, urlFormat(firstNames), name1];
-        if (name2 !== name1) {
-          namesList.push(firstName);
-          namesList.push(name2);
-        }
-        getDataAndUpdatePage(nameElems, rawName, namesList);
+        generateNameCombos(nameElems, rawName);
       }
     });
+  }
+
+  function generateNameCombos(nameElems, rawName) {
+    var names = rawName.split(',');
+    var lastName = removeAllSingleLetters(names[0].trim());
+    var firstNames = removeAllSingleLetters(names[1].trim());
+    var firstName = onlyFirstName(firstNames);
+    var name1 = urlFormat(firstNames + ' ' + lastName);
+    var name2 = urlFormat(firstName + ' ' + lastName);
+    var namesList = [lastName, urlFormat(firstNames), name1];
+    if (name2 !== name1) {
+      namesList.push(firstName);
+      namesList.push(name2);
+    }
+    getDataAndUpdatePage(nameElems, rawName, namesList);
   }
 
   function getDataAndUpdatePage(nameElems, rawName, namesList) {
@@ -82,7 +97,9 @@
 
   function updateInstructorName(rawName, nameElems, bgColor, href, rating, evals) {
     nameElems.forEach(function (nameElem) {
-      nameElem.css('background', bgColor);
+      if (showBackgroundColors) {
+        nameElem.css('background', bgColor);
+      }
       nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
     });
     var info = {
@@ -95,6 +112,10 @@
     var data = {};
     data[rawName] = JSON.stringify(info);
     chrome.storage.local.set(data);
+  }
+
+  function DNE(value) {
+    return value === undefined || value === null;
   }
 
   function onlyFirstName(name) {
