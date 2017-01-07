@@ -1,23 +1,36 @@
 (function () {
   var showBackgroundColorsElem = document.getElementById('showBackgroundColors');
-  var showCancelledClassesElem = document.getElementById('showCancelledClasses');
+  var hideCancelledClassesElem = document.getElementById('hideCancelledClasses');
+  var hideConflictingClassesElem = document.getElementById('hideConflictingClasses');
+  var restoreDefaultsButton = document.getElementById('restoreDefaults');
   chrome.storage.sync.get([
     'showBackgroundColors',
-    'showCancelledClasses'
+    'hideCancelledClasses',
+    'hideConflictingClasses'
   ], function (options) {
     showBackgroundColorsElem.checked = value(options['showBackgroundColors'], true);
-    showCancelledClassesElem.checked = value(options['showCancelledClasses'], false);
+    hideCancelledClassesElem.checked = value(options['hideCancelledClasses'], false);
+    hideConflictingClassesElem.checked = value(options['hideConflictingClasses'], false);
   });
 
   showBackgroundColorsElem.addEventListener('click', function () {
-    chrome.storage.sync.set({
-      showBackgroundColors: showBackgroundColorsElem.checked
-    });
+    chrome.storage.sync.set({ showBackgroundColors: showBackgroundColorsElem.checked });
   });
-  showCancelledClassesElem.addEventListener('click', function () {
+  hideCancelledClassesElem.addEventListener('click', function () {
+    chrome.storage.sync.set({ hideCancelledClasses: hideCancelledClassesElem.checked });
+  });
+  hideConflictingClassesElem.addEventListener('click', function () {
+    chrome.storage.sync.set({ hideConflictingClasses: hideConflictingClassesElem.checked });
+  });
+  restoreDefaultsButton.addEventListener('click', function () {
     chrome.storage.sync.set({
-      showCancelledClasses: showCancelledClassesElem.checked
+      showBackgroundColors: true,
+      hideCancelledClasses: false,
+      hideConflictingClasses: false
     });
+    showBackgroundColorsElem.checked = true;
+    hideCancelledClassesElem.checked = false;
+    hideConflictingClassesElem.checked = false;
   });
 
   function value(value, defaultValue) {

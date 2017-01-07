@@ -16,7 +16,7 @@ body {
   border-radius: 10px;
   display: inline-block;
   margin: 80px auto 0;
-  padding: 0 50px 10px 50px;
+  padding: 0 50px 20px 50px;
 }
 
 h2 {
@@ -67,4 +67,17 @@ input[type=checkbox]:checked + .label::before {
   content: "\2713";
   font-size: 16px;
   text-align: center;
+}
+
+button {
+  background: none;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: rgb(195, 195, 195);
 }

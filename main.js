@@ -16,18 +16,24 @@
 
   chrome.storage.sync.get([
     'showBackgroundColors',
-    'showCancelledClasses'
+    'hideCancelledClasses',
+    'hideConflictingClasses'
   ], function (options) {
-    if (options['showCancelledClasses'] === false) {
-      $('tr.key-cancel').each(function () {
-        $(this).hide();
-      });
-    }
     showBackgroundColors = DNE(options.showBackgroundColors)
       ? true
       : options.showBackgroundColors;
     for (var rawName in nameGroups) {
       getPolyratingData(nameGroups[rawName]);
+    }
+    if (options['hideCancelledClasses']) {
+      $('tr.key-cancel').each(function () {
+        $(this).hide();
+      });
+    }
+    if (options['hideCancelledClasses']) {
+      $('tr.key-avail').each(function () {
+        $(this).hide();
+      });
     }
   });
 
