@@ -19,23 +19,29 @@
     'hideCancelledClasses',
     'hideConflictingClasses'
   ], function (options) {
+    if (options['hideCancelledClasses']) {
+      $('tr.key-cancel').each(hideClassRow);
+    }
+    if (options['hideConflictingClasses']) {
+      $('tr.key-avail').each(hideClassRow);
+    }
     showBackgroundColors = DNE(options.showBackgroundColors)
       ? true
       : options.showBackgroundColors;
     for (var rawName in nameGroups) {
       getPolyratingData(nameGroups[rawName]);
     }
-    if (options['hideCancelledClasses']) {
-      $('tr.key-cancel').each(function () {
-        $(this).hide();
-      });
-    }
-    if (options['hideCancelledClasses']) {
-      $('tr.key-avail').each(function () {
-        $(this).hide();
-      });
-    }
   });
+
+  function hideClassRow() {
+      var row = $(this);
+      row.hide();
+      var rowAbove = row.prev();
+      var sectionNotes = rowAbove.find('td .section-notes');
+      if (sectionNotes[0]) {
+        rowAbove.hide();
+      }
+    }
 
   function getPolyratingData(nameElems) {
     var rawName = nameElems[0][0].innerText;
