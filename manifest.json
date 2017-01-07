@@ -6,7 +6,7 @@
   "background": {
     "persistent": true,
     "scripts": [
-      "bg.js"
+      "js/bg.js"
     ]
   },
   "content_scripts": [
@@ -15,15 +15,15 @@
         "https://pass.calpoly.edu/main.html"
       ],
       "js": [
-        "jquery-3.1.1.min.js",
-        "main.js"
+        "js/jquery-3.1.1.min.js",
+        "js/main.js"
       ],
       "css": [
-        "main.css"
+        "css/main.css"
       ]
     }
   ],
-  "options_page": "options.html",
+  "options_page": "options/options.html",
   "permissions": [
     "http://polyratings.com/*",
     "activeTab",
