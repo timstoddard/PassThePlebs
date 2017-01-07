@@ -16,9 +16,13 @@
 
   chrome.storage.sync.get([
     'showBackgroundColors',
+    'hideClosedClasses',
     'hideCancelledClasses',
     'hideConflictingClasses'
   ], function (options) {
+    if (options['hideClosedClasses']) {
+      $('tr.key-closed').each(hideClassRow);
+    }
     if (options['hideCancelledClasses']) {
       $('tr.key-cancel').each(hideClassRow);
     }
