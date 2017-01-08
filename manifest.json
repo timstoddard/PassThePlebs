@@ -25,7 +25,7 @@
   ],
   "options_page": "options/options.html",
   "permissions": [
-    "http://polyratings.com/*",
+    "http://polyratings.com/",
     "activeTab",
     "storage"
   ]

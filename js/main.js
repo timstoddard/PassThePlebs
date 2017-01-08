@@ -88,7 +88,7 @@
         data: '',
       },
       function (response) {
-        if (response != 'error') {
+        if (response !== 'error') {
           try {
             var polyratingPage = $($.parseHTML(response));
             var ratingElem = polyratingPage.find('.hidden-xs span .text-primary');
