@@ -38,14 +38,14 @@
   });
 
   function hideClassRow() {
-      var row = $(this);
-      row.hide();
-      var rowAbove = row.prev();
-      var sectionNotes = rowAbove.find('td .section-notes');
-      if (sectionNotes[0]) {
-        rowAbove.hide();
-      }
+    var row = $(this);
+    row.hide();
+    var rowAbove = row.prev();
+    var sectionNotes = rowAbove.find('td .section-notes');
+    if (sectionNotes[0]) {
+      rowAbove.hide();
     }
+  }
 
   function getPolyratingData(nameElems) {
     var rawName = nameElems[0][0].innerText;
@@ -97,7 +97,7 @@
             var evals = ratingElem.next()[0].innerText.replace('uation', '');
             var href = 'http://polyratings.com/eval.php?profid=' + profId;
             var numericalRating = parseFloat(rating, 10);
-            var bgColor = calculateBgRGBA(numericalRating);
+            var bgColor = calculateBackgroundColor(numericalRating);
             updateInstructorName(rawName, nameElems, bgColor, href, rating, evals);
             return;
           } catch (e) { }
@@ -114,9 +114,14 @@
   function updateInstructorName(rawName, nameElems, bgColor, href, rating, evals) {
     nameElems.forEach(function (nameElem) {
       if (showBackgroundColors) {
-        nameElem.css('background', bgColor);
+        nameElem.css({
+          'background': 'white',
+          'background-image': 'linear-gradient(' + bgColor + ',' + bgColor + ')'
+        });
       }
-      nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')</a>');
+      nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' +
+        nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')' +
+        '</a>');
     });
     var info = {
       bgColor: bgColor,
@@ -154,10 +159,10 @@
     return str.replace(/ /g, '+');
   }
 
-  function calculateBgRGBA(rating) {
+  function calculateBackgroundColor(rating) {
     var r = rating < 3 ? 255 : 255 * (4 - rating) / 4;
     var g = rating < 3 ? 255 * rating / 3 : 255;
-    return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',0,0.6)';
+    return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',0,0.7)';
   }
 
   function addLinkToSearchPage(nameElems, lastName) {
