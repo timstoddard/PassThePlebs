@@ -10,7 +10,8 @@
 }
 
 /*** PASS STYLES (OVERRIDDEN) ***/
-.sidebar ul {
+.sidebar ul,
+.sidebar ul li:not([id]):not([class]) {
   border-radius: 4px;
 }
 
