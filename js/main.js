@@ -4,7 +4,23 @@
 
   $('.select-course table thead tr').each(function () {
     var headers = $(this).children();
+    var input = $('<input type="checkbox" style="margin-left:4px">');
+    input.click(function () {
+      var checked = this.checked;
+      var table = $(this).parent().parent().parent().parent();
+      table.find('tbody tr td input[type="checkbox"]').each(function () {
+        this.checked = !checked;
+        $(this).click();
+      });
+    });
+    $(headers[0]).append(input);
     $(headers[4]).after('<th>Polyrating</th>');
+  });
+
+  $('td input[type="checkbox"]').each(function () {
+    var input = $(this);
+    input.removeClass('left');
+    input.parent().css('text-align', 'center');
   });
 
   $('.select-course table tbody tr .sectionNumber').each(function () {
