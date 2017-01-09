@@ -5,6 +5,15 @@ email: tim.stoddard2@gmail.com
 
 
 /*** EXTENSION STYLES ***/
+#error {
+  background: rgba(255,0,0,0.4);
+  border: 2px solid red;
+}
+
+#error > span {
+  font-weight: bold;
+}
+
 .headerLink {
   color: white;
 }
@@ -27,8 +36,8 @@ email: tim.stoddard2@gmail.com
 }
 
 /*** PASS STYLES (OVERRIDDEN) ***/
-.sidebar ul,
-.sidebar ul li:not([id]):not([class]) {
+.sidebar > ul,
+.sidebar > ul > li:not([id]):not([class]) {
   border-radius: 4px;
 }
 
@@ -50,7 +59,7 @@ email: tim.stoddard2@gmail.com
   margin-top: 10px !important;
 }
 
-.select-course h3 {
+.select-course > h3 {
   border-radius: 4px 4px 0 0 !important;
   overflow-y: hidden;
 }

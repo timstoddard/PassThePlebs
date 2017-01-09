@@ -16,9 +16,9 @@
     'hideConflictingClasses',
     'hideStaffClasses'
   ], function (options) {
-    hideRows(options, 'hideClosedClasses', '.key-closed', false);
-    hideRows(options, 'hideCancelledClasses', '.key-cancel', true);
-    hideRows(options, 'hideConflictingClasses', '.key-avail', false);
+    hideRows(options, 'hideClosedClasses', 'tr.key-closed', false);
+    hideRows(options, 'hideCancelledClasses', 'tr.key-cancel', true);
+    hideRows(options, 'hideConflictingClasses', 'tr.key-avail', false);
     showBackgroundColors = DNE(options.showBackgroundColors)
       ? true
       : options.showBackgroundColors;
@@ -49,6 +49,10 @@
   });
 
   function fixPassLayout() {
+    // move errors to the left side
+    var errors = $('#error').detach();
+    errors.appendTo('.sidebar');
+
     // add select all checkboxes
     $('.select-course > table > thead > tr').each(function () {
       var headers = $(this).children();
