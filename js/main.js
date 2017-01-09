@@ -55,6 +55,8 @@
       } else {
         nameGroups[rawName] = [nameElem];
       }
+    } else {
+      foundStaff(nameElem);
     }
   });
 
@@ -175,6 +177,7 @@
         nameElem.css(css);
         nameElem.next().css(css);
       }
+      updateAttachedRows(nameElem);
     });
     var info = {
       bgColor: bgColor,
@@ -224,6 +227,22 @@
       var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
       nameElem.html(anchor + nameElem.html() + '</a>');
       nameElem.after('<td style="text-align:center">' + anchor + 'n/a</a></td>');
+      updateAttachedRows(nameElem);
     });
+  }
+
+  function foundStaff(nameElem) {
+    nameElem.after('<td style="text-align:center">n/a</td>');
+    updateAttachedRows(nameElem);
+  }
+
+  function updateAttachedRows(nameElem) {
+    var nextRow = nameElem.parent().next();
+    var colSpanTd = nextRow.find('td:first-child[colspan]')[0];
+    while (colSpanTd) {
+      colSpanTd.colSpan += 1;
+      nextRow = nextRow.next();
+      colSpanTd = nextRow.find('td:first-child[colspan]')[0];
+    }
   }
 } ());
