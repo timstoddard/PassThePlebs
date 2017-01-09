@@ -178,20 +178,29 @@
           try {
             var polyratingPage = $($.parseHTML(response));
             var ratingElem = polyratingPage.find('.hidden-xs > span > .text-primary');
-            var rating = ratingElem[0].innerText;
-            var profId = response.match(/profid=(\d+)/)[1];
-            var evals = ratingElem.next()[0].innerText.replace('uation', '');
-            var href = 'http://polyratings.com/eval.php?profid=' + profId;
-            var numericalRating = parseFloat(rating, 10);
-            var bgColor = calculateBackgroundColor(numericalRating);
-            updateInstructorName(rawName, nameElems, bgColor, href, rating, evals);
-            return;
+            if (ratingElem[0]) {
+              var rating = ratingElem[0].innerText;
+              var profId = response.match(/profid=(\d+)/)[1];
+              var evals = ratingElem.next()[0].innerText.replace('uation', '');
+              var href = 'http://polyratings.com/eval.php?profid=' + profId;
+              var numericalRating = parseFloat(rating, 10);
+              var bgColor = calculateBackgroundColor(numericalRating);
+              updateInstructorName(rawName, nameElems, bgColor, href, rating, evals);
+              return;
+            } else {
+              var mainPageHeader = polyratingPage.find('h1.header-text');
+              if (namesList.length === 0 && !mainPageHeader[0]) {
+                // searched name exists, but there were multiple search results
+                addLinkToSearchPage(nameElems, nextName, false);
+                return;
+              }
+            }
           } catch (e) { }
         }
         if (namesList.length > 0) {
           getDataAndUpdatePage(nameElems, rawName, namesList);
         } else {
-          addLinkToSearchPage(nameElems, nextName);
+          addLinkToSearchPage(nameElems, nextName, true);
         }
       }
     );
@@ -254,14 +263,25 @@
     return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',0,0.7)';
   }
 
-  function addLinkToSearchPage(nameElems, lastName) {
-    var href = 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name';
-    nameElems.forEach(function (nameElem) {
-      var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
-      nameElem.html(anchor + nameElem.html() + '</a>');
-      nameElem.after('<td style="text-align:center">' + anchor + 'n/a</a></td>');
-      updateAttachedRows(nameElem);
-    });
+  function centeredTd(text) {
+    return '<td style="text-align:center">' + text + '</td>';
+  }
+
+  function addLinkToSearchPage(nameElems, lastName, notFound) {
+    if (notFound) {
+      nameElems.forEach(function (nameElem) {
+        nameElem.after(centeredTd('not found'));
+        updateAttachedRows(nameElem);
+      });
+    } else {
+      var href = 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name';
+      nameElems.forEach(function (nameElem) {
+        var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
+        nameElem.html(anchor + nameElem.html() + '</a>');
+        nameElem.after(centeredTd(anchor + 'click here</a>'));
+        updateAttachedRows(nameElem);
+      });
+    }
   }
 
   function foundStaff(nameElem) {
@@ -284,7 +304,7 @@
         colSpanTd = row.find('td:first-child[colspan]')[0];
       }
     } else {
-      nameElem.after('<td style="text-align:center">n/a</td>');
+      nameElem.after(centeredTd('n/a'));
       updateAttachedRows(nameElem);
     }
   }
