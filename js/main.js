@@ -2,6 +2,11 @@
   var nameGroups = {};
   var showBackgroundColors;
 
+  $('.select-course table thead tr').each(function () {
+    var headers = $(this).children();
+    $(headers[4]).after('<th>Polyrating</th>');
+  });
+
   $('.select-course table tbody tr .sectionNumber').each(function () {
     var nameElem = $(this).next().next().next();
     var rawName = nameElem[0].innerText;
@@ -113,15 +118,17 @@
 
   function updateInstructorName(rawName, nameElems, bgColor, href, rating, evals) {
     nameElems.forEach(function (nameElem) {
+      var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
+      nameElem.html(anchor + nameElem.html() + '</a>');
+      nameElem.after('<td>' + anchor + '<span class="rating">' + rating + '</span><br>' + evals + '</a></td>');
       if (showBackgroundColors) {
-        nameElem.css({
+        var css = {
           'background': 'white',
           'background-image': 'linear-gradient(' + bgColor + ',' + bgColor + ')'
-        });
+        };
+        nameElem.css(css);
+        nameElem.next().css(css);
       }
-      nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' +
-        nameElem.html() + '<br><span class="rating">' + rating + '</span> (' + evals + ')' +
-        '</a>');
     });
     var info = {
       bgColor: bgColor,
@@ -168,7 +175,9 @@
   function addLinkToSearchPage(nameElems, lastName) {
     var href = 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name';
     nameElems.forEach(function (nameElem) {
-      nameElem.html('<a href="' + href + '" target="_blank" class="ratingLink">' + nameElem.html() + '</a>');
+      var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
+      nameElem.html(anchor + nameElem.html() + '</a>');
+      nameElem.after('<td style="text-align:center">' + anchor + 'n/a</a></td>');
     });
   }
 } ());
