@@ -11,6 +11,8 @@ Features:
 * Options to hide closed, cancelled, or conflicting classes
 * Option to hide classes that have STAFF listed as the instructor
 * Checkbox at the top of each class list to select/unselect all classes at once
+* Section headers now have a link to the class in the course catalog
+* Errors list is now part of the sidebar instead of on top of the class lists
 
 Chome webstore link: https://chrome.google.com/webstore/detail/pass-the-plebs/mhglgbabaleaegjhdcmfffkaaklpmjog
 
