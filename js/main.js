@@ -2,13 +2,13 @@
   var nameGroups = {};
   var showBackgroundColors;
 
-  $('.select-course table thead tr').each(function () {
+  $('.select-course > table > thead > tr').each(function () {
     var headers = $(this).children();
     var input = $('<input type="checkbox" style="margin-left:4px">');
     input.click(function () {
       var checked = this.checked;
       var table = $(this).parent().parent().parent().parent();
-      table.find('tbody tr td input[type="checkbox"]').each(function () {
+      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
         this.checked = !checked;
         $(this).click();
       });
@@ -17,13 +17,13 @@
     $(headers[4]).after('<th>Polyrating</th>');
   });
 
-  $('td input[type="checkbox"]').each(function () {
+  $('td > input[type="checkbox"]').each(function () {
     var input = $(this);
     input.removeClass('left');
     input.parent().css('text-align', 'center');
   });
 
-  $('.select-course table tbody tr .sectionNumber').each(function () {
+  $('.select-course > table > tbody > tr > .sectionNumber').each(function () {
     var nameElem = $(this).next().next().next();
     var rawName = nameElem[0].innerText;
     if (rawName !== 'STAFF') {
@@ -69,7 +69,7 @@
     var row = $(this);
     row.hide();
     var rowAbove = row.prev();
-    var sectionNotes = rowAbove.find('td .section-notes');
+    var sectionNotes = rowAbove.find('td > .section-notes');
     if (sectionNotes[0]) {
       rowAbove.hide();
     }
@@ -119,7 +119,7 @@
         if (response !== 'error') {
           try {
             var polyratingPage = $($.parseHTML(response));
-            var ratingElem = polyratingPage.find('.hidden-xs span .text-primary');
+            var ratingElem = polyratingPage.find('.hidden-xs > span > .text-primary');
             var rating = ratingElem[0].innerText;
             var profId = response.match(/profid=(\d+)/)[1];
             var evals = ratingElem.next()[0].innerText.replace('uation', '');
