@@ -5,6 +5,14 @@ email: tim.stoddard2@gmail.com
 
 
 /*** EXTENSION STYLES ***/
+.headerLink {
+  color: white;
+}
+
+.headerLink:hover {
+  font-style: italic;
+}
+
 .rating {
   font-weight: bold;
 }

@@ -90,6 +90,17 @@
       var selectAll = table.find('.selectAll');
       selectAll[0].checked = allChecked;
     });
+
+    // add catalog link to section headers
+    $('.select-course > h3').each(function () {
+      var header = $(this);
+      var course = header.text()
+        .replace(/\s+/g, ' ')
+        .match(/([a-z]+ \d+)/i)[0]
+        .replace(' ', '+');
+      $(header.contents()[0])
+        .wrap('<a href="http://catalog.calpoly.edu/search/?P=' + course + '" target="_blank" class="headerLink"></a>');
+    });
   }
 
   function hideRows(options, name, selector, defaultValue) {
