@@ -5,77 +5,92 @@
 (function () {
   var nameGroups = {};
   var showBackgroundColors;
-
-  $('.select-course > table > thead > tr').each(function () {
-    var headers = $(this).children();
-    var input = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
-    input.click(function () {
-      var checked = this.checked;
-      var table = $(this).parent().parent().parent().parent();
-      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
-        this.checked = !checked;
-        $(this).click();
-      });
-    });
-    $(headers[0]).append(input);
-    $(headers[4]).after('<th>Polyrating</th>');
-  });
-
-  $('.selectAll').each(function () {
-    var table = $(this).parent().parent().parent().parent();
-    var allChecked = true;
-    table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
-      allChecked &= this.checked;
-    });
-    this.checked = allChecked;
-  });
-
-  $('td > input[type="checkbox"]').each(function () {
-    var input = $(this);
-    input.removeClass('left');
-    input.parent().css('text-align', 'center');
-  });
-
-  $('td > input[type="checkbox"]:not(.selectAll)').click(function () {
-    var table = $(this).parent().parent().parent().parent();
-    var allChecked = true;
-    table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
-      allChecked &= this.checked;
-    });
-    var selectAll = table.find('.selectAll');
-    selectAll[0].checked = allChecked;
-  });
-
-  $('.select-course > table > tbody > tr > .sectionNumber').each(function () {
-    var nameElem = $(this).next().next().next();
-    var rawName = nameElem[0].innerText;
-    if (rawName !== 'STAFF') {
-      if (nameGroups[rawName]) {
-        nameGroups[rawName].push(nameElem);
-      } else {
-        nameGroups[rawName] = [nameElem];
-      }
-    } else {
-      foundStaff(nameElem);
-    }
-  });
+  var hideStaffClasses;
 
   chrome.storage.sync.get([
     'showBackgroundColors',
     'hideClosedClasses',
     'hideCancelledClasses',
-    'hideConflictingClasses'
+    'hideConflictingClasses',
+    'hideStaffClasses'
   ], function (options) {
-    hideRows(options, 'hideClosedClasses', 'tr.key-closed', false);
-    hideRows(options, 'hideCancelledClasses', 'tr.key-cancel', true);
-    hideRows(options, 'hideConflictingClasses', 'tr.key-avail', false);
+    hideRows(options, 'hideClosedClasses', '.key-closed', false);
+    hideRows(options, 'hideCancelledClasses', '.key-cancel', true);
+    hideRows(options, 'hideConflictingClasses', '.key-avail', false);
     showBackgroundColors = DNE(options.showBackgroundColors)
       ? true
       : options.showBackgroundColors;
+    hideStaffClasses = DNE(options.hideStaffClasses)
+      ? false
+      : options.hideStaffClasses;
+
+    // make an array of all the instructor names and associated <td> elements
+    $('.select-course > table > tbody > tr > .sectionNumber').each(function () {
+      var nameElem = $(this).next().next().next();
+      var rawName = nameElem[0].innerText;
+      if (rawName !== 'STAFF') {
+        if (nameGroups[rawName]) {
+          nameGroups[rawName].push(nameElem);
+        } else {
+          nameGroups[rawName] = [nameElem];
+        }
+      } else {
+        foundStaff(nameElem);
+      }
+    });
+
+    // integrate polyrating data and improve the layout
     for (var rawName in nameGroups) {
       getPolyratingData(nameGroups[rawName]);
     }
+    fixPassLayout();
   });
+
+  function fixPassLayout() {
+    // add select all checkboxes
+    $('.select-course > table > thead > tr').each(function () {
+      var headers = $(this).children();
+      var input = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
+      input.click(function () {
+        var checked = this.checked;
+        var table = $(this).parent().parent().parent().parent();
+        table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+          this.checked = !checked;
+          $(this).click();
+        });
+      });
+      $(headers[0]).append(input);
+      $(headers[4]).after('<th>Polyrating</th>');
+    });
+
+    // update the select all checkboxes to checked if all their children all checked
+    $('.selectAll').each(function () {
+      var table = $(this).parent().parent().parent().parent();
+      var allChecked = true;
+      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+        allChecked &= this.checked;
+      });
+      this.checked = allChecked;
+    });
+
+    // restyle the checkboxes
+    $('td > input[type="checkbox"]').each(function () {
+      var input = $(this);
+      input.removeClass('left');
+      input.parent().css('text-align', 'center');
+    });
+
+    // listen for child checkbox changes to update its select all checkbox
+    $('td > input[type="checkbox"]:not(.selectAll)').click(function () {
+      var table = $(this).parent().parent().parent().parent();
+      var allChecked = true;
+      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+        allChecked &= this.checked;
+      });
+      var selectAll = table.find('.selectAll');
+      selectAll[0].checked = allChecked;
+    });
+  }
 
   function hideRows(options, name, selector, defaultValue) {
     if (options[name]) {
@@ -232,8 +247,28 @@
   }
 
   function foundStaff(nameElem) {
-    nameElem.after('<td style="text-align:center">n/a</td>');
-    updateAttachedRows(nameElem);
+    if (hideStaffClasses) {
+      // hide row
+      var row = nameElem.parent();
+      row.hide();
+      // hide row above (section notes)
+      var rowAbove = row.prev();
+      var sectionNotes = rowAbove.find('td > .section-notes');
+      if (sectionNotes[0]) {
+        rowAbove.hide();
+      }
+      // hide row(s) below (if any)
+      row = row.next();
+      var colSpanTd = row.find('td:first-child[colspan]')[0];
+      while (colSpanTd) {
+        row.hide();
+        row = row.next();
+        colSpanTd = row.find('td:first-child[colspan]')[0];
+      }
+    } else {
+      nameElem.after('<td style="text-align:center">n/a</td>');
+      updateAttachedRows(nameElem);
+    }
   }
 
   function updateAttachedRows(nameElem) {
