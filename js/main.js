@@ -41,15 +41,9 @@
     'hideCancelledClasses',
     'hideConflictingClasses'
   ], function (options) {
-    if (options['hideClosedClasses']) {
-      $('tr.key-closed').each(hideClassRow);
-    }
-    if (options['hideCancelledClasses']) {
-      $('tr.key-cancel').each(hideClassRow);
-    }
-    if (options['hideConflictingClasses']) {
-      $('tr.key-avail').each(hideClassRow);
-    }
+    hideRows(options, 'hideClosedClasses', 'tr.key-closed', false);
+    hideRows(options, 'hideCancelledClasses', 'tr.key-cancel', true);
+    hideRows(options, 'hideConflictingClasses', 'tr.key-avail', false);
     showBackgroundColors = DNE(options.showBackgroundColors)
       ? true
       : options.showBackgroundColors;
@@ -57,6 +51,19 @@
       getPolyratingData(nameGroups[rawName]);
     }
   });
+
+  function hideRows(options, name, selector, defaultValue) {
+    if (options[name]) {
+      $(selector).each(hideClassRow);
+    } else if (DNE(options[name])) {
+      if (defaultValue) {
+        $(selector).each(hideClassRow);
+      }
+      var data = {};
+      data[name] = defaultValue;
+      chrome.storage.sync.set(data);
+    }
+  }
 
   function hideClassRow() {
     var row = $(this);
