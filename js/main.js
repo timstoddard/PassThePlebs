@@ -6,6 +6,8 @@
   var nameGroups = {};
   var showBackgroundColors;
   var hideStaffClasses;
+  chrome.storage.local.clear();
+  chrome.storage.sync.clear();
 
   chrome.storage.sync.get([
     'showBackgroundColors',
@@ -94,12 +96,13 @@
     // add catalog link to section headers
     $('.select-course > h3').each(function () {
       var header = $(this);
-      var course = header.text()
-        .replace(/\s+/g, ' ')
+      var headerContent = $(header.contents()[0]);
+      var headerText = headerContent.text().replace(/\s+/g, ' ').trim();
+      var course = headerText
         .match(/([a-z]+ \d+)/i)[0]
         .replace(' ', '+');
-      $(header.contents()[0])
-        .wrap('<a href="http://catalog.calpoly.edu/search/?P=' + course + '" target="_blank" class="headerLink"></a>');
+      headerContent.wrap('<a href="http://catalog.calpoly.edu/search/?P=' + course + '" target="_blank" class="headerLink"></a>');
+      headerContent.replaceWith('<span class="headerText">' + headerText + '</span>');
     });
   }
 

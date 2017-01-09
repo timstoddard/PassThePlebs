@@ -9,6 +9,10 @@ email: tim.stoddard2@gmail.com
   color: white;
 }
 
+.headerText {
+  margin-right: 10px;
+}
+
 .headerLink:hover {
   font-style: italic;
 }
