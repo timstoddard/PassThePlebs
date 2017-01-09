@@ -1,3 +1,7 @@
+/**
+ * @author Tim Stoddard <tim.stoddard2@gmail.com>
+ */
+
 // defaults
 var SHOW_BACKGROUND_COLORS_DEFAULT = true;
 var HIDE_CLOSED_CLASSES_DEFAULT = false;

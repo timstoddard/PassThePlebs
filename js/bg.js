@@ -1,3 +1,7 @@
+/**
+ * @author Tim Stoddard <tim.stoddard2@gmail.com>
+ */
+
 chrome.runtime.onMessage.addListener(
   function (request, sender, callback) {
     if (request.action == 'xhttp') {

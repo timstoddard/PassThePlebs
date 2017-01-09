@@ -1,3 +1,7 @@
+/**
+ * @author Tim Stoddard <tim.stoddard2@gmail.com>
+ */
+
 (function () {
   var nameGroups = {};
   var showBackgroundColors;
