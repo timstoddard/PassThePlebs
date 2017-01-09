@@ -6,8 +6,6 @@
   var nameGroups = {};
   var showBackgroundColors;
   var hideStaffClasses;
-  chrome.storage.local.clear();
-  chrome.storage.sync.clear();
 
   chrome.storage.sync.get([
     'showBackgroundColors',
@@ -153,14 +151,16 @@
     var names = rawName.split(',');
     var lastName = removeAllSingleLetters(names[0].trim());
     var firstNames = removeAllSingleLetters(names[1].trim());
-    var firstName = onlyFirstName(firstNames);
-    var name1 = urlFormat(firstNames + ' ' + lastName);
-    var name2 = urlFormat(firstName + ' ' + lastName);
-    var namesList = [lastName, urlFormat(firstNames), name1];
-    if (name2 !== name1) {
-      namesList.push(firstName);
-      namesList.push(name2);
+    var firstNamesList = firstNames.split(' ');
+    var namesList = [];
+    firstNamesList.forEach(function(name) {
+      namesList.push(urlFormat(name + ' ' + lastName));
+    });
+    var fullName = urlFormat(firstNames + ' ' + lastName);
+    if (namesList.indexOf(fullName) === -1) {
+      namesList.push(fullName);
     }
+    namesList.unshift(lastName, firstNamesList[0]);
     getDataAndUpdatePage(nameElems, rawName, namesList);
   }
 
