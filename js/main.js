@@ -153,7 +153,7 @@
     var firstNames = removeAllSingleLetters(names[1].trim());
     var firstNamesList = firstNames.split(' ');
     var namesList = [];
-    firstNamesList.forEach(function(name) {
+    firstNamesList.forEach(function (name) {
       namesList.push(urlFormat(name + ' ' + lastName));
     });
     var fullName = urlFormat(firstNames + ' ' + lastName);
@@ -233,40 +233,6 @@
     chrome.storage.local.set(data);
   }
 
-  function DNE(value) {
-    return value === undefined || value === null;
-  }
-
-  function onlyFirstName(name) {
-    var spaceIndex = name.indexOf(' ');
-    return spaceIndex > -1 ? name.substr(0, spaceIndex) : name;
-  }
-
-  function removeAllSingleLetters(name) {
-    var modified = '';
-    var parts = name.split(' ');
-    parts.forEach(function (part) {
-      if (/[a-z]{2,}/.test(part)) {
-        modified += ' ' + part;
-      }
-    });
-    return modified.trim();
-  }
-
-  function urlFormat(str) {
-    return str.replace(/ /g, '+');
-  }
-
-  function calculateBackgroundColor(rating) {
-    var r = rating < 3 ? 255 : 255 * (4 - rating) / 4;
-    var g = rating < 3 ? 255 * rating / 3 : 255;
-    return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',0,0.7)';
-  }
-
-  function centeredTd(text) {
-    return '<td style="text-align:center">' + text + '</td>';
-  }
-
   function addLinkToSearchPage(nameElems, lastName, notFound) {
     if (notFound) {
       nameElems.forEach(function (nameElem) {
@@ -307,6 +273,35 @@
       nameElem.after(centeredTd('n/a'));
       updateAttachedRows(nameElem);
     }
+  }
+
+  function DNE(value) {
+    return value === undefined || value === null;
+  }
+
+  function removeAllSingleLetters(name) {
+    var modified = [];
+    var parts = name.split(' ');
+    parts.forEach(function (part) {
+      if (/[a-z]{2,}/.test(part)) {
+        modified.push(part);
+      }
+    });
+    return modified.join(' ').trim();
+  }
+
+  function urlFormat(str) {
+    return str.replace(/ /g, '+');
+  }
+
+  function calculateBackgroundColor(rating) {
+    var r = rating < 3 ? 255 : 255 * (4 - rating) / 4;
+    var g = rating < 3 ? 255 * rating / 3 : 255;
+    return 'rgba(' + Math.round(r) + ',' + Math.round(g) + ',0,0.7)';
+  }
+
+  function centeredTd(text) {
+    return '<td style="text-align:center">' + text + '</td>';
   }
 
   function updateAttachedRows(nameElem) {
