@@ -2,7 +2,7 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-(function () {
+(function() {
   var nameGroups = {};
   var showBackgroundColors;
   var hideStaffClasses;
@@ -13,7 +13,7 @@
     'hideCancelledClasses',
     'hideConflictingClasses',
     'hideStaffClasses'
-  ], function (options) {
+  ], function(options) {
     hideRows(options, 'hideClosedClasses', 'tr.key-closed', false);
     hideRows(options, 'hideCancelledClasses', 'tr.key-cancel', true);
     hideRows(options, 'hideConflictingClasses', 'tr.key-avail', false);
@@ -25,7 +25,7 @@
       : options.hideStaffClasses;
 
     // make an array of all the instructor names and associated <td> elements
-    $('.select-course > table > tbody > tr > .sectionNumber').each(function () {
+    $('.select-course > table > tbody > tr > .sectionNumber').each(function() {
       var nameElem = $(this).next().next().next();
       var rawName = nameElem[0].innerText;
       if (rawName !== 'STAFF') {
@@ -52,13 +52,13 @@
     errors.appendTo('.sidebar');
 
     // add select all checkboxes
-    $('.select-course > table > thead > tr').each(function () {
+    $('.select-course > table > thead > tr').each(function() {
       var headers = $(this).children();
       var input = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
-      input.click(function () {
+      input.click(function() {
         var checked = this.checked;
         var table = $(this).parent().parent().parent().parent();
-        table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+        table.find('tbody > tr > td > input[type="checkbox"]').each(function() {
           this.checked = !checked;
           $(this).click();
         });
@@ -68,27 +68,27 @@
     });
 
     // update the select all checkboxes to checked if all their children all checked
-    $('.selectAll').each(function () {
+    $('.selectAll').each(function() {
       var table = $(this).parent().parent().parent().parent();
       var allChecked = true;
-      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+      table.find('tbody > tr > td > input[type="checkbox"]').each(function() {
         allChecked &= this.checked;
       });
       this.checked = allChecked;
     });
 
     // restyle the checkboxes
-    $('td > input[type="checkbox"]').each(function () {
+    $('td > input[type="checkbox"]').each(function() {
       var input = $(this);
       input.removeClass('left');
       input.parent().css('text-align', 'center');
     });
 
     // listen for child checkbox changes to update its select all checkbox
-    $('td > input[type="checkbox"]:not(.selectAll)').click(function () {
+    $('td > input[type="checkbox"]:not(.selectAll)').click(function() {
       var table = $(this).parent().parent().parent().parent();
       var allChecked = true;
-      table.find('tbody > tr > td > input[type="checkbox"]').each(function () {
+      table.find('tbody > tr > td > input[type="checkbox"]').each(function() {
         allChecked &= this.checked;
       });
       var selectAll = table.find('.selectAll');
@@ -96,7 +96,7 @@
     });
 
     // add catalog link to section headers
-    $('.select-course > h3').each(function () {
+    $('.select-course > h3').each(function() {
       var header = $(this);
       var headerContent = $(header.contents()[0]);
       var headerText = headerContent.text().replace(/\s+/g, ' ').trim();
@@ -133,7 +133,7 @@
 
   function getPolyratingData(nameElems) {
     var rawName = nameElems[0][0].innerText;
-    chrome.storage.local.get(rawName, function (data) {
+    chrome.storage.local.get(rawName, function(data) {
       if (Object.keys(data).length > 0) {
         var info = JSON.parse(data[rawName]);
         if ((Date.now() - info.timeAdded) / (1000 * 60) < 10) {
@@ -153,7 +153,7 @@
     var firstNames = removeAllSingleLetters(names[1].trim());
     var firstNamesList = firstNames.split(' ');
     var namesList = [];
-    firstNamesList.forEach(function (name) {
+    firstNamesList.forEach(function(name) {
       namesList.push(urlFormat(name + ' ' + lastName));
     });
     var fullName = urlFormat(firstNames + ' ' + lastName);
@@ -173,7 +173,7 @@
         url: 'http://polyratings.com/search.php?type=ProfName&terms=' + nextName + '&format=long&sort=name',
         data: '',
       },
-      function (response) {
+      function(response) {
         if (response !== 'error') {
           try {
             var polyratingPage = $($.parseHTML(response));
@@ -207,7 +207,7 @@
   }
 
   function updateInstructorName(rawName, nameElems, bgColor, href, rating, evals) {
-    nameElems.forEach(function (nameElem) {
+    nameElems.forEach(function(nameElem) {
       var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
       nameElem.html(anchor + nameElem.html() + '</a>');
       nameElem.after('<td>' + anchor + '<span class="rating">' + rating + '</span><br>' + evals + '</a></td>');
@@ -235,13 +235,13 @@
 
   function addLinkToSearchPage(nameElems, lastName, notFound) {
     if (notFound) {
-      nameElems.forEach(function (nameElem) {
+      nameElems.forEach(function(nameElem) {
         nameElem.after(centeredTd('not found'));
         updateAttachedRows(nameElem);
       });
     } else {
       var href = 'http://polyratings.com/search.php?type=ProfName&terms=' + lastName + '&format=long&sort=name';
-      nameElems.forEach(function (nameElem) {
+      nameElems.forEach(function(nameElem) {
         var anchor = '<a href="' + href + '" target="_blank" class="ratingLink">';
         nameElem.html(anchor + nameElem.html() + '</a>');
         nameElem.after(centeredTd(anchor + 'click here</a>'));
@@ -282,7 +282,7 @@
   function removeAllSingleLetters(name) {
     var modified = [];
     var parts = name.split(' ');
-    parts.forEach(function (part) {
+    parts.forEach(function(part) {
       if (/[a-z]{2,}/.test(part)) {
         modified.push(part);
       }

@@ -24,7 +24,7 @@ chrome.storage.sync.get([
   'hideCancelledClasses',
   'hideConflictingClasses',
   'hideStaffClasses'
-], function (options) {
+], function(options) {
   showBackgroundColorsElem.checked = value(options['showBackgroundColors'], SHOW_BACKGROUND_COLORS_DEFAULT);
   hideClosedClassesElem.checked = value(options['hideClosedClasses'], HIDE_CLOSED_CLASSES_DEFAULT);
   hideCancelledClassesElem.checked = value(options['hideCancelledClasses'], HIDE_CANCELLED_CLASSES_DEFAULT);
@@ -38,7 +38,7 @@ addOptionListener(hideClosedClassesElem, 'hideClosedClasses');
 addOptionListener(hideCancelledClassesElem, 'hideCancelledClasses');
 addOptionListener(hideConflictingClassesElem, 'hideConflictingClasses');
 addOptionListener(hideStaffClassesElem, 'hideStaffClasses');
-restoreDefaultsButton.addEventListener('click', function () {
+restoreDefaultsButton.addEventListener('click', function() {
   showBackgroundColorsElem.checked = SHOW_BACKGROUND_COLORS_DEFAULT;
   hideClosedClassesElem.checked = HIDE_CLOSED_CLASSES_DEFAULT;
   hideCancelledClassesElem.checked = HIDE_CANCELLED_CLASSES_DEFAULT;
@@ -55,7 +55,7 @@ restoreDefaultsButton.addEventListener('click', function () {
 
 // helper functions
 function addOptionListener(elem, name) {
-  elem.addEventListener('click', function () {
+  elem.addEventListener('click', function() {
     var data = {};
     data[name] = elem.checked;
     chrome.storage.sync.set(data);
