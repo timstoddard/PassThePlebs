@@ -4,3 +4,6 @@ npm-debug.log
 
 # webpack output
 dist/bundle
+
+# compressed dist folder
+PassThePlebs.zip
