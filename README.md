@@ -14,6 +14,13 @@ Features:
 * Section headers now have a link to the class in the course catalog
 * Errors list is now part of the sidebar instead of on top of the class lists
 
+Modifying source
+* Clone or download repo
+* Run `npm install`, which will:
+  * Install dependencies
+  * Install chrome-cli (used for reloading on save)
+* Edit away! The code will be built and the extension refreshed every time you save.
+
 Chome webstore link: https://chrome.google.com/webstore/detail/pass-the-plebs/mhglgbabaleaegjhdcmfffkaaklpmjog
 
 Inspired by https://github.com/RobertUrsua/BruinWalkChromeExtension
