@@ -14,13 +14,14 @@
     "pack-files": "rimraf dist/bundle && rimraf PassThePlebs.zip && webpack -p --config ./webpack.config.js",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "zip-dist": "zip -r dist.zip dist",
-    "lint": "eslint ./index.js && eslint js/*.js",
+    "lint": "eslint js/*.js",
     "postinstall": "brew install chrome-cli"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.0",
     "babel": "^6.5.2",
     "babel-core": "^6.14.0",
+    "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.16.0",
