@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Pass the Plebs",
   "description": "Adds Polyratings to PASS pages",
-  "version": "0.4",
+  "version": "0.5",
   "background": {
     "persistent": true,
     "scripts": [
