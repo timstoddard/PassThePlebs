@@ -6,4 +6,4 @@ npm-debug.log
 dist/bundle
 
 # compressed dist folder
-PassThePlebs.zip
+dist.zip
