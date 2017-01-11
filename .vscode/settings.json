@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".*",
+        "cmd": "cd ~/Dropbox/PassThePlebs && npm run build"
+      }
+    ]
+  }
+}

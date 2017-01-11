@@ -1,8 +1,6 @@
-# dependencies
+# node stuff
 node_modules
-
-# editor settings
-.vscode
+npm-debug.log
 
 # webpack output
 dist/bundle
