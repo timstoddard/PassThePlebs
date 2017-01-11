@@ -7,7 +7,6 @@ chrome.runtime.onMessage.addListener(
     if (request.action == 'xhttp') {
       var xhttp = new XMLHttpRequest();
       var method = request.method ? request.method.toUpperCase() : 'GET';
-
       xhttp.onload = function() {
         callback(xhttp.responseText);
       };

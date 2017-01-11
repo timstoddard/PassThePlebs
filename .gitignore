@@ -1,1 +1,8 @@
+# dependencies
 node_modules
+
+# editor settings
+.vscode
+
+# webpack output
+dist/bundle
