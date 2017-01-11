@@ -10,9 +10,12 @@
   },
   "main": "js/index.js",
   "scripts": {
-    "build": "rimraf dist/bundle && webpack -p --config ./webpack.config.js && npm run zip-dist",
+    "build": "npm run pack-files && npm run refresh-ext && npm run zip-dist",
+    "pack-files": "rimraf dist/bundle && rimraf PassThePlebs.zip && webpack -p --config ./webpack.config.js",
+    "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "zip-dist": "bestzip PassThePlebs.zip dist/*",
-    "lint": "eslint ./index.js && eslint js/*.js"
+    "lint": "eslint ./index.js && eslint js/*.js",
+    "postinstall": "brew install chrome-cli"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.0",
