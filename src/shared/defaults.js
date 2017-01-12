@@ -7,6 +7,7 @@ export const defaults = {
   'grayClosedClasses': false,
   'hideClosedClasses': false,
   'hideCancelledClasses': true,
+  'grayConflictingClasses': false,
   'hideConflictingClasses': false,
   'hideStaffClasses': false
 };
@@ -16,6 +17,7 @@ export const optionNames = [
   'grayClosedClasses',
   'hideClosedClasses',
   'hideCancelledClasses',
+  'grayConflictingClasses',
   'hideConflictingClasses',
   'hideStaffClasses'
 ];

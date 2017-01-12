@@ -35,6 +35,8 @@ export class PassLayoutFixer {
       $(selector).each(this.hideClassRow);
     } else if (name === 'hideClosedClasses' && this.options['grayClosedClasses']) {
       $(selector).each(this.grayOutClassRowText);
+    } else if (name === 'hideConflictingClasses' && this.options['grayConflictingClasses']) {
+      $(selector).each(this.grayOutClassRowText);
     }
   }
 
