@@ -45,7 +45,7 @@ label:hover {
   cursor: pointer;
 }
 
-.label {
+.labelText {
   align-items: center;
   display: flex;
 }
@@ -54,7 +54,7 @@ input[type=checkbox] {
   display: none;
 }
 
-input[type=checkbox] + .label::before {
+input[type=checkbox] + .labelText::before {
   border: 1px solid black;
   border-radius: 3px;
   box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
@@ -66,7 +66,7 @@ input[type=checkbox] + .label::before {
   width: 16px;
 }
 
-input[type=checkbox]:checked + .label::before {
+input[type=checkbox]:checked + .labelText::before {
   background: white;
   color: black;
   content: "\2713";

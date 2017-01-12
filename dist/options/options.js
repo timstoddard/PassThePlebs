@@ -3,71 +3,55 @@
  */
 
 // defaults
-var SHOW_BACKGROUND_COLORS_DEFAULT = true;
-var GRAY_CLOSED_CLASSES_DEFAULT = false;
-var HIDE_CLOSED_CLASSES_DEFAULT = false;
-var HIDE_CANCELLED_CLASSES_DEFAULT = true;
-var HIDE_CONFLICTING_CLASSES_DEFAULT = false;
-var HIDE_STAFF_CLASSES_DEFAULT = false;
+var defaults = {
+  'showBackgroundColors': true,
+  'grayClosedClasses': false,
+  'hideClosedClasses': false,
+  'hideCancelledClasses': true,
+  'hideConflictingClasses': false,
+  'hideStaffClasses': false
+}
 
 // form elements
-var showBackgroundColorsElem = document.getElementById('showBackgroundColors');
-var grayClosedClassesElem = document.getElementById('grayClosedClasses');
-var hideClosedClassesElem = document.getElementById('hideClosedClasses');
-var hideCancelledClassesElem = document.getElementById('hideCancelledClasses');
-var hideConflictingClassesElem = document.getElementById('hideConflictingClasses');
-var hideStaffClassesElem = document.getElementById('hideStaffClasses');
-var restoreDefaultsButton = document.getElementById('restoreDefaults');
-
-// load stored data
-chrome.storage.sync.get([
+var optionNames = [
   'showBackgroundColors',
   'grayClosedClasses',
   'hideClosedClasses',
   'hideCancelledClasses',
   'hideConflictingClasses',
   'hideStaffClasses'
-], function(options) {
-  showBackgroundColorsElem.checked = value(options['showBackgroundColors'], SHOW_BACKGROUND_COLORS_DEFAULT);
-  grayClosedClassesElem.checked = value(options['grayClosedClasses'], GRAY_CLOSED_CLASSES_DEFAULT);
-  hideClosedClassesElem.checked = value(options['hideClosedClasses'], HIDE_CLOSED_CLASSES_DEFAULT);
-  hideCancelledClassesElem.checked = value(options['hideCancelledClasses'], HIDE_CANCELLED_CLASSES_DEFAULT);
-  hideConflictingClassesElem.checked = value(options['hideConflictingClasses'], HIDE_CONFLICTING_CLASSES_DEFAULT);
-  hideStaffClassesElem.checked = value(options['hideStaffClasses'], HIDE_STAFF_CLASSES_DEFAULT);
+];
+var checkboxElems = {};
+optionNames.forEach(function(name) {
+  checkboxElems[name] = document.getElementById(name);
 });
 
-// add event listeners
-addOptionListener(showBackgroundColorsElem, 'showBackgroundColors');
-addOptionListener(grayClosedClassesElem, 'grayClosedClasses');
-addOptionListener(hideClosedClassesElem, 'hideClosedClasses');
-addOptionListener(hideCancelledClassesElem, 'hideCancelledClasses');
-addOptionListener(hideConflictingClassesElem, 'hideConflictingClasses');
-addOptionListener(hideStaffClassesElem, 'hideStaffClasses');
-restoreDefaultsButton.addEventListener('click', function() {
-  showBackgroundColorsElem.checked = SHOW_BACKGROUND_COLORS_DEFAULT;
-  grayClosedClassesElem.checked = GRAY_CLOSED_CLASSES_DEFAULT;
-  hideClosedClassesElem.checked = HIDE_CLOSED_CLASSES_DEFAULT;
-  hideCancelledClassesElem.checked = HIDE_CANCELLED_CLASSES_DEFAULT;
-  hideConflictingClassesElem.checked = HIDE_CONFLICTING_CLASSES_DEFAULT;
-  hideStaffClassesElem.checked = HIDE_STAFF_CLASSES_DEFAULT;
-  chrome.storage.sync.set({
-    showBackgroundColors: showBackgroundColorsElem.checked,
-    grayClosedClasses: grayClosedClassesElem.checked,
-    hideClosedClasses: hideClosedClassesElem.checked,
-    hideCancelledClasses: hideCancelledClassesElem.checked,
-    hideConflictingClasses: hideConflictingClassesElem.checked,
-    hideStaffClassesElem: hideStaffClassesElem.checked
+// load stored data
+chrome.storage.sync.get(optionNames, function(options) {
+  optionNames.forEach(function(name) {
+    checkboxElems[name].checked = value(options[name], defaults[name]);
   });
 });
 
-// helper functions
-function addOptionListener(elem, name) {
+// add event listeners
+optionNames.forEach(function(name) {
+  var elem = checkboxElems[name];
   elem.addEventListener('click', function() {
     var data = {};
     data[name] = elem.checked;
     chrome.storage.sync.set(data);
   });
-}
+});
+document.getElementById('restoreDefaults')
+  .addEventListener('click', function() {
+    var data = {};
+    optionNames.forEach(function(name) {
+      checkboxElems[name].checked = data[name] = defaults[name];
+    });
+    chrome.storage.sync.set(data);
+  });
+
+// helper functions
 
 function value(value, defaultValue) {
   return value === undefined || value === null ? defaultValue : value;
