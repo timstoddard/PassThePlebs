@@ -1,5 +1,7 @@
 This Chrome extension adds several useful features, such as Polyrating integration, to the class listings on PASS.
 
+[Chome webstore link](https://chrome.google.com/webstore/detail/pass-the-plebs/mhglgbabaleaegjhdcmfffkaaklpmjog)
+
 Features:
 * Polyrating and number of evaluations appear below the instructor's name
 * Background behind the instructor's name changes color
@@ -21,8 +23,6 @@ Modifying source
   * Install dependencies
   * Install chrome-cli (used for reloading on save)
 * Edit away! The code will be built and the extension refreshed every time you save.
-  * Note: You will need the 'Run on Save' extension for VS code.
+  * Note: You will need the ['Run on Save' extension for VS code](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave), otherwise you must run `npm run build` every time you want to build the extension.
 
-Chome webstore link: https://chrome.google.com/webstore/detail/pass-the-plebs/mhglgbabaleaegjhdcmfffkaaklpmjog
-
-Inspired by https://github.com/RobertUrsua/BruinWalkChromeExtension
+Inspired by [this Chrome extension](https://github.com/RobertUrsua/BruinWalkChromeExtension)
