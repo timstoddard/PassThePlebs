@@ -12,6 +12,7 @@ import '../scss/index.scss';
 chrome.storage.sync.get(
   [
     'showBackgroundColors',
+    'grayClosedClasses',
     'hideClosedClasses',
     'hideCancelledClasses',
     'hideConflictingClasses',

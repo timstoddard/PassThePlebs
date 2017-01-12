@@ -2,7 +2,12 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import { HIDE_CLOSED_CLASSES_DEFAULT, HIDE_CANCELLED_CLASSES_DEFAULT, HIDE_CONFLICTING_CLASSES_DEFAULT } from './defaults';
+import {
+  GRAY_CLOSED_CLASSES_DEFAULT,
+  HIDE_CLOSED_CLASSES_DEFAULT,
+  HIDE_CANCELLED_CLASSES_DEFAULT,
+  HIDE_CONFLICTING_CLASSES_DEFAULT
+} from './defaults';
 import { DNE } from './utils';
 
 export class PassLayoutFixer {
