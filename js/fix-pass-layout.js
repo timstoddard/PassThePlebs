@@ -12,10 +12,16 @@ export class PassLayoutFixer {
   }
 
   fixPassLayout() {
-    this.hideRowsBasedOnOptions();
     this.moveErrorList();
+    this.hideRowsBasedOnOptions();
     this.addSelectAll();
     this.fixSectionHeaders();
+  }
+
+  moveErrorList() {
+    // move errors to the left side
+    let errors = $('#error').detach();
+    errors.appendTo('.sidebar');
   }
 
   hideRowsBasedOnOptions() {
@@ -27,6 +33,8 @@ export class PassLayoutFixer {
   hideRows(name, selector) {
     if (this.options[name]) {
       $(selector).each(this.hideClassRow);
+    } else if (name === 'hideClosedClasses' && this.options['grayClosedClasses']) {
+      $(selector).each(this.grayOutClassRowText);
     }
   }
 
@@ -40,10 +48,15 @@ export class PassLayoutFixer {
     }
   }
 
-  moveErrorList() {
-    // move errors to the left side
-    let errors = $('#error').detach();
-    errors.appendTo('.sidebar');
+  grayOutClassRowText() {
+    let row = $(this);
+    let grayText = { 'color': 'rgb(160,160,160)' };
+    row.css(grayText);
+    let rowAbove = row.prev();
+    let sectionNotes = rowAbove.find('td > .section-notes');
+    if (sectionNotes[0]) {
+      rowAbove.css(grayText);
+    }
   }
 
   addSelectAll() {
