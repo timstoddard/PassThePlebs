@@ -21,6 +21,7 @@ Modifying source
   * Install dependencies
   * Install chrome-cli (used for reloading on save)
 * Edit away! The code will be built and the extension refreshed every time you save.
+  * Note: You will need the 'Run on Save' extension for VS code.
 
 Chome webstore link: https://chrome.google.com/webstore/detail/pass-the-plebs/mhglgbabaleaegjhdcmfffkaaklpmjog
 
