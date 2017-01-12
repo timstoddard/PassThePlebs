@@ -16,14 +16,14 @@
       ],
       "js": [
         "js/jquery-3.1.1.min.js",
-        "bundle/main.js"
+        "bundle/index.js"
       ],
       "css": [
-        "bundle/main.css"
+        "bundle/index.css"
       ]
     }
   ],
-  "options_page": "options/options.html",
+  "options_page": "options/index.html",
   "permissions": [
     "http://polyratings.com/",
     "activeTab",

@@ -2,7 +2,7 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import { DNE } from './utils';
+import { DNE } from '../../shared/utils';
 
 export class PassLayoutFixer {
   options;

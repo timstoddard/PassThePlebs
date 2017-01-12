@@ -11,7 +11,8 @@
   "main": "js/index.js",
   "scripts": {
     "build": "npm run pack-files && npm run refresh-ext && npm run zip-dist",
-    "pack-files": "rimraf dist/bundle && rimraf PassThePlebs.zip && webpack -p --config ./webpack.config.js",
+    "pack-files": "npm run rimraf-output && webpack -p --config webpack/config.js",
+    "rimraf-output": "rimraf dist/bundle && rimraf dist/options && rimraf PassThePlebs.zip",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "zip-dist": "zip -r dist.zip dist",
     "lint": "eslint js/*.js",
@@ -28,6 +29,8 @@
     "css-loader": "^0.25.0",
     "eslint": "^3.7.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.26.0",
     "node-sass": "^3.10.1",
     "postcss-loader": "^0.13.0",
     "rimraf": "^2.5.4",
