@@ -2,12 +2,6 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import {
-  GRAY_CLOSED_CLASSES_DEFAULT,
-  HIDE_CLOSED_CLASSES_DEFAULT,
-  HIDE_CANCELLED_CLASSES_DEFAULT,
-  HIDE_CONFLICTING_CLASSES_DEFAULT
-} from './defaults';
 import { DNE } from './utils';
 
 export class PassLayoutFixer {
@@ -25,21 +19,14 @@ export class PassLayoutFixer {
   }
 
   hideRowsBasedOnOptions() {
-    this.hideRows('hideClosedClasses', 'tr.key-closed', HIDE_CLOSED_CLASSES_DEFAULT);
-    this.hideRows('hideCancelledClasses', 'tr.key-cancel', HIDE_CANCELLED_CLASSES_DEFAULT);
-    this.hideRows('hideConflictingClasses', 'tr.key-avail', HIDE_CONFLICTING_CLASSES_DEFAULT);
+    this.hideRows('hideClosedClasses', 'tr.key-closed');
+    this.hideRows('hideCancelledClasses', 'tr.key-cancel');
+    this.hideRows('hideConflictingClasses', 'tr.key-avail');
   }
 
-  hideRows(name, selector, defaultValue) {
+  hideRows(name, selector) {
     if (this.options[name]) {
       $(selector).each(this.hideClassRow);
-    } else if (DNE(this.options[name])) {
-      if (defaultValue) {
-        $(selector).each(this.hideClassRow);
-      }
-      let data = {};
-      data[name] = defaultValue;
-      chrome.storage.sync.set(data);
     }
   }
 
