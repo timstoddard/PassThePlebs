@@ -3,7 +3,7 @@
  */
 
 import { PolyratingIntegrator } from './add-polyratings';
-import { fixPassLayout } from './fix-pass-layout';
+import { PassLayoutFixer } from './fix-pass-layout';
 import { SHOW_BACKGROUND_COLORS_DEFAULT, HIDE_STAFF_CLASSES_DEFAULT } from './defaults';
 import { DNE } from './utils';
 
@@ -26,5 +26,6 @@ chrome.storage.sync.get(
       : options.hideStaffClasses;
     let integrator = new PolyratingIntegrator(showBackgroundColors, hideStaffClasses);
     integrator.addPolyratings();
-    fixPassLayout(options);
+    let fixer = new PassLayoutFixer(options);
+    fixer.fixPassLayout();
   });
