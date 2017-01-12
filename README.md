@@ -1,4 +1,4 @@
-This chrome extension adds Polyratings to the class listings on PASS.
+This Chrome extension adds several useful features, such as Polyrating integration, to the class listings on PASS.
 
 Features:
 * Polyrating and number of evaluations appear below the instructor's name
@@ -9,6 +9,7 @@ Features:
   * Red = Bad
 * Click on any teacher's name to see their full Polyratings page (if it exists)
 * Options to hide closed, cancelled, or conflicting classes
+* Options to gray out closed or conflicting classes
 * Option to hide classes that have STAFF listed as the instructor
 * Checkbox at the top of each class list to select/unselect all classes at once
 * Section headers now have a link to the class in the course catalog
