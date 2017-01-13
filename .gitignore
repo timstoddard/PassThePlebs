@@ -3,8 +3,5 @@ node_modules
 npm-debug.log
 
 # webpack output
-dist/bundle
-dist/options
-
-# compressed dist folder
+dist
 dist.zip

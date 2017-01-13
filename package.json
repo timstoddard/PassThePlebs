@@ -11,8 +11,8 @@
   "main": "js/index.js",
   "scripts": {
     "build": "npm run pack-files && npm run refresh-ext && npm run zip-dist",
-    "pack-files": "npm run rimraf-output && webpack -p --config webpack/config.js",
-    "rimraf-output": "rimraf dist/bundle && rimraf dist/options && rimraf dist.zip",
+    "pack-files": "rimraf dist && webpack -p --config webpack/config.js && npm run move-static-files",
+    "move-static-files": "cp src/manifest.json dist && cp src/lib/* dist/bundle",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "zip-dist": "zip -r dist.zip dist",
     "lint": "eslint js/*.js",
