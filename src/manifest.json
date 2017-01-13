@@ -1,8 +1,12 @@
 {
   "manifest_version": 2,
   "name": "Pass the Plebs",
-  "description": "Adds Polyratings to PASS pages",
+  "short_name": "Pass the Plebs",
   "version": "0.6.2",
+  "version_name": "beta",
+  "description": "Adds Polyratings (and much more) to PASS!",
+  "icons": {},
+  "author": "Tim Stoddard",
   "background": {
     "persistent": true,
     "scripts": [
@@ -23,7 +27,12 @@
       ]
     }
   ],
+  "incognito": "split",
+  "offline_enabled": true,
   "options_page": "options/index.html",
+  "options_ui": {
+    "page": "options/index.html"
+  },
   "permissions": [
     "http://polyratings.com/",
     "activeTab",
