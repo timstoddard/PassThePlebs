@@ -17,7 +17,12 @@ module.exports = [
     },
     plugins: utils.buildPlugins([
       new HtmlWebpackPlugin({
-        template: 'src/options/template.html'
+        template: 'src/options/template.ejs',
+        data: utils.getTemplateData(),
+        minify: {
+          collapseWhitespace: true,
+          removeComments: true
+        }
       })
     ])
   })

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Options | Pass The Plebs</title>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Options</h2>
+
+    <% for (var prop in htmlWebpackPlugin.options.data) { %>
+    <label>
+      <input
+        id="<%- prop %>"
+        type="checkbox">
+      <span class="labelText">
+        <%- htmlWebpackPlugin.options.data[prop] %>
+      </span>
+    </label>
+    <% } %>
+
+    <button id="restoreDefaults">
+      Restore Defaults
+    </button>
+  </div>
+</body>
+
+</html>

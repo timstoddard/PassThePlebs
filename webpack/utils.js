@@ -16,10 +16,6 @@ module.exports = {
           {
             test: /\.scss$/,
             loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader'])
-          },
-          {
-            test: /\.html$/,
-            loader: 'html'
           }
         ]
       },
@@ -49,5 +45,16 @@ module.exports = {
       });
     }
     return basePlugins;
+  },
+  getTemplateData() {
+    return {
+      'showBackgroundColors': 'Show Background Colors',
+      'grayClosedClasses': 'Gray Closed Classes Text',
+      'hideClosedClasses': 'Hide Closed Classes',
+      'hideCancelledClasses': 'Hide Cancelled Classes',
+      'grayConflictingClasses': 'Gray Conflicting Classes Text',
+      'hideConflictingClasses': 'Hide Conflicting Classes',
+      'hideStaffClasses': 'Hide STAFF Classes',
+    };
   }
 };
