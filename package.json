@@ -8,11 +8,12 @@
     "type": "git",
     "url": "https://github.com/timstoddard/PassThePlebs"
   },
-  "main": "js/index.js",
+  "main": "src/extension/js/index.js",
   "scripts": {
     "build": "npm run pack-files && npm run refresh-ext && npm run zip-dist",
-    "pack-files": "rimraf dist && webpack -p --config webpack/config.js && npm run move-static-files",
-    "move-static-files": "cp src/manifest.json dist && cp src/lib/* dist/bundle",
+    "pack-files": "rimraf dist && rimraf dist.zip && webpack -p --config webpack/config.js && npm run move-static-files",
+    "move-static-files": "cp src/manifest.json dist && cp src/lib/* dist/bundle && npm run move-icons",
+    "move-icons": "mkdir dist/icons && cp icons/* dist/icons && rm dist/icons/1024.png",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "zip-dist": "zip -r dist.zip dist",
     "lint": "eslint js/*.js",
