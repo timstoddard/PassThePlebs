@@ -13,6 +13,8 @@ export class PolyratingIntegrator {
 
   addPolyratings() {
     let nameGroups = {};
+    let rawNames = [];
+
     // make an object with all the instructor names and associated <td> elements
     $('.select-course > table > tbody > tr > .sectionNumber').each((i, elem) => {
       let nameElem = $(elem).next().next().next();
@@ -22,6 +24,7 @@ export class PolyratingIntegrator {
           nameGroups[rawName].push(nameElem);
         } else {
           nameGroups[rawName] = [nameElem];
+          rawNames.push(nameElem[0].innerText);
         }
       } else {
         this.foundStaff(nameElem);
@@ -29,22 +32,26 @@ export class PolyratingIntegrator {
     });
 
     // loop over all instructor names and get the associated polyrating data
-    for (let rawName in nameGroups) {
-      let nameElems = nameGroups[rawName];
-      let rawName = nameElems[0][0].innerText;
-      chrome.storage.local.get(rawName, (data) => {
-        if (Object.keys(data).length > 0) {
-          let info = JSON.parse(data[rawName]);
-          if ((Date.now() - info.timeAdded) / (1000 * 60) < 10) {
-            this.updateInstructorName(rawName, nameElems, info.bgColor, info.href, info.rating, info.evals);
+    chrome.storage.local.get(rawNames, (data) => {
+      rawNames.forEach((rawName) => {
+        let dataForName = data[rawName];
+        let nameElems = nameGroups[rawName];
+        if (dataForName) {
+          let info = JSON.parse(dataForName);
+          if ((Date.now() - info.timestamp) / (1000 * 60) < 10) {
+            if (info.notFound || info.ambiguous) {
+              this.addLinkToSearchPage(nameElems, rawName, info.lastName, info.notFound);
+            } else {
+              this.updateInstructorName(rawName, nameElems, info.bgColor, info.href, info.rating, info.evals);
+            }
           } else {
             this.generateNameCombos(nameElems, rawName);
           }
         } else {
           this.generateNameCombos(nameElems, rawName);
         }
-      });
-    }
+      })
+    });
   }
 
   generateNameCombos(nameElems, rawName) {
@@ -91,7 +98,7 @@ export class PolyratingIntegrator {
               let mainPageHeader = polyratingPage.find('h1.header-text');
               if (namesList.length === 0 && !mainPageHeader[0]) {
                 // searched name exists, but there were multiple search results
-                this.addLinkToSearchPage(nameElems, nextName, false);
+                this.addLinkToSearchPage(nameElems, rawName, nextName, false);
                 return;
               }
             }
@@ -100,7 +107,7 @@ export class PolyratingIntegrator {
         if (namesList.length > 0) {
           this.getDataAndUpdatePage(nameElems, rawName, namesList);
         } else {
-          this.addLinkToSearchPage(nameElems, nextName, true);
+          this.addLinkToSearchPage(nameElems, rawName, nextName, true);
         }
       }
     );
@@ -124,19 +131,18 @@ export class PolyratingIntegrator {
       }
       this.updateAttachedRows(nameElem);
     });
-    let info = {
+    let info = this.createInfo({
       bgColor: bgColor,
       href: href,
       rating: rating,
-      evals: evals,
-      timeAdded: Date.now()
-    };
+      evals: evals
+    });
     let data = {};
     data[rawName] = JSON.stringify(info);
     chrome.storage.local.set(data);
   }
 
-  addLinkToSearchPage(nameElems, lastName, notFound) {
+  addLinkToSearchPage(nameElems, rawName, lastName, notFound) {
     if (notFound) {
       nameElems.forEach((nameElem) => {
         nameElem.after(this.centeredTd('not found'));
@@ -151,6 +157,14 @@ export class PolyratingIntegrator {
         this.updateAttachedRows(nameElem);
       });
     }
+    let info = this.createInfo({
+      lastName: lastName,
+      notFound: notFound,
+      ambiguous: !notFound
+    });
+    let data = {};
+    data[rawName] = JSON.stringify(info);
+    chrome.storage.local.set(data);
   }
 
   foundStaff(nameElem) {
@@ -213,5 +227,10 @@ export class PolyratingIntegrator {
 
   centeredTd(text) {
     return `<td style="text-align:center">${text}</td>`;
+  }
+
+  createInfo(data) {
+    data['timestamp'] = Date.now();
+    return data;
   }
 }
