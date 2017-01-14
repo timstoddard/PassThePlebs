@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const utils = require('./utils');
 
 module.exports = [
+  // extension
   utils.createConfig({
     entry: './src/extension/js',
     output: {
@@ -15,6 +16,15 @@ module.exports = [
       })
     ])
   }),
+  // background
+  utils.createConfig({
+    entry: './src/extension/background',
+    output: {
+      filename: 'background.js',
+      path: 'dist/bundle'
+    }
+  }),
+  // options
   utils.createConfig({
     entry: './src/options',
     output: {
