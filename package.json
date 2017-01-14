@@ -1,7 +1,7 @@
 {
   "name": "pass-the-plebs",
   "version": "0.6.2",
-  "description": "Pass the Plebs (Chrome Extension)",
+  "description": "Pass the Plebs (Chrome extension for pass.calpoly.edu)",
   "author": "Tim Stoddard",
   "license": "MIT",
   "repository": {
@@ -10,13 +10,12 @@
   },
   "main": "src/extension/js/index.js",
   "scripts": {
-    "build": "npm run pack-files && npm run refresh-ext && npm run zip-dist",
-    "pack-files": "rimraf dist && rimraf dist.zip && webpack -p --config webpack/config.js && npm run move-static-files",
-    "move-static-files": "cp src/manifest.json dist && cp src/lib/* dist/bundle && npm run move-icons",
+    "build": "npm run rmrf && npm run pack-files && npm run refresh-ext && zip -r dist.zip dist",
+    "rmrf": "rimraf dist && rimraf dist.zip",
+    "pack-files": "webpack -p --config webpack/config.js && cp src/manifest.json dist && npm run move-icons",
     "move-icons": "mkdir dist/icons && cp icons/* dist/icons && rm dist/icons/1024.png",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
-    "zip-dist": "zip -r dist.zip dist",
-    "lint": "eslint js/*.js",
+    "lint": "eslint src/**/*.js",
     "postinstall": "brew install chrome-cli"
   },
   "devDependencies": {
