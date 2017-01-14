@@ -5,6 +5,9 @@
   "version": "0.6.2",
   "version_name": "beta",
   "description": "Adds Polyratings (and much more) to PASS!",
+  "omnibox": {
+    "keyword": "rating"
+  },
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",

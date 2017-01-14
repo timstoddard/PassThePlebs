@@ -2,23 +2,31 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, callback) {
-    if (request.action === 'xhttp') {
-      var xhttp = new XMLHttpRequest();
-      var method = request.method ? request.method.toUpperCase() : 'GET';
-      xhttp.onload = function() {
-        callback(xhttp.responseText);
-      };
-      xhttp.onerror = function() {
-        callback('error');
-      };
-      xhttp.open(method, request.url, true);
-      if (method == 'POST') {
-        xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      }
-      xhttp.send(request.data);
-      return true; // prevents the callback from being called too early on return
+// helper for http calls
+chrome.runtime.onMessage.addListener((request, sender, callback) => {
+  if (request.action === 'xhttp') {
+    let xhttp = new XMLHttpRequest();
+    let method = request.method ? request.method.toUpperCase() : 'GET';
+    xhttp.onload = () => callback(xhttp.responseText);
+    xhttp.onerror = () => callback('error');
+    xhttp.open(method, request.url, true);
+    if (method == 'POST') {
+      xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     }
+    xhttp.send(request.data);
+    return true; // prevents the callback from being called too early on return
   }
-);
+});
+
+// omnibox stuff
+chrome.omnibox.setDefaultSuggestion({ 'description': 'Look up \'%s\' on Polyratings.com' });
+chrome.omnibox.onInputEntered.addListener((text) => {
+  let classFormat = /[a-z]+ \d+/.test(text);
+  let searchType = classFormat ? 'class' : 'profname';
+  let sort = classFormat ? 'rating' : 'name';
+  let searchTerm = text.replace(/ /g, '+');
+  let url = `http://polyratings.com/search.php?type=${searchType}&terms=${searchTerm}&format=long&sort=${sort}`;
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.update(tabs[0].id, { url: url });
+  });
+});
