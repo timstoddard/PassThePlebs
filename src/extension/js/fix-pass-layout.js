@@ -2,6 +2,7 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
+import urlRegex from 'url-regex';
 import { DNE } from '../../shared/utils';
 
 export class PassLayoutFixer {
@@ -16,6 +17,7 @@ export class PassLayoutFixer {
     this.hideRowsBasedOnOptions();
     this.addSelectAll();
     this.fixSectionHeaders();
+    this.fixSectionNotes();
   }
 
   moveErrorList() {
@@ -120,6 +122,19 @@ export class PassLayoutFixer {
         .replace(' ', '+');
       headerContent.wrap(`<a href="http://catalog.calpoly.edu/search/?P=${course}" target="_blank" class="headerLink"></a>`);
       headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
+    });
+  }
+
+  fixSectionNotes() {
+    // make urls in section notes clickable
+    $('.section-notes').each((i, elem) => {
+      let sectionNotes = $(elem);
+      let urls = sectionNotes.html().match(urlRegex());
+      if (urls) {
+        urls.forEach((url) => {
+          sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`));
+        })
+      }
     });
   }
 }
