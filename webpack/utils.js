@@ -10,7 +10,9 @@ module.exports = {
         loaders: [
           {
             test: /\.js$/,
-            exclude: /node_modules/,
+            // because uglifyjs can't handle the fact that the
+            // url-regex module needs to be a special snowflake
+            exclude: /node_modules(?!\/url-regex)/,
             loader: 'babel',
             query: {
               presets: ['es2015', 'stage-0']
