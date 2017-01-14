@@ -10,8 +10,11 @@ module.exports = {
         loaders: [
           {
             test: /\.js$/,
-            loader: 'babel-loader?presets[]=es2015&presets[]=stage-0',
-            exclude: /node_modules/
+            exclude: /node_modules/,
+            loader: 'babel',
+            query: {
+              presets: ['es2015', 'stage-0']
+            }
           },
           {
             test: /\.scss$/,
