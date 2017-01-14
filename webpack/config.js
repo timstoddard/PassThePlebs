@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const utils = require('./utils');
 
@@ -7,7 +8,12 @@ module.exports = [
     output: {
       filename: 'index.js',
       path: 'dist/bundle'
-    }
+    },
+    plugins: utils.buildPlugins([
+      new webpack.ProvidePlugin({
+        $: 'jquery'
+      })
+    ])
   }),
   utils.createConfig({
     entry: './src/options',

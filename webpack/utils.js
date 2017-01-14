@@ -17,7 +17,10 @@ module.exports = {
             test: /\.scss$/,
             loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader'])
           }
-        ]
+        ],
+        alias: {
+          jquery: 'jquery/src/jquery'
+        }
       },
       postcss: function() {
         return [autoprefixer];
