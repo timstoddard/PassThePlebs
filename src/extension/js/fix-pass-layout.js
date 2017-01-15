@@ -13,19 +13,12 @@ export class PassLayoutFixer {
   }
 
   fixPassLayout() {
-    this.moveErrorList();
     this.hideRowsBasedOnOptions();
-    this.addSelectAll();
-    this.addRemoveButtons();
     this.fixSectionHeaders();
+    this.addRemoveButtons();
+    this.addSelectAll();
+    this.moveErrorList();
     this.fixSectionNotes();
-  }
-
-  moveErrorList() {
-    // move errors to the left side
-    let errors = $('#error').detach();
-    errors.appendTo('.sidebar');
-    errors.addClass('moved');
   }
 
   hideRowsBasedOnOptions() {
@@ -36,21 +29,19 @@ export class PassLayoutFixer {
 
   hideRows(name, selector) {
     if (this.options[name]) {
-      $(selector).each(this.hideClassRow);
+      $(selector).each((i, elem) => {
+        let row = $(elem);
+        row.hide();
+        let rowAbove = row.prev();
+        let sectionNotes = rowAbove.find('td > .section-notes');
+        if (sectionNotes[0]) {
+          rowAbove.hide();
+        }
+      });
     } else if (name === 'hideClosedClasses' && this.options['grayClosedClasses']) {
       $(selector).each(this.grayOutClassRowText);
     } else if (name === 'hideConflictingClasses' && this.options['grayConflictingClasses']) {
       $(selector).each(this.grayOutClassRowText);
-    }
-  }
-
-  hideClassRow() {
-    let row = $(this);
-    row.hide();
-    let rowAbove = row.prev();
-    let sectionNotes = rowAbove.find('td > .section-notes');
-    if (sectionNotes[0]) {
-      rowAbove.hide();
     }
   }
 
@@ -63,6 +54,49 @@ export class PassLayoutFixer {
     if (sectionNotes[0]) {
       rowAbove.css(grayText);
     }
+  }
+
+  fixSectionHeaders() {
+    // add catalog link to section headers
+    $('.select-course > h3').each((i, elem) => {
+      let header = $(elem);
+      let headerContent = $(header.contents()[0]);
+      let headerText = headerContent.text().replace(/\s+/g, ' ').trim();
+      let course = headerText
+        .match(/([a-z]+ \d+)/i)[0]
+        .replace(' ', '+');
+      headerContent.wrap(`<a href="http://catalog.calpoly.edu/search/?P=${course}" target="_blank" class="headerLink"></a>`);
+      headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
+    });
+  }
+
+  addRemoveButtons() {
+    $('.cart-action[data-id]').each((i, elem) => {
+      let id = $(elem).data('id');
+      let headerMap = $(`.select-course:nth-child(${i + 1}) .view-map`);
+      let removeButton = $('<a class="removeButton">X</a>');
+      headerMap.before(removeButton);
+      removeButton.click(() => {
+        // modified from filterBox.js
+        $.ajax({
+          dataType: 'json',
+          url: 'removeCourse.json',
+          data: {
+            courseId: id
+          },
+          cache: false,
+          success: (data) => {
+            if (data.length > 0) {
+              window.location.reload();
+            } else {
+              $('#cart-list-view').append('<li>No selected courses</li>');
+              window.location = 'prev.do';
+              $('#nextBtn').attr('enabled', 'false');
+            }
+          }
+        });
+      });
+    });
   }
 
   addSelectAll() {
@@ -113,47 +147,11 @@ export class PassLayoutFixer {
     });
   }
 
-  addRemoveButtons() {
-    $('.cart-action[data-id]').each((i, elem) => {
-      let id = $(elem).data('id');
-      let headerMap = $(`.select-course:nth-child(${i + 1}) .view-map`);
-      let removeButton = $('<a class="removeButton">X</a>');
-      headerMap.before(removeButton);
-      removeButton.click(() => {
-        // modified from filterBox.js
-        $.ajax({
-          dataType: 'json',
-          url: 'removeCourse.json',
-          data: {
-            courseId: id
-          },
-          cache: false,
-          success: (data) => {
-            if (data.length > 0) {
-              window.location.reload();
-            } else {
-              $('#cart-list-view').append('<li>No selected courses</li>');
-              window.location = 'prev.do';
-              $('#nextBtn').attr('enabled', 'false');
-            }
-          }
-        });
-      });
-    });
-  }
-
-  fixSectionHeaders() {
-    // add catalog link to section headers
-    $('.select-course > h3').each((i, elem) => {
-      let header = $(elem);
-      let headerContent = $(header.contents()[0]);
-      let headerText = headerContent.text().replace(/\s+/g, ' ').trim();
-      let course = headerText
-        .match(/([a-z]+ \d+)/i)[0]
-        .replace(' ', '+');
-      headerContent.wrap(`<a href="http://catalog.calpoly.edu/search/?P=${course}" target="_blank" class="headerLink"></a>`);
-      headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
-    });
+  moveErrorList() {
+    // move errors to the left side
+    let errors = $('#error').detach();
+    errors.appendTo('.sidebar');
+    errors.addClass('moved');
   }
 
   fixSectionNotes() {
