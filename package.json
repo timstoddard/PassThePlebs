@@ -13,7 +13,7 @@
     "build": "npm run rmrf && npm run pack-files && npm run refresh-ext && zip -r dist.zip dist",
     "rmrf": "rimraf dist && rimraf dist.zip",
     "pack-files": "webpack -p --config webpack/config.js && cp src/manifest.json dist && npm run move-icons",
-    "move-icons": "mkdir dist/icons && cp icons/* dist/icons && rm dist/icons/1024.png",
+    "move-icons": "mkdir dist/icons && cp media/icons/* dist/icons && rm dist/icons/1024.png",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "lint": "eslint src/**/*.js",
     "postinstall": "brew install chrome-cli"
