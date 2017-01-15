@@ -67,7 +67,7 @@ export class PolyratingIntegrator {
     if (namesList.indexOf(fullName) === -1) {
       namesList.push(fullName);
     }
-    namesList.unshift(lastName, firstNamesList[0]);
+    namesList.unshift(lastName);
     this.getDataAndUpdatePage(nameElems, rawName, namesList);
   }
 
