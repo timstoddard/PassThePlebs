@@ -19,10 +19,21 @@ email: tim.stoddard2@gmail.com
 }
 
 .removeButton {
-  font-size: 12px;
-  font-weight: normal;
-  margin: auto 4px;
-  padding: 4px 8px !important;
+  background: rgba(255,255,255,0.3);
+  border: 2px solid white;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  margin-left: 1rem;
+  padding: 0 4px;
+
+  &:hover {
+    background: rgba(255,0,0,0.3);
+    border-color: red;
+    color: red;
+    text-decoration: none;
+  }
 }
 
 .headerLink {

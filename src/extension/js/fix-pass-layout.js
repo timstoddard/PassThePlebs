@@ -117,7 +117,7 @@ export class PassLayoutFixer {
     $('.cart-action[data-id]').each((i, elem) => {
       let id = $(elem).data('id');
       let headerMap = $(`.select-course:nth-child(${i + 1}) .view-map`);
-      let removeButton = $('<a class="btn btn-gray removeButton">Remove</a>');
+      let removeButton = $('<a class="removeButton">X</a>');
       headerMap.before(removeButton);
       removeButton.click(() => {
         // modified from filterBox.js
