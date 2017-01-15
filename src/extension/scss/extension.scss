@@ -4,20 +4,25 @@ email: tim.stoddard2@gmail.com
 ------------------------------------ */
 
 
+#error {
+  background: rgba(255,0,0,0.4);
+  border: 2px solid red;
+  display: none;
+
+  &.moved {
+    display: block;
+  }
+  
+  > span {
+    font-weight: bold;
+  }
+}
+
 .removeButton {
   font-size: 12px;
   font-weight: normal;
   margin: auto 4px;
   padding: 4px 8px !important;
-}
-
-#error {
-  background: rgba(255,0,0,0.4);
-  border: 2px solid red;
-  
-  > span {
-    font-weight: bold;
-  }
 }
 
 .headerLink {

@@ -25,6 +25,7 @@ export class PassLayoutFixer {
     // move errors to the left side
     let errors = $('#error').detach();
     errors.appendTo('.sidebar');
+    errors.addClass('moved');
   }
 
   hideRowsBasedOnOptions() {
