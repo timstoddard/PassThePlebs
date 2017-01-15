@@ -16,6 +16,7 @@ export class PassLayoutFixer {
     this.moveErrorList();
     this.hideRowsBasedOnOptions();
     this.addSelectAll();
+    this.addRemoveButtons();
     this.fixSectionHeaders();
     this.fixSectionNotes();
   }
@@ -108,6 +109,35 @@ export class PassLayoutFixer {
       });
       let selectAll = table.find('.selectAll');
       selectAll[0].checked = allChecked;
+    });
+  }
+
+  addRemoveButtons() {
+    $('.cart-action[data-id]').each((i, elem) => {
+      let id = $(elem).data('id');
+      let headerMap = $(`.select-course:nth-child(${i + 1}) .view-map`);
+      let removeButton = $('<a class="btn btn-gray removeButton">Remove</a>');
+      headerMap.before(removeButton);
+      removeButton.click(() => {
+        // modified from filterBox.js
+        $.ajax({
+          dataType: 'json',
+          url: 'removeCourse.json',
+          data: {
+            courseId: id
+          },
+          cache: false,
+          success: (data) => {
+            if (data.length > 0) {
+              window.location.reload();
+            } else {
+              $('#cart-list-view').append('<li>No selected courses</li>');
+              window.location = 'prev.do';
+              $('#nextBtn').attr('enabled', 'false');
+            }
+          }
+        });
+      });
     });
   }
 
