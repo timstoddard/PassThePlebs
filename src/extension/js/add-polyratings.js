@@ -59,7 +59,7 @@ export class PolyratingIntegrator {
     let lastName = this.removeAllSingleLetters(names[0].trim());
     let firstNames = this.removeAllSingleLetters(names[1].trim());
     let firstNamesList = firstNames.split(' ');
-    let namesList = [];
+    let namesList = [lastName];
     firstNamesList.forEach((name) => {
       namesList.push(this.urlFormat(`${name} ${lastName}`));
     });
@@ -67,7 +67,6 @@ export class PolyratingIntegrator {
     if (namesList.indexOf(fullName) === -1) {
       namesList.push(fullName);
     }
-    namesList.unshift(lastName);
     this.getDataAndUpdatePage(nameElems, rawName, namesList);
   }
 
