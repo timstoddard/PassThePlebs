@@ -2,7 +2,7 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import { PassExtension } from './main';
+import { PassExtension } from './extension';
 
 import '../scss/index.scss';
 
