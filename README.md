@@ -10,6 +10,7 @@ Features:
   * Orange = Okay
   * Red = Bad
 * Click on any teacher's name to see their full Polyratings page (if it exists)
+* Search Polyratings from the Chrome search bar (keyword is 'rating')
 * Options to hide closed, cancelled, or conflicting classes
 * Options to gray out closed or conflicting classes
 * Option to hide classes that have STAFF listed as the instructor
