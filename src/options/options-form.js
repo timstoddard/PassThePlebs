@@ -40,7 +40,7 @@ export class OptionsForm {
   addEventListeners() {
     this.showBackgroundColors.addEventListener('click', () => {
       let data = {};
-      data[name] = this.showBackgroundColors.checked;
+      data['showBackgroundColors'] = this.showBackgroundColors.checked;
       chrome.storage.sync.set(data);
     });
     optionNames.forEach((name) => {
