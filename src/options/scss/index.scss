@@ -11,6 +11,7 @@ email: tim.stoddard2@gmail.com
 
 * {
   user-select: none;
+  font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
 }
 
 html {
@@ -23,21 +24,18 @@ body {
 
 .container {
   background: rgb(235,235,235);
-  border: 2px solid $borderColor;
-  border-radius: 10px;
-  display: inline-block;
-  padding: 0 40px 20px 40px;
+  padding: 20px 40px;
 }
 
 h2 {
   font-size: 1.5rem;
-  margin: 1rem;
+  margin: 0 auto 1rem;
   text-decoration: underline;
 }
 
 .labelText {
   align-items: center;
-  display: flex;
+  display: inline-flex;
   text-transform: capitalize;
 }
 
