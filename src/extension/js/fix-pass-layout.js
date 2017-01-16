@@ -13,7 +13,7 @@ export class PassLayoutFixer {
   }
 
   fixPassLayout() {
-    this.hideRowsBasedOnOptions();
+    this.updateRowsBasedOnOptions();
     this.fixSectionHeaders();
     this.addRemoveButtons();
     this.addSelectAll();
@@ -21,14 +21,14 @@ export class PassLayoutFixer {
     this.fixSectionNotes();
   }
 
-  hideRowsBasedOnOptions() {
-    this.hideRows('hideClosedClasses', 'tr.key-closed');
-    this.hideRows('hideCancelledClasses', 'tr.key-cancel');
-    this.hideRows('hideConflictingClasses', 'tr.key-avail');
+  updateRowsBasedOnOptions() {
+    this.updateRows('closedClasses', 'tr.key-closed');
+    this.updateRows('cancelledClasses', 'tr.key-cancel');
+    this.updateRows('conflictingClasses', 'tr.key-avail');
   }
 
-  hideRows(name, selector) {
-    if (this.options[name]) {
+  updateRows(name, selector) {
+    if (this.options[name] === 'hidden') {
       $(selector).each((i, elem) => {
         let row = $(elem);
         row.hide();
@@ -38,21 +38,17 @@ export class PassLayoutFixer {
           rowAbove.hide();
         }
       });
-    } else if (name === 'hideClosedClasses' && this.options['grayClosedClasses']) {
-      $(selector).each(this.grayOutClassRowText);
-    } else if (name === 'hideConflictingClasses' && this.options['grayConflictingClasses']) {
-      $(selector).each(this.grayOutClassRowText);
-    }
-  }
-
-  grayOutClassRowText() {
-    let row = $(this);
-    let grayText = { 'color': 'rgb(160,160,160)' };
-    row.css(grayText);
-    let rowAbove = row.prev();
-    let sectionNotes = rowAbove.find('td > .section-notes');
-    if (sectionNotes[0]) {
-      rowAbove.css(grayText);
+    } else if (this.options[name] === 'gray') {
+      $(selector).each((i, elem) => {
+        let row = $(elem);
+        let grayText = { 'color': 'rgb(160,160,160)' };
+        row.css(grayText);
+        let rowAbove = row.prev();
+        let sectionNotes = rowAbove.find('td > .section-notes');
+        if (sectionNotes[0]) {
+          rowAbove.css(grayText);
+        }
+      });
     }
   }
 

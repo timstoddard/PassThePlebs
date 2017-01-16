@@ -11,7 +11,7 @@ export class PassExtension {
   start() {
     chrome.storage.sync.get(optionNames, (options) => {
       this.addDefaults(options);
-      let integrator = new PolyratingIntegrator(options.showBackgroundColors, options.hideStaffClasses);
+      let integrator = new PolyratingIntegrator(options.showBackgroundColors, options.staffClasses);
       integrator.addPolyratings();
       let fixer = new PassLayoutFixer(options);
       fixer.fixPassLayout();

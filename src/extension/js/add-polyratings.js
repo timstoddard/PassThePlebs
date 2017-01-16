@@ -4,11 +4,11 @@
 
 export class PolyratingIntegrator {
   showBackgroundColors;
-  hideStaffClasses;
+  staffClassesOption;
 
-  constructor(showBackgroundColors, hideStaffClasses) {
+  constructor(showBackgroundColors, staffClassesOption) {
     this.showBackgroundColors = showBackgroundColors;
-    this.hideStaffClasses = hideStaffClasses;
+    this.staffClassesOption = staffClassesOption;
   }
 
   addPolyratings() {
@@ -167,7 +167,7 @@ export class PolyratingIntegrator {
   }
 
   foundStaff(nameElem) {
-    if (this.hideStaffClasses) {
+    if (this.staffClassesOption === 'hidden') {
       // hide row
       let row = nameElem.parent();
       row.hide();

@@ -6,20 +6,16 @@
 // update getTemplateData in webpack/utils
 export const defaults = {
   'showBackgroundColors': true,
-  'grayClosedClasses': false,
-  'hideClosedClasses': false,
-  'hideCancelledClasses': true,
-  'grayConflictingClasses': false,
-  'hideConflictingClasses': false,
-  'hideStaffClasses': false
+  'closedClasses': 'normal',
+  'cancelledClasses': 'hidden',
+  'conflictingClasses': 'normal',
+  'staffClasses': 'normal'
 };
 
 export const optionNames = [
   'showBackgroundColors',
-  'grayClosedClasses',
-  'hideClosedClasses',
-  'hideCancelledClasses',
-  'grayConflictingClasses',
-  'hideConflictingClasses',
-  'hideStaffClasses'
+  'closedClasses',
+  'cancelledClasses',
+  'conflictingClasses',
+  'staffClasses'
 ];

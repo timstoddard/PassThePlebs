@@ -34,7 +34,8 @@ module.exports = [
     plugins: utils.buildPlugins([
       new HtmlWebpackPlugin({
         template: 'src/options/template.ejs',
-        data: utils.getTemplateData(),
+        radioHeaders: utils.getRadioHeaders(),
+        radioOptions: utils.getRadioOptions(),
         minify: {
           collapseWhitespace: true,
           removeComments: true

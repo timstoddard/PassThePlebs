@@ -51,15 +51,15 @@ module.exports = {
     }
     return basePlugins;
   },
-  getTemplateData() {
+  getRadioHeaders() {
     return {
-      'showBackgroundColors': 'Show Background Colors',
-      'grayClosedClasses': 'Gray Closed Classes Text',
-      'hideClosedClasses': 'Hide Closed Classes',
-      'hideCancelledClasses': 'Hide Cancelled Classes',
-      'grayConflictingClasses': 'Gray Conflicting Classes Text',
-      'hideConflictingClasses': 'Hide Conflicting Classes',
-      'hideStaffClasses': 'Hide STAFF Classes',
+      'closedClasses': 'Closed Classes',
+      'cancelledClasses': 'Cancelled Classes',
+      'conflictingClasses': 'Conflicting Classes',
+      'staffClasses': 'STAFF Classes',
     };
+  },
+  getRadioOptions() {
+    return ['normal', 'gray', 'hidden'];
   }
 };
