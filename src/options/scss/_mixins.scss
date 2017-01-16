@@ -1,0 +1,19 @@
+/* ------------------------------------
+author: Tim Stoddard
+email: tim.stoddard2@gmail.com
+------------------------------------ */
+
+
+@import '_variables';
+
+@mixin inputBase($borderRadius) {
+  border: 1px solid black;
+  border-radius: $borderRadius;
+  box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
+  content: '\00a0';
+  height: 16px;
+  margin: 0 8px 0 4px;
+  padding: 0;
+  vertical-align: middle;
+  width: 16px;
+}

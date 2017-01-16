@@ -1,0 +1,41 @@
+/* ------------------------------------
+author: Tim Stoddard
+email: tim.stoddard2@gmail.com
+------------------------------------ */
+
+
+.radioOption {
+  border: 2px solid $borderColor;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.radioHeader {
+  border-bottom: 1px solid $borderColor;
+  font-size: 1.1rem;
+}
+
+.radioLabel {
+  display: inline-block;
+  font-size: 1rem;
+  padding: 5px;
+  text-align: left;
+  white-space: nowrap;
+
+  &:hover {
+    background: $borderColor;
+    cursor: pointer;
+  }
+}
+
+input[type="radio"] {
+  display: none;
+
+  + .labelText::before {
+    @include inputBase(8px);
+  }
+
+  &:checked + .labelText::before {
+    background: radial-gradient(ellipse at center, black 0%,black 35%, white 40%);
+  }
+}

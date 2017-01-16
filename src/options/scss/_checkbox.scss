@@ -1,0 +1,35 @@
+/* ------------------------------------
+author: Tim Stoddard
+email: tim.stoddard2@gmail.com
+------------------------------------ */
+
+
+.checkboxLabel {
+  border: 2px solid $borderColor;
+  border-radius: 5px;
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  padding: 5px;
+  text-align: left;
+  white-space: nowrap;
+
+  &:hover {
+    background: $borderColor;
+    cursor: pointer;
+  }
+}
+
+input[type="checkbox"] {
+  display: none;
+
+  + .labelText::before {
+    @include inputBase(3px);
+  }
+
+  &:checked + .labelText::before {
+    background: white;
+    content: '\2713';
+    text-align: center;
+  }
+}

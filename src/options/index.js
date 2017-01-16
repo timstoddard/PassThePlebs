@@ -4,7 +4,7 @@
 
 import { OptionsForm } from './options-form';
 
-import './index.scss';
+import './scss/index.scss';
 
 let form = new OptionsForm();
 form.init();
