@@ -136,9 +136,7 @@ export class PolyratingIntegrator {
       rating: rating,
       evals: evals
     });
-    let data = {};
-    data[rawName] = JSON.stringify(info);
-    chrome.storage.local.set(data);
+    chrome.storage.local.set({ [rawName]: JSON.stringify(info) });
   }
 
   addLinkToSearchPage(nameElems, rawName, lastName, notFound) {
@@ -161,9 +159,7 @@ export class PolyratingIntegrator {
       notFound: notFound,
       ambiguous: !notFound
     });
-    let data = {};
-    data[rawName] = JSON.stringify(info);
-    chrome.storage.local.set(data);
+    chrome.storage.local.set({ [rawName]: JSON.stringify(info) });
   }
 
   foundStaff(nameElem) {

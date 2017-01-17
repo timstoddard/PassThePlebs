@@ -39,9 +39,7 @@ export class OptionsForm {
 
   addEventListeners() {
     this.showBackgroundColors.addEventListener('click', () => {
-      let data = {};
-      data['showBackgroundColors'] = this.showBackgroundColors.checked;
-      chrome.storage.sync.set(data);
+      chrome.storage.sync.set({ 'showBackgroundColors': this.showBackgroundColors.checked });
     });
     optionNames.forEach((name) => {
       if (name !== 'showBackgroundColors') {
@@ -49,9 +47,7 @@ export class OptionsForm {
         for (let i = 0; i < radios.length; i++) {
           let radio = radios[i];
           radio.addEventListener('click', () => {
-            let data = {};
-            data[name] = radios[i].value;
-            chrome.storage.sync.set(data);
+            chrome.storage.sync.set({ [name]: radio.value });
           });
         }
       }
