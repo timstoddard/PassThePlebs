@@ -130,13 +130,12 @@ export class PolyratingIntegrator {
       }
       this.updateAttachedRows(nameElem);
     });
-    let info = this.createInfo({
+    this.setInfo(rawName, {
       bgColor: bgColor,
       href: href,
       rating: rating,
       evals: evals
     });
-    chrome.storage.local.set({ [rawName]: JSON.stringify(info) });
   }
 
   addLinkToSearchPage(nameElems, rawName, lastName, notFound) {
@@ -154,12 +153,11 @@ export class PolyratingIntegrator {
         this.updateAttachedRows(nameElem);
       });
     }
-    let info = this.createInfo({
+    this.setInfo(rawName, {
       lastName: lastName,
       notFound: notFound,
       ambiguous: !notFound
     });
-    chrome.storage.local.set({ [rawName]: JSON.stringify(info) });
   }
 
   foundStaff(nameElem) {
@@ -224,8 +222,8 @@ export class PolyratingIntegrator {
     return `<td style="text-align:center">${text}</td>`;
   }
 
-  createInfo(data) {
-    data['timestamp'] = Date.now();
-    return data;
+  setInfo(rawName, info) {
+    info['timestamp'] = Date.now();
+    chrome.storage.local.set({ [rawName]: JSON.stringify(info) });
   }
 }
