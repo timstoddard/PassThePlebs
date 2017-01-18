@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Pass the Plebs",
   "short_name": "Pass the Plebs",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "version_name": "beta",
   "description": "Adds Polyratings (and much more) to PASS!",
   "omnibox": {
