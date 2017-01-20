@@ -13,7 +13,7 @@ Features:
 * Search Polyratings for teachers and classes from the Chrome search bar (keyword is 'rating')
 * Options to gray out or hide classes that are closed, cancelled, conflict with your schedule, or have STAFF listed as the instructor
 * Checkbox at the top of each class list to select/unselect all classes at once
-* Section headers contain a link to the class in the course catalog
+* Click on any section header to toggle the course description
 * Errors list is now part of the sidebar instead of on top of the class listings
 
 Modifying source
