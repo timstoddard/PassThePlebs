@@ -42,7 +42,7 @@ h2 {
 
 button {
   background: none;
-  border: 1px solid black;
+  border: 1px solid rgb(120,120,120);
   border-radius: 5px;
   box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
   cursor: pointer;
@@ -51,6 +51,7 @@ button {
 
   &:hover {
     background: $borderColor;
+    border-color: black;
   }
 
   &:focus {
