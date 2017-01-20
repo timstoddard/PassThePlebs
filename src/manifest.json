@@ -34,7 +34,6 @@
     }
   ],
   "incognito": "split",
-  "offline_enabled": true,
   "options_page": "options/index.html",
   "options_ui": {
     "page": "options/index.html"
