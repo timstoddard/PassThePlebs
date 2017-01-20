@@ -53,16 +53,29 @@ export class PassLayoutFixer {
   }
 
   fixSectionHeaders() {
-    // add catalog link to section headers
-    $('.select-course > h3').each((i, elem) => {
-      let header = $(elem);
-      let headerContent = $(header.contents()[0]);
-      let headerText = headerContent.text().replace(/\s+/g, ' ').trim();
-      let course = headerText
-        .match(/([a-z]+ \d+)/i)[0]
-        .replace(' ', '+');
-      headerContent.wrap(`<a href="http://catalog.calpoly.edu/search/?P=${course}" target="_blank" class="headerLink"></a>`);
-      headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
+    // add descriptions to the section headers
+    $.ajax({
+      dataType: 'json',
+      url: 'removeCourse.json',
+      data: {
+        courseId: -1
+      },
+      cache: false,
+      success: (data) => {
+        let headers = $('.select-course > h3');
+        data.forEach((course, i) => {
+          let header = $(headers[i]);
+          let headerContent = $(header.contents()[0]);
+          let headerText = headerContent.text().replace(/\s+/g, ' ').trim();
+          let courseDescription = $(`<div class="courseDescription">${course.description}</div>`);
+          headerContent.wrap(`<a class="headerLink"></a>`);
+          headerContent.parent().click(() => {
+            courseDescription.toggleClass('expanded');
+          });
+          headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
+          header.after(courseDescription);
+        });
+      }
     });
   }
 

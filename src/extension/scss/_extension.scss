@@ -45,7 +45,24 @@ email: tim.stoddard2@gmail.com
 }
 
 .headerText {
+  cursor: pointer;
   margin-right: 10px;
+}
+
+.courseDescription {
+  background: #4e9a57;
+  color: white;
+  font-size: 0;
+  max-height: 0;
+  padding: 0;
+  transition: all .25s ease-out;
+
+  &.expanded {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    max-height: 1000px;
+    padding: 0 10px 10px 10px;
+  }
 }
 
 .rating {
