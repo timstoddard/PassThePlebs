@@ -28,6 +28,7 @@ input[type="checkbox"] {
 
   &:checked + .labelText::before {
     background: white;
+    border-color: black;
     content: '\2713';
     text-align: center;
   }

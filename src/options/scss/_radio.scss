@@ -37,6 +37,7 @@ input[type="radio"] {
   }
 
   &:checked + .labelText::before {
-    background: radial-gradient(ellipse at center, black 0%,black 35%, white 40%);
+    background: radial-gradient(ellipse at center, black 0%,black 30%, white 35%);
+    border-color: black;
   }
 }
