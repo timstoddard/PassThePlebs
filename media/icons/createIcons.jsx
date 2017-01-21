@@ -15,14 +15,14 @@ app.preferences.rulerUnits = Units.PIXELS;
 
 for (var i = 0; i < iconSizes.length; i++) {
     var size = iconSizes[i];
-    
+
     // resize with bicubic sharper (best for reduction)
     document.resizeImage(
       new UnitValue(size, 'px'),
       new UnitValue(size, 'px'),
       null,
       ResampleMethod.BICUBICSHARPER);
-    
+
     // save as png (copy)
     var file = new File(decodeURI(document.path) + '/' + size + '.png');
     var options = new PNGSaveOptions();
