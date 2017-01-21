@@ -38,15 +38,13 @@ email: tim.stoddard2@gmail.com
 
 .headerLink {
   color: white;
+  cursor: pointer;
+  margin-right: 10px;
+  text-decoration: underline;
 
   &:hover {
     font-style: italic;
   }
-}
-
-.headerText {
-  cursor: pointer;
-  margin-right: 10px;
 }
 
 .courseDescription {
