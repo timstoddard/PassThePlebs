@@ -22,9 +22,28 @@ export class PassLayoutFixer {
   }
 
   updateRowsBasedOnOptions() {
+    // hide/gray out rows if necessary
     this.updateRows('closedClasses', 'tr.key-closed');
     this.updateRows('cancelledClasses', 'tr.key-cancel');
     this.updateRows('conflictingClasses', 'tr.key-avail');
+
+    // fix alternating white/gray rows
+    $('.select-course > table > tbody').each((i, elem) => {
+      let rowShouldBeGray = false; // first <tr> should be white
+      $(elem).find('tr:visible').each((i, elem) => {
+        let row = $(elem);
+        if (rowShouldBeGray && row.hasClass('row-white')) {
+          row.removeClass('row-white').addClass('row-gray');
+        } else if (!rowShouldBeGray && row.hasClass('row-gray')) {
+          row.removeClass('row-gray').addClass('row-white');
+        }
+
+        // if current row has section notes, row below needs to be same color
+        if (!row.find('td > .section-notes')[0]) {
+          rowShouldBeGray = !rowShouldBeGray;
+        }
+      });
+    });
   }
 
   updateRows(name, selector) {
