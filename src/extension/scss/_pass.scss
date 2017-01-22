@@ -18,6 +18,15 @@ email: tim.stoddard2@gmail.com
   color: red !important;
 }
 
+.content {
+  opacity: 0;
+  transition: opacity .25s ease .25s;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
 .select-course {
   border-radius: 4px 4px 0 0;
   margin-top: 0 !important;

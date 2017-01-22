@@ -13,12 +13,17 @@ export class PassLayoutFixer {
   }
 
   fixPassLayout() {
+    this.fadeInContent();
     this.updateRowsBasedOnOptions();
     this.fixSectionHeaders();
     this.addRemoveButtons();
     this.addSelectAll();
     this.moveErrorList();
     this.fixSectionNotes();
+  }
+
+  fadeInContent() {
+    $('.content').addClass('visible');
   }
 
   updateRowsBasedOnOptions() {
