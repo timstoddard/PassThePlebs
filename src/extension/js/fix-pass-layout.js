@@ -20,6 +20,7 @@ export class PassLayoutFixer {
     this.addSelectAll();
     this.moveErrorList();
     this.fixSectionNotes();
+    this.fixNoSchedulesGeneratedMessage();
   }
 
   fadeInContent() {
@@ -205,6 +206,21 @@ export class PassLayoutFixer {
         urls.forEach((url) => {
           sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`));
         })
+      }
+    });
+  }
+
+  fixNoSchedulesGeneratedMessage() {
+    let noSchedulesGenerated = false;
+    $('.schedulePages').each((i, elem) => {
+      let div = $(elem);
+      if (i === 0) {
+        if (/of 0 total/.test(div.html())) {
+          noSchedulesGenerated = true;
+        }
+        div.html(div.html().replace('1 - 0', '0'));
+      } else {
+        div.hide();
       }
     });
   }
