@@ -56,10 +56,12 @@ export class PassLayoutFixer {
       $(selector).each((i, elem) => {
         let row = $(elem);
         row.hide();
+        this.uncheckCheckbox(row);
         let rowAbove = row.prev();
         let sectionNotes = rowAbove.find('td > .section-notes');
         if (sectionNotes[0]) {
           rowAbove.hide();
+          this.uncheckCheckbox(rowAbove);
         }
       });
     } else if (this.options[name] === 'gray') {
@@ -73,6 +75,13 @@ export class PassLayoutFixer {
           rowAbove.css(grayText);
         }
       });
+    }
+  }
+
+  uncheckCheckbox(row) {
+    let checkbox = row.find('input[type="checkbox"]:checked');
+    if (checkbox[0]) {
+      checkbox.click();
     }
   }
 
