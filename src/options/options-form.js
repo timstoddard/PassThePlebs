@@ -71,9 +71,7 @@ export class OptionsForm {
     let radios = this.radioElems[name];
     for (let i = 0; i < radios.length; i++) {
       let radio = radios[i];
-      if (radio.value === val) {
-        radio.checked = true;
-      }
+      radio.checked = radio.value === val;
     }
   }
 }

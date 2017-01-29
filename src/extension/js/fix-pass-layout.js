@@ -3,7 +3,8 @@
  */
 
 import urlRegex from 'url-regex';
-import { DNE } from '../../shared/utils';
+import { defaults } from '../../shared/defaults';
+import { DNE, value } from '../../shared/utils';
 
 export class PassLayoutFixer {
   options;
@@ -18,6 +19,7 @@ export class PassLayoutFixer {
     this.fixSectionHeaders();
     this.addRemoveButtons();
     this.addSelectAll();
+    this.integrateRowOptions();
     this.moveErrorList();
     this.fixSectionNotes();
     this.fixNoSchedulesGeneratedMessage();
@@ -188,6 +190,57 @@ export class PassLayoutFixer {
       let selectAll = table.find('.selectAll');
       selectAll[0].checked = allChecked;
     });
+  }
+
+  integrateRowOptions() {
+    let sidebarLists = $('.sidebar > ul');
+    if (sidebarLists.length == 2) {
+      let key = $(sidebarLists[1]);
+      let closed = key.find('.key-closed')
+      let conflicting = key.find('.key-avail')
+      let cancelled = key.find('.key-cancel')
+
+      let optionNames = [
+        'closedClasses',
+        'cancelledClasses',
+        'conflictingClasses'
+      ];
+      chrome.storage.sync.get(optionNames, (options) => {
+        optionNames.forEach((name) => {
+          options[name] = value(options[name], defaults[name]);
+        });
+        closed.after(this.createRadioOptions(options, 'closedClasses'));
+        cancelled.after(this.createRadioOptions(options, 'cancelledClasses'));
+        conflicting.after(this.createRadioOptions(options, 'conflictingClasses'));
+      });
+
+    }
+  }
+
+  createRadioOptions(options, name) {
+    let radioOptions = $(`<div class="sidebarRadioList">
+      <label class="sidebarRadioItem">
+        <input type="radio" name="${name}" value="normal">
+        normal
+      </label>
+      <label class="sidebarRadioItem">
+        <input type="radio" name="${name}" value="gray">
+        gray
+      </label>
+      <label class="sidebarRadioItem">
+        <input type="radio" name="${name}" value="hidden">
+        hidden
+      </label>
+    </div>`);
+    let radios = radioOptions.find('input[type="radio"]');
+    radios.each((i, radio) => {
+      radio.checked = radio.value === options[name];
+      $(radio).click(() => {
+        chrome.storage.sync.set({ [name]: radio.value });
+        window.location.reload();
+      });
+    });
+    return radioOptions;
   }
 
   moveErrorList() {

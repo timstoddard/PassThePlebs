@@ -4,6 +4,18 @@ email: tim.stoddard2@gmail.com
 ------------------------------------ */
 
 
+.sidebarRadio {
+  &List {
+    display: flex;
+    margin-top: 4px;
+  }
+
+  &Item {
+    margin-right: 10px;
+    text-transform: capitalize;
+  }
+}
+
 #error {
   background: rgba(255,0,0,0.4);
   border: 2px solid red;
