@@ -4,10 +4,10 @@ email: tim.stoddard2@gmail.com
 ------------------------------------ */
 
 
-@import '_variables';
-@import '_mixins';
-@import '_checkbox';
-@import '_radio';
+@import 'variables';
+@import 'mixins';
+@import 'checkbox';
+@import 'radio';
 
 * {
   user-select: none;
@@ -18,19 +18,23 @@ html {
   font-size: 18px;
 }
 
-body {
-  text-align: center;
+.container {
+  display: flex;
+  justify-content: center;
 }
 
-.container {
+.content {
   background: rgb(235,235,235);
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   padding: 20px 40px;
 }
 
 h2 {
   font-size: 1.5rem;
-  margin: 0 auto 1rem;
+  margin: 0;
+  margin-bottom: 1rem;
+  text-align: center;
   text-decoration: underline;
 }
 
@@ -40,14 +44,20 @@ h2 {
   text-transform: capitalize;
 }
 
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}
+
 button {
   background: none;
   border: 1px solid rgb(120,120,120);
   border-radius: 5px;
   box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
   cursor: pointer;
+  display: inline-block;
   font-size: 1rem;
-  margin-top: 10px;
 
   &:hover {
     background: $borderColor;

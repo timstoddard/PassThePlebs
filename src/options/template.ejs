@@ -7,42 +7,48 @@
 
 <body>
   <div class="container">
-    <h2>Options</h2>
-    <label class="checkboxLabel">
-      <input
-        id="showBackgroundColors"
-        type="checkbox">
-      <span class="labelText">
-        Show Background Colors
-      </span>
-    </label>
+    <div class="content">
+      <h2>Options</h2>
+      <label class="checkboxLabel">
+        <input
+          id="showBackgroundColors"
+          type="checkbox">
+        <span class="labelText">
+          Show Background Colors
+        </span>
+      </label>
 
-      <% for (var prop in htmlWebpackPlugin.options.radioHeaders) { %>
-      <div class="radioOption">
-        <div class="radioHeader">
-          <%- htmlWebpackPlugin.options.radioHeaders[prop] %>
+        <% for (var prop in htmlWebpackPlugin.options.radioHeaders) { %>
+        <div class="radioOption">
+          <div class="radioHeader">
+            <%- htmlWebpackPlugin.options.radioHeaders[prop] %>
+          </div>
+          <div
+            class="radioList"
+            id="<%- prop %>">
+
+            <% for (var i = 0; i < htmlWebpackPlugin.options.radioOptions.length; i++) { %>
+            <label class="radioLabel">
+              <input
+                type="radio"
+                name="<%- prop %>"
+                value="<%- htmlWebpackPlugin.options.radioOptions[i] %>">
+              <span class="labelText">
+                <%- htmlWebpackPlugin.options.radioOptions[i] %>
+              </span>
+            </label>
+            <% } %>
+
+          </div>
         </div>
-        <div id="<%- prop %>">
+        <% } %>
 
-          <% for (var i = 0; i < htmlWebpackPlugin.options.radioOptions.length; i++) { %>
-          <label class="radioLabel">
-            <input
-              type="radio"
-              name="<%- prop %>"
-              value="<%- htmlWebpackPlugin.options.radioOptions[i] %>">
-            <span class="labelText">
-              <%- htmlWebpackPlugin.options.radioOptions[i] %>
-            </span>
-          </label>
-          <% } %>
-
-        </div>
+      <div class="buttonWrapper">
+        <button id="restoreDefaults">
+          Restore Defaults
+        </button>
       </div>
-      <% } %>
-
-    <button id="restoreDefaults">
-      Restore Defaults
-    </button>
+    </div>
   </div>
 </body>
 

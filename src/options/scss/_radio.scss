@@ -4,28 +4,37 @@ email: tim.stoddard2@gmail.com
 ------------------------------------ */
 
 
-.radioOption {
-  border: 2px solid $borderColor;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
+.radio {
+  &Option {
+    border: 2px solid $borderColor;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
 
-.radioHeader {
-  border-bottom: 1px solid $borderColor;
-  font-size: 1.1rem;
-  padding: 3px 0;
-}
+  &Header {
+    border-bottom: 1px solid $borderColor;
+    font-size: 1.1rem;
+    padding: 3px 0;
+    text-align: center;
+  }
 
-.radioLabel {
-  display: inline-block;
-  font-size: 1rem;
-  padding: 8px;
-  text-align: left;
-  white-space: nowrap;
+  &List {
+    display: flex;
+  }
 
-  &:hover {
-    background: $borderColor;
-    cursor: pointer;
+  &Label {
+    display: inline-block;
+    font-size: 1rem;
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap;
+
+    &:hover {
+      background: $borderColor;
+      cursor: pointer;
+    }
   }
 }
 
