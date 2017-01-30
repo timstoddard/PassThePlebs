@@ -6,12 +6,8 @@
   },
   "rules": {
     "semi": [
-      "warn",
-      "always"
-    ],
-    "quotes": [
       "error",
-      "single"
+      "never"
     ]
   }
 }

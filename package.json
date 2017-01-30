@@ -14,7 +14,7 @@
     "pack-files": "webpack -p --config webpack/config.js && npm run move-files",
     "move-files": "cp src/manifest.json dist && mkdir dist/icons && cp media/icons/*.png dist/icons",
     "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint \"src/**/*.js\"",
     "postinstall": "brew install chrome-cli"
   },
   "devDependencies": {

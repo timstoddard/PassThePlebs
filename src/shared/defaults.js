@@ -10,7 +10,7 @@ export const defaults = {
   'cancelledClasses': 'hidden',
   'conflictingClasses': 'normal',
   'staffClasses': 'normal'
-};
+}
 
 export const optionNames = [
   'showBackgroundColors',
@@ -18,4 +18,4 @@ export const optionNames = [
   'cancelledClasses',
   'conflictingClasses',
   'staffClasses'
-];
+]

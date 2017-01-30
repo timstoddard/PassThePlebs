@@ -2,96 +2,96 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import urlRegex from 'url-regex';
-import { defaults } from '../../shared/defaults';
-import { DNE, value } from '../../shared/utils';
+import urlRegex from 'url-regex'
+import { defaults } from '../../shared/defaults'
+import { DNE, value } from '../../shared/utils'
 
 export class PassLayoutFixer {
   options;
 
   constructor(options) {
-    this.options = options;
+    this.options = options
   }
 
   fixPassLayout() {
-    this.fadeInContent();
-    this.updateRowsBasedOnOptions();
-    this.fixSectionHeaders();
-    this.addRemoveButtons();
-    this.addSelectAll();
-    this.integrateRowOptions();
-    this.addOptionsButton();
-    this.moveErrorList();
-    this.fixSectionNotes();
-    this.fixNoSchedulesGeneratedMessage();
+    this.fadeInContent()
+    this.updateRowsBasedOnOptions()
+    this.fixSectionHeaders()
+    this.addRemoveButtons()
+    this.addSelectAll()
+    this.integrateRowOptions()
+    this.addOptionsButton()
+    this.moveErrorList()
+    this.fixSectionNotes()
+    this.fixNoSchedulesGeneratedMessage()
   }
 
   fadeInContent() {
-    $('.content').addClass('visible');
+    $('.content').addClass('visible')
   }
 
   updateRowsBasedOnOptions() {
     // hide/gray out rows if necessary
-    this.updateRows('closedClasses', 'tr.key-closed');
-    this.updateRows('cancelledClasses', 'tr.key-cancel');
-    this.updateRows('conflictingClasses', 'tr.key-avail');
+    this.updateRows('closedClasses', 'tr.key-closed')
+    this.updateRows('cancelledClasses', 'tr.key-cancel')
+    this.updateRows('conflictingClasses', 'tr.key-avail')
 
     // fix alternating white/gray rows
     $('.select-course > table > tbody').each((i, elem) => {
-      let rowShouldBeGray = false; // first <tr> should be white
+      let rowShouldBeGray = false // first <tr> should be white
       $(elem).find('tr:visible').each((i, elem) => {
-        let row = $(elem);
+        let row = $(elem)
         if (rowShouldBeGray && row.hasClass('row-white')) {
-          row.removeClass('row-white').addClass('row-gray');
+          row.removeClass('row-white').addClass('row-gray')
         } else if (!rowShouldBeGray && row.hasClass('row-gray')) {
-          row.removeClass('row-gray').addClass('row-white');
+          row.removeClass('row-gray').addClass('row-white')
         }
 
         // if current row has section notes, row below needs to be same color
         if (!row.find('td > .section-notes')[0]) {
-          rowShouldBeGray = !rowShouldBeGray;
+          rowShouldBeGray = !rowShouldBeGray
         }
-      });
-    });
+      })
+    })
   }
 
   updateRows(name, selector) {
     if (this.options[name] === 'hidden') {
       $(selector).each((i, elem) => {
-        let row = $(elem);
-        let input = row.find('input[type="checkbox"]');
+        let row = $(elem)
+        let input = row.find('input[type="checkbox"]')
         if (input[0]) {
-          input.addClass('hiddenInput');
+          input.addClass('hiddenInput')
         }
-        row.hide();
-        this.uncheckCheckbox(row);
-        let rowAbove = row.prev();
-        let sectionNotes = rowAbove.find('td > .section-notes');
+        row.hide()
+        this.uncheckCheckbox(row)
+        let rowAbove = row.prev()
+        let sectionNotes = rowAbove.find('td > .section-notes')
         if (sectionNotes[0]) {
           // if section notes exist, the input checkbox is always part of that row
-          rowAbove.find('input[type="checkbox"]').addClass('hiddenInput');
-          rowAbove.hide();
-          this.uncheckCheckbox(rowAbove);
+          rowAbove.find('input[type="checkbox"]').addClass('hiddenInput')
+          rowAbove.hide()
+          this.uncheckCheckbox(rowAbove)
         }
-      });
+      })
     } else if (this.options[name] === 'gray') {
       $(selector).each((i, elem) => {
-        let row = $(elem);
-        let grayText = { 'color': 'rgb(160,160,160)' };
-        row.css(grayText);
-        let rowAbove = row.prev();
-        let sectionNotes = rowAbove.find('td > .section-notes');
+        let row = $(elem)
+        let grayText = { 'color': 'rgb(160,160,160)' }
+        row.css(grayText)
+        let rowAbove = row.prev()
+        let sectionNotes = rowAbove.find('td > .section-notes')
         if (sectionNotes[0]) {
-          rowAbove.css(grayText);
+          rowAbove.css(grayText)
         }
-      });
+      })
     }
   }
 
   uncheckCheckbox(row) {
-    let checkbox = row.find('input[type="checkbox"]:checked');
+    let checkbox = row.find('input[type="checkbox"]:checked')
     if (checkbox[0]) {
-      checkbox.click();
+      checkbox.click()
     }
   }
 
@@ -105,29 +105,29 @@ export class PassLayoutFixer {
       },
       cache: false,
       success: (data) => {
-        let headers = $('.select-course > h3');
+        let headers = $('.select-course > h3')
         data.forEach((course, i) => {
-          let header = $(headers[i]);
-          let headerContent = $(header.contents()[0]);
-          let headerText = headerContent.text().replace(/\s+/g, ' ').trim();
-          let courseDescription = $(`<div class="courseDescription">${course.description}</div>`);
-          headerContent.wrap(`<a class="headerLink"></a>`);
+          let header = $(headers[i])
+          let headerContent = $(header.contents()[0])
+          let headerText = headerContent.text().replace(/\s+/g, ' ').trim()
+          let courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
+          headerContent.wrap(`<a class="headerLink"></a>`)
           headerContent.parent().click(() => {
-            courseDescription.toggleClass('expanded');
-          });
-          headerContent.replaceWith(`<span class="headerText">${headerText}</span>`);
-          header.after(courseDescription);
-        });
+            courseDescription.toggleClass('expanded')
+          })
+          headerContent.replaceWith(`<span class="headerText">${headerText}</span>`)
+          header.after(courseDescription)
+        })
       }
-    });
+    })
   }
 
   addRemoveButtons() {
     $('.cart-action[data-id]').each((i, elem) => {
-      let id = $(elem).data('id');
-      let headerMap = $(`.select-course:nth-child(${i + 2}) .view-map`);
-      let removeButton = $('<a class="removeButton">X</a>');
-      headerMap.before(removeButton);
+      let id = $(elem).data('id')
+      let headerMap = $(`.select-course:nth-child(${i + 2}) .view-map`)
+      let removeButton = $('<a class="removeButton">X</a>')
+      headerMap.before(removeButton)
       removeButton.click(() => {
         // modified from filterBox.js
         $.ajax({
@@ -139,16 +139,16 @@ export class PassLayoutFixer {
           cache: false,
           success: (data) => {
             if (data.length > 0) {
-              window.location.reload();
+              window.location.reload()
             } else {
-              $('#cart-list-view').append('<li>No selected courses</li>');
-              window.location = 'prev.do';
-              $('#nextBtn').attr('enabled', 'false');
+              $('#cart-list-view').append('<li>No selected courses</li>')
+              window.location = 'prev.do'
+              $('#nextBtn').attr('enabled', 'false')
             }
           }
-        });
-      });
-    });
+        })
+      })
+    })
   }
 
   addSelectAll() {
@@ -156,51 +156,51 @@ export class PassLayoutFixer {
     // the hidden rows' checkboxes have the `hiddenInput` class
 
     $('.select-course > table').each((i, elem) => {
-      let table = $(elem);
-      let checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)');
+      let table = $(elem)
+      let checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)')
       if (checkboxes.length > 0) {
         // restyle the checkboxes
         checkboxes.each((i, elem) => {
-          let checkbox = $(elem);
-          checkbox.removeClass('left');
-          checkbox.parent().css('text-align', 'center');
-        });
+          let checkbox = $(elem)
+          checkbox.removeClass('left')
+          checkbox.parent().css('text-align', 'center')
+        })
 
         // add select all checkboxes to table headers
-        let selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
-        let headerChildren = table.find('thead > tr').children();
+        let selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">')
+        let headerChildren = table.find('thead > tr').children()
         selectAllCheckbox.click((e) => {
-          let checked = e.target.checked;
+          let checked = e.target.checked
           checkboxes.each((i, elem) => {
-            elem.checked = !checked;
-            $(elem).click();
-          });
-        });
-        headerChildren.eq(0).append(selectAllCheckbox);
-        headerChildren.eq(4).after('<th>Polyrating</th>');
+            elem.checked = !checked
+            $(elem).click()
+          })
+        })
+        headerChildren.eq(0).append(selectAllCheckbox)
+        headerChildren.eq(4).after('<th>Polyrating</th>')
 
         // update the select all checkboxes to checked if all their children all checked,
         // and listen for child checkbox changes to update the parent select all checkbox
-        this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox);
+        this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox)
         checkboxes.click(() => {
-          this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox);
-        });
+          this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox)
+        })
       }
-    });
+    })
   }
 
   updateSelectAllCheckbox(checkboxes, selectAllCheckbox) {
-    let allChecked = true;
+    let allChecked = true
     checkboxes.each((i, elem) => {
-      allChecked &= elem.checked;
-    });
-    selectAllCheckbox.prop('checked', allChecked);
+      allChecked &= elem.checked
+    })
+    selectAllCheckbox.prop('checked', allChecked)
   }
 
   integrateRowOptions() {
-    let sidebarLists = $('.sidebar > ul');
+    let sidebarLists = $('.sidebar > ul')
     if (sidebarLists.length == 2) {
-      let key = $(sidebarLists[1]);
+      let key = $(sidebarLists[1])
       let closed = key.find('.key-closed')
       let conflicting = key.find('.key-avail')
       let cancelled = key.find('.key-cancel')
@@ -209,15 +209,15 @@ export class PassLayoutFixer {
         'closedClasses',
         'cancelledClasses',
         'conflictingClasses'
-      ];
+      ]
       chrome.storage.sync.get(optionNames, (options) => {
         optionNames.forEach((name) => {
-          options[name] = value(options[name], defaults[name]);
-        });
-        closed.after(this.createRadioOptions(options, 'closedClasses'));
-        cancelled.after(this.createRadioOptions(options, 'cancelledClasses'));
-        conflicting.after(this.createRadioOptions(options, 'conflictingClasses'));
-      });
+          options[name] = value(options[name], defaults[name])
+        })
+        closed.after(this.createRadioOptions(options, 'closedClasses'))
+        cancelled.after(this.createRadioOptions(options, 'cancelledClasses'))
+        conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))
+      })
 
     }
   }
@@ -238,68 +238,68 @@ export class PassLayoutFixer {
           hidden
         </label>
       </div>
-    `);
-    let radios = radioOptions.find('input[type="radio"]');
+    `)
+    let radios = radioOptions.find('input[type="radio"]')
     radios.each((i, radio) => {
-      radio.checked = radio.value === options[name];
+      radio.checked = radio.value === options[name]
       $(radio).click(() => {
-        chrome.storage.sync.set({ [name]: radio.value });
-        window.location.reload();
-      });
-    });
-    return radioOptions;
+        chrome.storage.sync.set({ [name]: radio.value })
+        window.location.reload()
+      })
+    })
+    return radioOptions
   }
 
   addOptionsButton() {
     // this method must be called before moveErrorList
     // so the sidebar content is in the correct order
-    let goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>');
+    let goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>')
     goToOptions.click(() => {
       console.log('c.r', chrome.runtime)
       console.log('c.r.oOP', chrome.runtime.openOptionsPage)
       if (chrome.runtime.openOptionsPage) {
         chrome.runtime.openOptionsPage((a, b, c) => {
           console.log(a, b, c)
-        });
+        })
       } else {
-        window.open(chrome.runtime.getURL('options/index.html'));
+        window.open(chrome.runtime.getURL('options/index.html'))
       }
-    });
-    $('.sidebar').append(goToOptions);
+    })
+    $('.sidebar').append(goToOptions)
   }
 
   moveErrorList() {
     // move errors to the left side
-    let errors = $('#error').detach();
-    errors.appendTo('.sidebar');
-    errors.addClass('moved');
+    let errors = $('#error').detach()
+    errors.appendTo('.sidebar')
+    errors.addClass('moved')
   }
 
   fixSectionNotes() {
     // make urls in section notes clickable
     $('.section-notes').each((i, elem) => {
-      let sectionNotes = $(elem);
-      let urls = sectionNotes.html().match(urlRegex());
+      let sectionNotes = $(elem)
+      let urls = sectionNotes.html().match(urlRegex())
       if (urls) {
         urls.forEach((url) => {
-          sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`));
+          sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`))
         })
       }
-    });
+    })
   }
 
   fixNoSchedulesGeneratedMessage() {
-    let noSchedulesGenerated = false;
+    let noSchedulesGenerated = false
     $('.schedulePages').each((i, elem) => {
-      let div = $(elem);
+      let div = $(elem)
       if (i === 0) {
         if (/of 0 total/.test(div.html())) {
-          noSchedulesGenerated = true;
+          noSchedulesGenerated = true
         }
-        div.html(div.html().replace('1 - 0', '0'));
+        div.html(div.html().replace('1 - 0', '0'))
       } else {
-        div.hide();
+        div.hide()
       }
-    });
+    })
   }
 }
