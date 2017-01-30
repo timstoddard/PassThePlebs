@@ -42,5 +42,8 @@
     "http://polyratings.com/",
     "activeTab",
     "storage"
+  ],
+  "web_accessible_resources": [
+    "options/index.html"
   ]
 }

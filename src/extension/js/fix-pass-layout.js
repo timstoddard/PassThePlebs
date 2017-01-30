@@ -20,6 +20,7 @@ export class PassLayoutFixer {
     this.addRemoveButtons();
     this.addSelectAll();
     this.integrateRowOptions();
+    this.addOptionsButton();
     this.moveErrorList();
     this.fixSectionNotes();
     this.fixNoSchedulesGeneratedMessage();
@@ -218,20 +219,22 @@ export class PassLayoutFixer {
   }
 
   createRadioOptions(options, name) {
-    let radioOptions = $(`<div class="sidebarRadioList">
-      <label class="sidebarRadioItem">
-        <input type="radio" name="${name}" value="normal">
-        normal
-      </label>
-      <label class="sidebarRadioItem">
-        <input type="radio" name="${name}" value="gray">
-        gray
-      </label>
-      <label class="sidebarRadioItem">
-        <input type="radio" name="${name}" value="hidden">
-        hidden
-      </label>
-    </div>`);
+    let radioOptions = $(`
+      <div class="sidebarRadioList">
+        <label class="sidebarRadioItem">
+          <input type="radio" name="${name}" value="normal">
+          normal
+        </label>
+        <label class="sidebarRadioItem">
+          <input type="radio" name="${name}" value="gray">
+          gray
+        </label>
+        <label class="sidebarRadioItem">
+          <input type="radio" name="${name}" value="hidden">
+          hidden
+        </label>
+      </div>
+    `);
     let radios = radioOptions.find('input[type="radio"]');
     radios.each((i, radio) => {
       radio.checked = radio.value === options[name];
@@ -241,6 +244,24 @@ export class PassLayoutFixer {
       });
     });
     return radioOptions;
+  }
+
+  addOptionsButton() {
+    // this method must be called before moveErrorList
+    // so the sidebar content is in the correct order
+    let goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>');
+    goToOptions.click(() => {
+      console.log('c.r', chrome.runtime)
+      console.log('c.r.oOP', chrome.runtime.openOptionsPage)
+      if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage((a, b, c) => {
+          console.log(a, b, c)
+        });
+      } else {
+        window.open(chrome.runtime.getURL('options/index.html'));
+      }
+    });
+    $('.sidebar').append(goToOptions);
   }
 
   moveErrorList() {
