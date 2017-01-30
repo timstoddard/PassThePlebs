@@ -59,11 +59,17 @@ export class PassLayoutFixer {
     if (this.options[name] === 'hidden') {
       $(selector).each((i, elem) => {
         let row = $(elem);
+        let input = row.find('input[type="checkbox"]');
+        if (input[0]) {
+          input.addClass('hiddenInput');
+        }
         row.hide();
         this.uncheckCheckbox(row);
         let rowAbove = row.prev();
         let sectionNotes = rowAbove.find('td > .section-notes');
         if (sectionNotes[0]) {
+          // if section notes exist, the input checkbox is always part of that row
+          rowAbove.find('input[type="checkbox"]').addClass('hiddenInput');
           rowAbove.hide();
           this.uncheckCheckbox(rowAbove);
         }
@@ -146,51 +152,49 @@ export class PassLayoutFixer {
   }
 
   addSelectAll() {
-    // add select all checkboxes
-    $('.select-course > table > thead > tr').each((i, elem) => {
-      let headers = $(elem).children();
-      let input = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
-      input.click((e) => {
-        let selectAll = e.target;
-        let checked = selectAll.checked;
-        let table = $(selectAll).parent().parent().parent().parent();
-        table.find('tbody > tr > td > input[type="checkbox"]').each((i, elem) => {
-          elem.checked = !checked;
-          $(elem).click();
+    // this function must be called after updateRowsBasedOnOptions so that
+    // the hidden rows' checkboxes have the `hiddenInput` class
+
+    $('.select-course > table').each((i, elem) => {
+      let table = $(elem);
+      let checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)');
+      if (checkboxes.length > 0) {
+        // restyle the checkboxes
+        checkboxes.each((i, elem) => {
+          let checkbox = $(elem);
+          checkbox.removeClass('left');
+          checkbox.parent().css('text-align', 'center');
         });
-      });
-      $(headers[0]).append(input);
-      $(headers[4]).after('<th>Polyrating</th>');
-    });
 
-    // update the select all checkboxes to checked if all their children all checked
-    $('.selectAll').each((i, elem) => {
-      let table = $(elem).parent().parent().parent().parent();
-      let allChecked = true;
-      table.find('tbody > tr > td > input[type="checkbox"]').each((i, elem) => {
-        allChecked &= elem.checked;
-      });
-      elem.checked = allChecked;
-    });
+        // add select all checkboxes to table headers
+        let selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">');
+        let headerChildren = table.find('thead > tr').children();
+        selectAllCheckbox.click((e) => {
+          let checked = e.target.checked;
+          checkboxes.each((i, elem) => {
+            elem.checked = !checked;
+            $(elem).click();
+          });
+        });
+        headerChildren.eq(0).append(selectAllCheckbox);
+        headerChildren.eq(4).after('<th>Polyrating</th>');
 
-    // restyle the checkboxes
-    $('td > input[type="checkbox"]').each((i, elem) => {
-      let input = $(elem);
-      input.removeClass('left');
-      input.parent().css('text-align', 'center');
+        // update the select all checkboxes to checked if all their children all checked,
+        // and listen for child checkbox changes to update the parent select all checkbox
+        this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox);
+        checkboxes.click(() => {
+          this.updateSelectAllCheckbox(checkboxes, selectAllCheckbox);
+        });
+      }
     });
+  }
 
-    // listen for child checkbox changes to update its select all checkbox
-    $('td > input[type="checkbox"]:not(.selectAll)').click((e) => {
-      let elem = e.target;
-      let table = $(elem).parent().parent().parent().parent();
-      let allChecked = true;
-      table.find('tbody > tr > td > input[type="checkbox"]').each((i, elem) => {
-        allChecked &= elem.checked;
-      });
-      let selectAll = table.find('.selectAll');
-      selectAll[0].checked = allChecked;
+  updateSelectAllCheckbox(checkboxes, selectAllCheckbox) {
+    let allChecked = true;
+    checkboxes.each((i, elem) => {
+      allChecked &= elem.checked;
     });
+    selectAllCheckbox.prop('checked', allChecked);
   }
 
   integrateRowOptions() {
