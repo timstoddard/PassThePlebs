@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const utils = require('./utils');
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const utils = require('./utils')
 
 module.exports = [
   // extension
@@ -8,28 +8,28 @@ module.exports = [
     entry: './src/extension/js',
     output: {
       filename: 'index.js',
-      path: 'dist/bundle'
+      path: 'dist/bundle',
     },
     plugins: utils.buildPlugins([
       new webpack.ProvidePlugin({
-        $: 'jquery'
-      })
-    ])
+        $: 'jquery',
+      }),
+    ]),
   }),
   // background
   utils.createConfig({
     entry: './src/extension/background',
     output: {
       filename: 'background.js',
-      path: 'dist/bundle'
-    }
+      path: 'dist/bundle',
+    },
   }),
   // options
   utils.createConfig({
     entry: './src/options',
     output: {
       filename: 'index.js',
-      path: 'dist/options'
+      path: 'dist/options',
     },
     plugins: utils.buildPlugins([
       new HtmlWebpackPlugin({
@@ -38,9 +38,9 @@ module.exports = [
         radioOptions: utils.getRadioOptions(),
         minify: {
           collapseWhitespace: true,
-          removeComments: true
-        }
-      })
-    ])
-  })
-];
+          removeComments: true,
+        },
+      }),
+    ]),
+  }),
+]

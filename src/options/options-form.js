@@ -5,14 +5,14 @@
 import { defaults, optionNames } from '../shared/defaults'
 import { value } from '../shared/utils'
 
-export class OptionsForm {
+export default class OptionsForm {
   showBackgroundColors;
   radioElems;
 
   constructor() {
     this.showBackgroundColors = document.getElementById('showBackgroundColors')
     this.radioElems = {}
-    optionNames.forEach((name) => {
+    optionNames.forEach(name => {
       if (name !== 'showBackgroundColors') {
         this.radioElems[name] = document.querySelectorAll(`input[name="${name}"]`)
       }
@@ -25,12 +25,12 @@ export class OptionsForm {
   }
 
   loadStoredData() {
-    chrome.storage.sync.get(optionNames, (options) => {
-      optionNames.forEach((name) => {
+    chrome.storage.sync.get(optionNames, options => {
+      optionNames.forEach(name => {
         if (name === 'showBackgroundColors') {
           this.showBackgroundColors.checked = value(options[name], defaults[name])
         } else {
-          let initialValue = value(options[name], defaults[name])
+          const initialValue = value(options[name], defaults[name])
           this.updateRadios(name, initialValue)
         }
       })
@@ -39,13 +39,13 @@ export class OptionsForm {
 
   addEventListeners() {
     this.showBackgroundColors.addEventListener('click', () => {
-      chrome.storage.sync.set({ 'showBackgroundColors': this.showBackgroundColors.checked })
+      chrome.storage.sync.set({ showBackgroundColors: this.showBackgroundColors.checked })
     })
-    optionNames.forEach((name) => {
+    optionNames.forEach(name => {
       if (name !== 'showBackgroundColors') {
-        let radios = this.radioElems[name]
+        const radios = this.radioElems[name]
         for (let i = 0; i < radios.length; i++) {
-          let radio = radios[i]
+          const radio = radios[i]
           radio.addEventListener('click', () => {
             chrome.storage.sync.set({ [name]: radio.value })
           })
@@ -54,12 +54,12 @@ export class OptionsForm {
     })
     document.getElementById('restoreDefaults')
       .addEventListener('click', () => {
-        let data = {}
-        optionNames.forEach((name) => {
+        const data = {}
+        optionNames.forEach(name => {
           if (name === 'showBackgroundColors') {
             this.showBackgroundColors.checked = data[name] = defaults[name]
           } else {
-            let defaultValue = data[name] = defaults[name]
+            const defaultValue = data[name] = defaults[name]
             this.updateRadios(name, defaultValue)
           }
         })
@@ -68,9 +68,9 @@ export class OptionsForm {
   }
 
   updateRadios(name, val) {
-    let radios = this.radioElems[name]
+    const radios = this.radioElems[name]
     for (let i = 0; i < radios.length; i++) {
-      let radio = radios[i]
+      const radio = radios[i]
       radio.checked = radio.value === val
     }
   }

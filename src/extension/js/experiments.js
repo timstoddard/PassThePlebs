@@ -12,23 +12,23 @@ export default class Experiments {
       dataType: 'json',
       url: 'removeCourse.json',
       data: {
-        courseId: -1
+        courseId: -1,
       },
       cache: false,
-      success: (data) => {
+      success: data => {
         if (data.length === 0) {
           this.addAllCoursesByDepartment()
         }
-      }
+      },
     })
   }
 
   addAllCoursesByDepartment() {
-    let counts = {
+    const counts = {
       expectedDeptCount: 0,
       deptCount: 0,
       expectedCourseCount: 0,
-      courseCount: 0
+      courseCount: 0,
     }
     $('#filterbox-list-view > li > select[data-filter="dept"] > option').each((i, elem) => {
       counts.expectedDeptCount++
@@ -36,12 +36,12 @@ export default class Experiments {
         dataType: 'json',
         url: 'searchByDept.json',
         data: {
-          deptId: elem.value
+          deptId: elem.value,
         },
         cache: false,
         success: courses => {
           this.addAllCoursesForDepartment(courses, counts)
-        }
+        },
       })
     })
   }
@@ -56,20 +56,22 @@ export default class Experiments {
           url: 'addCourse.json',
           cache: false,
           data: {
-            courseId: course.id
+            courseId: course.id,
           },
           success: () => {
             this.addCourse(course, counts)
-          }
+          },
         })
       })
     }
   }
 
   addCourse(course, counts) {
+    /* eslint-disable no-console */
     counts.courseCount++
     console.log(`Added ${course.subject} ${course.catalogNumber}.`)
-    if (counts.deptCount === counts.expectedDeptCount && counts.courseCount === counts.expectedCourseCount) {
+    if (counts.deptCount === counts.expectedDeptCount &&
+      counts.courseCount === counts.expectedCourseCount) {
       console.log('done')
       setTimeout(() => {
         if (confirm('Reload?')) {
@@ -77,5 +79,6 @@ export default class Experiments {
         }
       })
     }
+    /* eslint-enable no-console */
   }
 }

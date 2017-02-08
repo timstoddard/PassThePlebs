@@ -1,13 +1,24 @@
 {
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended"
+  ],
+  "globals": {
+    "chrome": true
+  },
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
   },
   "rules": {
-    "semi": [
-      "error",
-      "never"
-    ]
+    "arrow-parens": ["error", "as-needed"],
+    "class-methods-use-this": "off",
+    "no-multi-assign": "off",
+    "semi": ["error", "never"]
   }
 }

@@ -4,7 +4,7 @@
 
 import urlRegex from 'url-regex'
 import { defaults } from '../../shared/defaults'
-import { DNE, value } from '../../shared/utils'
+import { value } from '../../shared/utils'
 
 export default class PassLayoutFixer {
   options;
@@ -40,7 +40,7 @@ export default class PassLayoutFixer {
     $('.select-course > table > tbody').each((i, elem) => {
       let rowShouldBeGray = false // first <tr> should be white
       $(elem).find('tr:visible').each((i, elem) => {
-        let row = $(elem)
+        const row = $(elem)
         if (rowShouldBeGray && row.hasClass('row-white')) {
           row.removeClass('row-white').addClass('row-gray')
         } else if (!rowShouldBeGray && row.hasClass('row-gray')) {
@@ -58,15 +58,15 @@ export default class PassLayoutFixer {
   updateRows(name, selector) {
     if (this.options[name] === 'hidden') {
       $(selector).each((i, elem) => {
-        let row = $(elem)
-        let input = row.find('input[type="checkbox"]')
+        const row = $(elem)
+        const input = row.find('input[type="checkbox"]')
         if (input[0]) {
           input.addClass('hiddenInput')
         }
         row.hide()
         this.uncheckCheckbox(row)
-        let rowAbove = row.prev()
-        let sectionNotes = rowAbove.find('td > .section-notes')
+        const rowAbove = row.prev()
+        const sectionNotes = rowAbove.find('td > .section-notes')
         if (sectionNotes[0]) {
           // if section notes exist, the input checkbox is always part of that row
           rowAbove.find('input[type="checkbox"]').addClass('hiddenInput')
@@ -76,11 +76,11 @@ export default class PassLayoutFixer {
       })
     } else if (this.options[name] === 'gray') {
       $(selector).each((i, elem) => {
-        let row = $(elem)
-        let grayText = { 'color': 'rgb(160,160,160)' }
+        const row = $(elem)
+        const grayText = { color: 'rgb(160,160,160)' }
         row.css(grayText)
-        let rowAbove = row.prev()
-        let sectionNotes = rowAbove.find('td > .section-notes')
+        const rowAbove = row.prev()
+        const sectionNotes = rowAbove.find('td > .section-notes')
         if (sectionNotes[0]) {
           rowAbove.css(grayText)
         }
@@ -89,7 +89,7 @@ export default class PassLayoutFixer {
   }
 
   uncheckCheckbox(row) {
-    let checkbox = row.find('input[type="checkbox"]:checked')
+    const checkbox = row.find('input[type="checkbox"]:checked')
     if (checkbox[0]) {
       checkbox.click()
     }
@@ -101,32 +101,32 @@ export default class PassLayoutFixer {
       dataType: 'json',
       url: 'removeCourse.json',
       data: {
-        courseId: -1
+        courseId: -1,
       },
       cache: false,
-      success: (data) => {
-        let headers = $('.select-course > h3')
+      success: data => {
+        const headers = $('.select-course > h3')
         data.forEach((course, i) => {
-          let header = $(headers[i])
-          let headerContent = $(header.contents()[0])
-          let headerText = headerContent.text().replace(/\s+/g, ' ').trim()
-          let courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
-          headerContent.wrap(`<a class="headerLink"></a>`)
+          const header = $(headers[i])
+          const headerContent = $(header.contents()[0])
+          const headerText = headerContent.text().replace(/\s+/g, ' ').trim()
+          const courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
+          headerContent.wrap('<a class="headerLink"></a>')
           headerContent.parent().click(() => {
             courseDescription.toggleClass('expanded')
           })
           headerContent.replaceWith(`<span class="headerText">${headerText}</span>`)
           header.after(courseDescription)
         })
-      }
+      },
     })
   }
 
   addRemoveButtons() {
     $('.cart-action[data-id]').each((i, elem) => {
-      let id = $(elem).data('id')
-      let headerMap = $(`.select-course:nth-child(${i + 2}) .view-map`)
-      let removeButton = $('<a class="removeButton">X</a>')
+      const id = $(elem).data('id')
+      const headerMap = $(`.select-course:nth-child(${i + 2}) .view-map`)
+      const removeButton = $('<a class="removeButton">X</a>')
       headerMap.before(removeButton)
       removeButton.click(() => {
         // modified from filterBox.js
@@ -134,10 +134,10 @@ export default class PassLayoutFixer {
           dataType: 'json',
           url: 'removeCourse.json',
           data: {
-            courseId: id
+            courseId: id,
           },
           cache: false,
-          success: (data) => {
+          success: data => {
             if (data.length > 0) {
               window.location.reload()
             } else {
@@ -145,7 +145,7 @@ export default class PassLayoutFixer {
               window.location = 'prev.do'
               $('#nextBtn').attr('enabled', 'false')
             }
-          }
+          },
         })
       })
     })
@@ -156,21 +156,21 @@ export default class PassLayoutFixer {
     // the hidden rows' checkboxes have the `hiddenInput` class
 
     $('.select-course > table').each((i, elem) => {
-      let table = $(elem)
-      let checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)')
+      const table = $(elem)
+      const checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)')
       if (checkboxes.length > 0) {
         // restyle the checkboxes
         checkboxes.each((i, elem) => {
-          let checkbox = $(elem)
+          const checkbox = $(elem)
           checkbox.removeClass('left')
           checkbox.parent().css('text-align', 'center')
         })
 
         // add select all checkboxes to table headers
-        let selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">')
-        let headerChildren = table.find('thead > tr').children()
-        selectAllCheckbox.click((e) => {
-          let checked = e.target.checked
+        const selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">')
+        const headerChildren = table.find('thead > tr').children()
+        selectAllCheckbox.click(e => {
+          const checked = e.target.checked
           checkboxes.each((i, elem) => {
             elem.checked = !checked
             $(elem).click()
@@ -198,32 +198,31 @@ export default class PassLayoutFixer {
   }
 
   integrateRowOptions() {
-    let sidebarLists = $('.sidebar > ul')
+    const sidebarLists = $('.sidebar > ul')
     if (sidebarLists.length == 2) {
-      let key = $(sidebarLists[1])
-      let closed = key.find('.key-closed')
-      let conflicting = key.find('.key-avail')
-      let cancelled = key.find('.key-cancel')
+      const key = $(sidebarLists[1])
+      const closed = key.find('.key-closed')
+      const conflicting = key.find('.key-avail')
+      const cancelled = key.find('.key-cancel')
 
-      let optionNames = [
+      const optionNames = [
         'closedClasses',
         'cancelledClasses',
-        'conflictingClasses'
+        'conflictingClasses',
       ]
-      chrome.storage.sync.get(optionNames, (options) => {
-        optionNames.forEach((name) => {
+      chrome.storage.sync.get(optionNames, options => {
+        optionNames.forEach(name => {
           options[name] = value(options[name], defaults[name])
         })
         closed.after(this.createRadioOptions(options, 'closedClasses'))
         cancelled.after(this.createRadioOptions(options, 'cancelledClasses'))
         conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))
       })
-
     }
   }
 
   createRadioOptions(options, name) {
-    let radioOptions = $(`
+    const radioOptions = $(`
       <div class="sidebarRadioList">
         <label class="sidebarRadioItem">
           <input type="radio" name="${name}" value="normal">
@@ -239,7 +238,7 @@ export default class PassLayoutFixer {
         </label>
       </div>
     `)
-    let radios = radioOptions.find('input[type="radio"]')
+    const radios = radioOptions.find('input[type="radio"]')
     radios.each((i, radio) => {
       radio.checked = radio.value === options[name]
       $(radio).click(() => {
@@ -253,14 +252,10 @@ export default class PassLayoutFixer {
   addOptionsButton() {
     // this method must be called before moveErrorList
     // so the sidebar content is in the correct order
-    let goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>')
+    const goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>')
     goToOptions.click(() => {
-      console.log('c.r', chrome.runtime)
-      console.log('c.r.oOP', chrome.runtime.openOptionsPage)
       if (chrome.runtime.openOptionsPage) {
-        chrome.runtime.openOptionsPage((a, b, c) => {
-          console.log(a, b, c)
-        })
+        chrome.runtime.openOptionsPage(() => {})
       } else {
         window.open(chrome.runtime.getURL('options/index.html'))
       }
@@ -270,7 +265,7 @@ export default class PassLayoutFixer {
 
   moveErrorList() {
     // move errors to the left side
-    let errors = $('#error').detach()
+    const errors = $('#error').detach()
     errors.appendTo('.sidebar')
     errors.addClass('moved')
   }
@@ -278,10 +273,10 @@ export default class PassLayoutFixer {
   fixSectionNotes() {
     // make urls in section notes clickable
     $('.section-notes').each((i, elem) => {
-      let sectionNotes = $(elem)
-      let urls = sectionNotes.html().match(urlRegex())
+      const sectionNotes = $(elem)
+      const urls = sectionNotes.html().match(urlRegex())
       if (urls) {
-        urls.forEach((url) => {
+        urls.forEach(url => {
           sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`))
         })
       }
@@ -289,14 +284,12 @@ export default class PassLayoutFixer {
   }
 
   fixNoSchedulesGeneratedMessage() {
-    let noSchedulesGenerated = false
     $('.schedulePages').each((i, elem) => {
-      let div = $(elem)
+      const div = $(elem)
       if (i === 0) {
         if (/of 0 total/.test(div.html())) {
-          noSchedulesGenerated = true
+          div.html(div.html().replace('1 - 0', '0'))
         }
-        div.html(div.html().replace('1 - 0', '0'))
       } else {
         div.hide()
       }

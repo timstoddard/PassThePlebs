@@ -7,8 +7,8 @@ import PassExtension from './extension'
 
 import '../scss/index.scss'
 
-let extension = new PassExtension()
+const extension = new PassExtension()
 extension.start()
 
-// let experiments = new Experiments()
+// const experiments = new Experiments()
 // experiments.start()
