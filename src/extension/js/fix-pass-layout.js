@@ -6,7 +6,7 @@ import urlRegex from 'url-regex'
 import { defaults } from '../../shared/defaults'
 import { DNE, value } from '../../shared/utils'
 
-export class PassLayoutFixer {
+export default class PassLayoutFixer {
   options;
 
   constructor(options) {

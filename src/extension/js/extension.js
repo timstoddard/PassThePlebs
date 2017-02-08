@@ -2,12 +2,12 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-import { PolyratingIntegrator } from './add-polyratings'
-import { PassLayoutFixer } from './fix-pass-layout'
+import PolyratingIntegrator from './add-polyratings'
+import PassLayoutFixer from './fix-pass-layout'
 import { defaults, optionNames } from '../../shared/defaults'
 import { DNE, value } from '../../shared/utils'
 
-export class PassExtension {
+export default class PassExtension {
   start() {
     chrome.storage.sync.get(optionNames, (options) => {
       this.addDefaults(options)
