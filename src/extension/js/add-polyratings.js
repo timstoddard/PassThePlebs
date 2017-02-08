@@ -6,9 +6,9 @@ export default class PolyratingIntegrator {
   showBackgroundColors;
   staffClassesOption;
 
-  constructor(showBackgroundColors, staffClassesOption) {
-    this.showBackgroundColors = showBackgroundColors
-    this.staffClassesOption = staffClassesOption
+  constructor(options) {
+    this.showBackgroundColors = options.showBackgroundColors
+    this.staffClassesOption = options.staffClassesOption
   }
 
   addPolyratings() {
@@ -186,13 +186,13 @@ export default class PolyratingIntegrator {
     }
   }
 
-  /** * UTILS ***/
+  /*** UTILS ***/
 
   updateAttachedRows(nameElem) {
     let nextRow = nameElem.parent().next()
     let colSpanTd = nextRow.find('td:first-child[colspan]')[0]
     while (colSpanTd) {
-      colSpanTd.colSpan += 1
+      colSpanTd.colSpan++
       nextRow = nextRow.next()
       colSpanTd = nextRow.find('td:first-child[colspan]')[0]
     }

@@ -3,8 +3,7 @@
  */
 
 import urlRegex from 'url-regex'
-import { defaults } from '../../shared/defaults'
-import { value } from '../../shared/utils'
+import defaults from '../../shared/defaults'
 
 export default class PassLayoutFixer {
   options;
@@ -205,15 +204,7 @@ export default class PassLayoutFixer {
       const conflicting = key.find('.key-avail')
       const cancelled = key.find('.key-cancel')
 
-      const optionNames = [
-        'closedClasses',
-        'cancelledClasses',
-        'conflictingClasses',
-      ]
-      chrome.storage.sync.get(optionNames, options => {
-        optionNames.forEach(name => {
-          options[name] = value(options[name], defaults[name])
-        })
+      chrome.storage.sync.get(defaults, options => {
         closed.after(this.createRadioOptions(options, 'closedClasses'))
         cancelled.after(this.createRadioOptions(options, 'cancelledClasses'))
         conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))

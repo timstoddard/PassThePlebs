@@ -2,9 +2,9 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
-// note: whenever an option is added here,
-// update getTemplateData in webpack/utils
-export const defaults = {
+// note: whenever an option is added here, check if
+// getRadioHeaders in webpack/utils needs to be updated
+const defaults = {
   showBackgroundColors: true,
   closedClasses: 'normal',
   cancelledClasses: 'hidden',
@@ -12,10 +12,4 @@ export const defaults = {
   staffClasses: 'normal',
 }
 
-export const optionNames = [
-  'showBackgroundColors',
-  'closedClasses',
-  'cancelledClasses',
-  'conflictingClasses',
-  'staffClasses',
-]
+export default defaults
