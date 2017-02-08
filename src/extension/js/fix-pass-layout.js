@@ -19,7 +19,6 @@ export default class PassLayoutFixer {
     this.addRemoveButtons()
     this.addSelectAll()
     this.integrateRowOptions()
-    this.addOptionsButton()
     this.moveErrorList()
     this.fixSectionNotes()
     this.fixNoSchedulesGeneratedMessage()
@@ -198,16 +197,22 @@ export default class PassLayoutFixer {
 
   integrateRowOptions() {
     const sidebarLists = $('.sidebar > ul')
-    if (sidebarLists.length == 2) {
+    if (sidebarLists.length === 2) {
       const key = $(sidebarLists[1])
+      const title = key.find('.cart-list-divider')
+      title.html('Key/Options')
       const closed = key.find('.key-closed')
-      const conflicting = key.find('.key-avail')
       const cancelled = key.find('.key-cancel')
+      const conflicting = key.find('.key-avail')
+      const staff = $('<span>STAFF classes</span>')
+      conflicting.parent().after(staff)
+      staff.wrap('<li class="clearfix"></li>')
 
       chrome.storage.sync.get(defaults, options => {
         closed.after(this.createRadioOptions(options, 'closedClasses'))
         cancelled.after(this.createRadioOptions(options, 'cancelledClasses'))
         conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))
+        staff.after(this.createRadioOptions(options, 'staffClasses'))
       })
     }
   }
@@ -238,20 +243,6 @@ export default class PassLayoutFixer {
       })
     })
     return radioOptions
-  }
-
-  addOptionsButton() {
-    // this method must be called before moveErrorList
-    // so the sidebar content is in the correct order
-    const goToOptions = $('<a class="btn btn-next optionsButton">All Options</a>')
-    goToOptions.click(() => {
-      if (chrome.runtime.openOptionsPage) {
-        chrome.runtime.openOptionsPage(() => {})
-      } else {
-        window.open(chrome.runtime.getURL('options/index.html'))
-      }
-    })
-    $('.sidebar').append(goToOptions)
   }
 
   moveErrorList() {
