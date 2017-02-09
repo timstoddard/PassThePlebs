@@ -213,6 +213,10 @@ export default class PassLayoutFixer {
         cancelled.after(this.createRadioOptions(options, 'cancelledClasses'))
         conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))
         staff.after(this.createRadioOptions(options, 'staffClasses'))
+
+        const backgroundColors = this.createCheckboxOption(options, 'Show Background Colors', 'showBackgroundColors')
+        staff.parent().next().after(backgroundColors)
+        backgroundColors.wrap('<li class="clearfix">')
       })
     }
   }
@@ -243,6 +247,20 @@ export default class PassLayoutFixer {
       })
     })
     return radioOptions
+  }
+
+  createCheckboxOption(options, name, optionName) {
+    const checkbox = $('<input type="checkbox" class="sidebarCheckboxInput">')
+    checkbox.prop('checked', options[optionName])
+    checkbox.click(() => {
+      chrome.storage.sync.set({ [optionName]: checkbox.prop('checked') })
+      window.location.reload()
+    })
+
+    const checkboxWrapper = $('<label class="sidebarCheckbox"></li>')
+    checkboxWrapper.append(checkbox)
+    checkboxWrapper.append(name)
+    return checkboxWrapper
   }
 
   moveErrorList() {

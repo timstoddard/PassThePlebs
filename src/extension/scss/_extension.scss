@@ -16,13 +16,12 @@ email: tim.stoddard2@gmail.com
   }
 }
 
-.optionsButton {
-  box-sizing: border-box;
-  display: block;
-  font-size: 105%;
-  margin: 8px 0;
-  text-align: center;
-  width: 100%;
+.sidebarCheckbox {
+  display: flex;
+
+  &Input {
+    margin-right: 3px;
+  }
 }
 
 #error {
