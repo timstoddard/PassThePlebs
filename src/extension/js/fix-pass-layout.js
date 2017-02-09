@@ -73,9 +73,9 @@ export default class PassLayoutFixer {
         }
       })
     } else if (this.options[name] === 'gray') {
+      const grayText = { color: 'rgb(160,160,160)' }
       $(selector).each((i, elem) => {
         const row = $(elem)
-        const grayText = { color: 'rgb(160,160,160)' }
         row.css(grayText)
         const rowAbove = row.prev()
         const sectionNotes = rowAbove.find('td > .section-notes')
