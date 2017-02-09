@@ -25,7 +25,7 @@ export default class PassLayoutFixer {
   }
 
   fadeInContent() {
-    $('.content').addClass('visible')
+    $('.main-content-wrapper').addClass('visible')
   }
 
   updateRowsBasedOnOptions() {

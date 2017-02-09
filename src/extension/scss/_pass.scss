@@ -4,6 +4,15 @@ email: tim.stoddard2@gmail.com
 ------------------------------------ */
 
 
+.main-content-wrapper {
+  opacity: 0;
+  transition: opacity .25s ease .25s;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
 .sidebar > ul,
 .sidebar > ul > li:not([id]):not([class]) {
   border-radius: 4px;
@@ -16,15 +25,6 @@ email: tim.stoddard2@gmail.com
 
 .cart-action:hover {
   color: red !important;
-}
-
-.content {
-  opacity: 0;
-  transition: opacity .25s ease .25s;
-
-  &.visible {
-    opacity: 1;
-  }
 }
 
 .select-course {
