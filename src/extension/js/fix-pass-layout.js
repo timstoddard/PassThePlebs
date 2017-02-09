@@ -277,7 +277,8 @@ export default class PassLayoutFixer {
       const urls = sectionNotes.html().match(urlRegex())
       if (urls) {
         urls.forEach(url => {
-          sectionNotes.html(sectionNotes.html().replace(url, `<a href="${url}" target="_blank">${url}</a>`))
+          const sectionNoteLink = `<a href="${url}" target="_blank" class="sectionNoteLink">${url}</a>`
+          sectionNotes.html(sectionNotes.html().replace(url, sectionNoteLink))
         })
       }
     })
