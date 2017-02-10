@@ -278,7 +278,7 @@ export default class PassLayoutFixer {
 
     const checkboxWrapper = $('<label class="sidebarCheckbox"></li>')
     checkboxWrapper.append(checkbox)
-    checkboxWrapper.append(name)
+    checkboxWrapper.append(`<span class="sidebarCheckboxLabel">${name}</span>`)
     return checkboxWrapper
   }
 

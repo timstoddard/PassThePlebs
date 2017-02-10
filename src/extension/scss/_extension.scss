@@ -11,8 +11,13 @@ email: tim.stoddard2@gmail.com
   }
 
   &Item {
+    cursor: pointer;
     margin-right: 10px;
     text-transform: capitalize;
+
+    > input {
+      cursor: pointer;
+    }
   }
 }
 
@@ -20,7 +25,12 @@ email: tim.stoddard2@gmail.com
   display: flex;
 
   &Input {
-    margin-right: 3px;
+    cursor: pointer;
+  }
+
+  &Label {
+    cursor: pointer;
+    padding-left: 3px;
   }
 }
 
