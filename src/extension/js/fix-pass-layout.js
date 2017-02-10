@@ -201,6 +201,13 @@ export default class PassLayoutFixer {
       const key = $(sidebarLists[1])
       const title = key.find('.cart-list-divider')
       title.html('Key/Options')
+      const restoreDefaults = $('<a class="detail cart-action">Restore Defaults</a>')
+      restoreDefaults.click(() => {
+        chrome.storage.sync.set(defaults, () => {
+          window.location.reload()
+        })
+      })
+      title.append(restoreDefaults)
       const closed = key.find('.key-closed')
       const cancelled = key.find('.key-cancel')
       const conflicting = key.find('.key-avail')

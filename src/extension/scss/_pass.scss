@@ -21,6 +21,10 @@ email: tim.stoddard2@gmail.com
 #cart-list-divider,
 .cart-list-divider {
   border-radius: 4px 4px 0 0;
+
+  > .cart-action:hover {
+    text-shadow: 0 0 8px white;
+  }
 }
 
 .cart-action:hover {
