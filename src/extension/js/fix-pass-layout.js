@@ -94,7 +94,6 @@ export default class PassLayoutFixer {
   }
 
   fixSectionHeaders() {
-    // add descriptions to the section headers
     $.ajax({
       dataType: 'json',
       url: 'removeCourse.json',
@@ -102,9 +101,10 @@ export default class PassLayoutFixer {
         courseId: -1,
       },
       cache: false,
-      success: data => {
+      success: courses => {
+        // add descriptions to the section headers
         const headers = $('.select-course > h3')
-        data.forEach((course, i) => {
+        courses.forEach((course, i) => {
           const header = $(headers[i])
           const headerContent = $(header.contents()[0])
           const headerText = headerContent.text().replace(/\s+/g, ' ').trim()
@@ -115,6 +115,18 @@ export default class PassLayoutFixer {
           })
           headerContent.replaceWith(`<span class="headerText">${headerText}</span>`)
           header.after(courseDescription)
+        })
+
+        // remove redundant "GE" from any headers that have them
+        $('.ge-tag').each((i, elem) => {
+          const geTag = $(elem)
+          const headerContent = geTag.parent().contents()
+          let geTypeText = headerContent[2].textContent.trim()
+          headerContent[2].textContent = ''
+          if (/GE/.test(geTypeText)) {
+            geTypeText = geTypeText.substr(2)
+          }
+          geTag.after(`<span class="ge-type">${geTypeText}</span>`)
         })
       },
     })
