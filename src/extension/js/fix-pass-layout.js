@@ -3,6 +3,7 @@
  */
 
 import urlRegex from 'url-regex'
+import { hideRow, grayOutRow } from './row-utils'
 import defaults from '../../shared/defaults'
 
 export default class PassLayoutFixer {
@@ -56,40 +57,12 @@ export default class PassLayoutFixer {
   updateRows(name, selector) {
     if (this.options[name] === 'hidden') {
       $(selector).each((i, elem) => {
-        const row = $(elem)
-        const input = row.find('input[type="checkbox"]')
-        if (input[0]) {
-          input.addClass('hiddenInput')
-        }
-        row.hide()
-        this.uncheckCheckbox(row)
-        const rowAbove = row.prev()
-        const sectionNotes = rowAbove.find('td > .section-notes')
-        if (sectionNotes[0]) {
-          // if section notes exist, the input checkbox is always part of that row
-          rowAbove.find('input[type="checkbox"]').addClass('hiddenInput')
-          rowAbove.hide()
-          this.uncheckCheckbox(rowAbove)
-        }
+        hideRow($(elem), false)
       })
     } else if (this.options[name] === 'gray') {
-      const grayText = { color: 'rgb(160,160,160)' }
       $(selector).each((i, elem) => {
-        const row = $(elem)
-        row.css(grayText)
-        const rowAbove = row.prev()
-        const sectionNotes = rowAbove.find('td > .section-notes')
-        if (sectionNotes[0]) {
-          rowAbove.css(grayText)
-        }
+        grayOutRow($(elem), false)
       })
-    }
-  }
-
-  uncheckCheckbox(row) {
-    const checkbox = row.find('input[type="checkbox"]:checked')
-    if (checkbox[0]) {
-      checkbox.click()
     }
   }
 
