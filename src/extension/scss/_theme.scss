@@ -1,0 +1,45 @@
+/* ------------------------------------
+author: Tim Stoddard
+email: tim.stoddard2@gmail.com
+------------------------------------ */
+
+
+$themeColor: rgb(0,175,255);
+$themeColorLight: rgba(0,175,255,0.6);
+
+#cart-list-divider,
+.cart-list-divider,
+#cart-list-divider > .cart-action,
+.cart-list-divider > .cart-action,
+.select-course > h3,
+.ge-tag,
+#navbar > .list-plain,
+.filter-list > li > h2,
+.courseDescription,
+.cart > li:first-child {
+  background-color: $themeColor !important;
+}
+
+.cp-logo > a > img {
+  filter: hue-rotate(75deg) brightness(200%);
+}
+
+.headerRight > .right > a {
+  color: $themeColor;
+}
+
+.btn-next {
+  background-color: white !important;
+  background-image: linear-gradient($themeColorLight, $themeColor 95%) !important;
+
+  &[enabled="false"],
+  &:hover {
+    background-color: $themeColor !important;
+    background-image: none;
+  }
+}
+
+.list-plain > li {
+  border-bottom-color: $themeColor !important;
+  color: $themeColor !important;
+}
