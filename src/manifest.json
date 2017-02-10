@@ -23,7 +23,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://pass.calpoly.edu/main.html"
+        "https://pass.calpoly.edu/*"
       ],
       "js": [
         "bundle/index.js"
@@ -42,8 +42,5 @@
     "http://polyratings.com/",
     "activeTab",
     "storage"
-  ],
-  "web_accessible_resources": [
-    "options/index.html"
   ]
 }
