@@ -29,7 +29,7 @@ export default class PassLayoutFixer {
   addThemeColor() {
     const themeColor = 'rgb(0,175,255)'
     const themeColorLight = 'rgba(0,175,255,0.6)'
-    const newTheme = [
+    const themeStyles = [
       {
         selectors: [
           '.filter-list > li h2',
@@ -40,7 +40,7 @@ export default class PassLayoutFixer {
           '.cart > li:first-child a',
           '.courseDescription',
         ],
-        styles: {
+        cssProps: {
           'background-color': `${themeColor}`,
         },
       },
@@ -48,7 +48,7 @@ export default class PassLayoutFixer {
         selectors: [
           '.pageHeader a',
         ],
-        styles: {
+        cssProps: {
           'color': `${themeColor}`,
         },
       },
@@ -57,7 +57,7 @@ export default class PassLayoutFixer {
           '.steps .active',
           '.steps .completed',
         ],
-        styles: {
+        cssProps: {
           'border-bottom-color': `${themeColor}`,
           'color': `${themeColor}`,
         },
@@ -66,7 +66,7 @@ export default class PassLayoutFixer {
         selectors: [
           '.cp-logo > a > img',
         ],
-        styles: {
+        cssProps: {
           'filter': 'hue-rotate(75deg) brightness(200%)',
         },
       },
@@ -74,7 +74,7 @@ export default class PassLayoutFixer {
         selectors: [
           '.btn-next',
         ],
-        styles: {
+        cssProps: {
           'background-color': 'white',
           'background-image': `linear-gradient(${themeColorLight}, ${themeColor} 95%)`,
         },
@@ -85,30 +85,22 @@ export default class PassLayoutFixer {
           '.btn-next:hover',
           '.btn-next:focus',
         ],
-        styles: {
+        cssProps: {
           'background-color': `${themeColor}`,
           'background-image': 'none',
         },
       },
     ]
 
-    let themeStr = ''
-    newTheme.forEach(theme => {
-      themeStr += `${theme.selectors.join(',')}{`
-      for (let style in theme.styles) {
-        themeStr += `${style}:${theme.styles[style]} !important;`
+    let css = ''
+    themeStyles.forEach(style => {
+      css += `${style.selectors.join(',')}{`
+      for (let prop in style.cssProps) {
+        css += `${prop}:${style.cssProps[prop]} !important;`
       }
-      themeStr += '}'
+      css += '}'
     })
-
-    let style = document.createElement('style')
-    style.type = 'text/css'
-    if (style.styleSheet) {
-      style.styleSheet.cssText = themeStr
-    } else {
-      style.appendChild(document.createTextNode(themeStr))
-    }
-    document.head.appendChild(style)
+    $(document.head).append(`<style>${css}</style>`)
   }
 
   fadeInContent() {
