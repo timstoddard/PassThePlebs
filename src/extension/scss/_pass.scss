@@ -13,6 +13,10 @@ body {
   }
 }
 
+.cp-logo > a > img {
+  user-select: none;
+}
+
 .sidebar > ul,
 .sidebar > ul > li:not([id]):not([class]) {
   border-radius: 4px;
@@ -60,4 +64,9 @@ body {
 tr.key-closed td a,
 tr.key-avail td a {
   color: inherit;
+}
+
+#navbar {
+  display: flex;
+  justify-content: center;
 }

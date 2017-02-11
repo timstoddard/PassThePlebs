@@ -15,6 +15,7 @@ export default class PassLayoutFixer {
 
   fixPassLayout() {
     this.addThemeColor()
+    this.fixPageHeader()
     this.fadeInContent()
     this.updateRowsBasedOnOptions()
     this.fixSectionHeaders()
@@ -101,6 +102,16 @@ export default class PassLayoutFixer {
       css += '}'
     })
     $(document.head).append(`<style>${css}</style>`)
+  }
+
+  fixPageHeader() {
+    const headerImg = $('.pageTitle > img')
+    headerImg.hide()
+    headerImg.after(`
+      <div class="pageTitle__main">
+        PASS (Plan a Student Schedule)
+      </div>
+    `)
   }
 
   fadeInContent() {
