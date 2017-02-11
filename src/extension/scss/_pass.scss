@@ -53,6 +53,10 @@ email: tim.stoddard2@gmail.com
   font-style: italic;
 }
 
+.no-bg td > a {
+  color: inherit;
+}
+
 tr.key-closed td a,
 tr.key-avail td a {
   color: inherit;
