@@ -18,6 +18,13 @@
   "rules": {
     "arrow-parens": ["error", "as-needed"],
     "class-methods-use-this": "off",
+    "comma-dangle": ["error", {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "ignore"
+    }],
     "eqeqeq": "error",
     "no-multi-assign": "off",
     "semi": ["error", "never"]

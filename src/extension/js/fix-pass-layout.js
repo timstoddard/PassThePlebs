@@ -38,7 +38,7 @@ export default class PassLayoutFixer {
           '.nav-top',
           '.cart > li:first-child',
           '.cart > li:first-child a',
-          '.courseDescription'
+          '.courseDescription',
         ],
         styles: {
           'background-color': `${themeColor}`,
@@ -87,7 +87,7 @@ export default class PassLayoutFixer {
         ],
         styles: {
           'background-color': `${themeColor}`,
-          'background-image': 'none'
+          'background-image': 'none',
         },
       },
     ]
