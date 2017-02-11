@@ -14,6 +14,7 @@ export default class PassLayoutFixer {
   }
 
   fixPassLayout() {
+    this.addThemeColor()
     this.fadeInContent()
     this.updateRowsBasedOnOptions()
     this.fixSectionHeaders()
@@ -25,8 +26,93 @@ export default class PassLayoutFixer {
     this.fixNoSchedulesGeneratedMessage()
   }
 
+  addThemeColor() {
+    const themeColor = 'rgb(0,175,255)'
+    const themeColorLight = 'rgba(0,175,255,0.6)'
+    const newTheme = [
+      {
+        selectors: [
+          '.filter-list > li h2',
+          '.select-course > h3',
+          '.select-course > h3 .ge-tag',
+          '.nav-top',
+          '.cart > li:first-child',
+          '.cart > li:first-child a',
+          '.courseDescription'
+        ],
+        styles: {
+          'background-color': `${themeColor}`,
+        },
+      },
+      {
+        selectors: [
+          '.pageHeader a',
+        ],
+        styles: {
+          'color': `${themeColor}`,
+        },
+      },
+      {
+        selectors: [
+          '.steps .active',
+          '.steps .completed',
+        ],
+        styles: {
+          'border-bottom-color': `${themeColor}`,
+          'color': `${themeColor}`,
+        },
+      },
+      {
+        selectors: [
+          '.cp-logo > a > img',
+        ],
+        styles: {
+          'filter': 'hue-rotate(75deg) brightness(200%)',
+        },
+      },
+      {
+        selectors: [
+          '.btn-next',
+        ],
+        styles: {
+          'background-color': 'white',
+          'background-image': `linear-gradient(${themeColorLight}, ${themeColor} 95%)`,
+        },
+      },
+      {
+        selectors: [
+          '.btn-next[enabled="false"]',
+          '.btn-next:hover',
+          '.btn-next:focus',
+        ],
+        styles: {
+          'background-color': `${themeColor}`,
+          'background-image': 'none'
+        },
+      },
+    ]
+
+    let themeStr = ''
+    newTheme.forEach(theme => {
+      themeStr += `${theme.selectors.join(',')}{`
+      for (let style in theme.styles) {
+        themeStr += `${style}:${theme.styles[style]} !important;`
+      }
+      themeStr += '}'
+    })
+
+    let style = document.createElement('style')
+    style.type = 'text/css'
+    if (style.styleSheet) {
+      style.styleSheet.cssText = themeStr
+    } else {
+      style.appendChild(document.createTextNode(themeStr))
+    }
+    document.head.appendChild(style)
+  }
+
   fadeInContent() {
-    $('.main-content-wrapper').addClass('visible')
+    $('body').addClass('visible')
   }
 
   updateRowsBasedOnOptions() {

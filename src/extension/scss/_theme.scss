@@ -12,7 +12,8 @@ $themeColorLight: rgba(0,175,255,0.6);
 .select-course > h3 .ge-tag,
 .nav-top,
 .cart > li:first-child,
-.cart > li:first-child a {
+.cart > li:first-child a,
+.courseDescription {
   background-color: $themeColor !important;
 }
 .pageHeader a {
