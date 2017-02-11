@@ -7,25 +7,27 @@ email: tim.stoddard2@gmail.com
 $themeColor: rgb(0,175,255);
 $themeColorLight: rgba(0,175,255,0.6);
 
-#cart-list-divider,
-.cart-list-divider,
-#cart-list-divider > .cart-action,
-.cart-list-divider > .cart-action,
+.filter-list > li h2,
 .select-course > h3,
-.ge-tag,
-#navbar > .list-plain,
-.filter-list > li > h2,
-.courseDescription,
-.cart > li:first-child {
+.select-course > h3 .ge-tag,
+.nav-top,
+.cart > li:first-child,
+.cart > li:first-child a {
   background-color: $themeColor !important;
+}
+.pageHeader a {
+  color: $themeColor !important;
+}
+
+.steps .active,
+.steps .completed {
+  border-bottom-color: $themeColor !important;
+  color: $themeColor !important;
+
 }
 
 .cp-logo > a > img {
   filter: hue-rotate(75deg) brightness(200%);
-}
-
-.headerRight > .right > a {
-  color: $themeColor;
 }
 
 .btn-next {
@@ -33,13 +35,9 @@ $themeColorLight: rgba(0,175,255,0.6);
   background-image: linear-gradient($themeColorLight, $themeColor 95%) !important;
 
   &[enabled="false"],
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: $themeColor !important;
     background-image: none;
   }
-}
-
-.list-plain > li {
-  border-bottom-color: $themeColor !important;
-  color: $themeColor !important;
 }
