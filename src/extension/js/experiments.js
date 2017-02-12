@@ -2,9 +2,12 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
+/* eslint-disable no-console */
+
 export default class Experiments {
   start() {
-    this.addAllCourses()
+    // this.addAllCourses()
+    this.makeLinkedLecturesAndLabsToggleTogether()
   }
 
   addAllCourses() {
@@ -67,7 +70,6 @@ export default class Experiments {
   }
 
   addCourse(course, counts) {
-    /* eslint-disable no-console */
     counts.courseCount++
     console.log(`Added ${course.subject} ${course.catalogNumber}.`)
     if (counts.deptCount === counts.expectedDeptCount &&
@@ -79,6 +81,40 @@ export default class Experiments {
         }
       })
     }
-    /* eslint-enable no-console */
+  }
+
+  makeLinkedLecturesAndLabsToggleTogether() {
+    // mark relevant checkboxes
+    $('.no-bg > tbody').each((i, elem) => {
+      const sectionNumbers = $(elem).find('.sectionNumber')
+      for (let i = 0; i < sectionNumbers.length - 1; i++) {
+        let classType = this.getClassTypeFromSectionNumber(sectionNumbers[i])
+        let nextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 1])
+        let nextNextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 2])
+        if (classType === 'LEC' && nextClassType === 'LAB' && nextNextClassType !== 'LAB') {
+          let classCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[i]))
+          // being a sneaky snake and incrementing `i` here, since we don't need
+          // to check the next row now that we know it's already been hooked up
+          let nextClassCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[++i]))
+
+          // add event listeners
+          // TODO: need to find way to fix circular logic (recurison?)
+          classCheckbox.click(() => {
+            nextClassCheckbox.click()
+          })
+          nextClassCheckbox.click(() => {
+            classCheckbox.click()
+          })
+        }
+      }
+    })
+  }
+
+  getClassTypeFromSectionNumber(elem) {
+    return elem ? $(elem).next().html() : ''
+  }
+
+  getCheckboxFromSectionNumber(elem) {
+    return $(elem).parent().find('input[type="checkbox"]')
   }
 }
