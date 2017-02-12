@@ -17,9 +17,12 @@ body {
   user-select: none;
 }
 
-.sidebar > ul,
-.sidebar > ul > li:not([id]):not([class]) {
+.sidebar > ul {
   border-radius: 4px;
+}
+
+.sidebar > ul > li:not([id]):not([class]) {
+  border-radius: 4px 4px 0 0;
 }
 
 #cart-list-divider,
