@@ -41,6 +41,7 @@
   "permissions": [
     "http://polyratings.com/",
     "activeTab",
+    "contextMenus",
     "storage"
   ]
 }

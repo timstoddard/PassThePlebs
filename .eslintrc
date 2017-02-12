@@ -27,6 +27,7 @@
     }],
     "eqeqeq": "error",
     "no-multi-assign": "off",
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"]
   }
 }

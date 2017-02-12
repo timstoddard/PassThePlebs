@@ -18,6 +18,19 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
   }
 })
 
+// context menu option
+chrome.storage.sync.get('showNewTheme', data => {
+  chrome.contextMenus.create({
+    'title': 'Use New Theme',
+    'type': 'checkbox',
+    'contexts': ['all'],
+    'checked': data.showNewTheme,
+    'onclick': (info, tab) => {
+      chrome.tabs.sendMessage(tab.id, { action: 'toggleTheme', showNewTheme: info.checked })
+    },
+  })
+})
+
 // omnibox stuff
 chrome.omnibox.setDefaultSuggestion({ description: 'Look up \'%s\' on Polyratings.com' })
 chrome.omnibox.onInputEntered.addListener(text => {

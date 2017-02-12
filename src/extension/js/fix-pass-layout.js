@@ -28,80 +28,82 @@ export default class PassLayoutFixer {
   }
 
   addThemeColor() {
-    const themeColor = 'rgb(0,175,255)'
-    const themeColorLight = 'rgba(0,175,255,0.6)'
-    const themeStyles = [
-      {
-        selectors: [
-          '.filter-list > li h2',
-          '.select-course > h3',
-          '.select-course > h3 .ge-tag',
-          '.nav-top',
-          '.cart > li:first-child',
-          '.cart > li:first-child a',
-          '.courseDescription',
-        ],
-        cssProps: {
-          'background-color': `${themeColor}`,
+    if (this.options.showNewTheme) {
+      const themeColor = 'rgb(0,175,255)'
+      const themeColorLight = 'rgba(0,175,255,0.6)'
+      const themeStyles = [
+        {
+          selectors: [
+            '.filter-list > li h2',
+            '.select-course > h3',
+            '.select-course > h3 .ge-tag',
+            '.nav-top',
+            '.cart > li:first-child',
+            '.cart > li:first-child a',
+            '.courseDescription',
+          ],
+          cssProps: {
+            'background-color': `${themeColor}`,
+          },
         },
-      },
-      {
-        selectors: [
-          '.pageHeader a',
-        ],
-        cssProps: {
-          'color': `${themeColor}`,
+        {
+          selectors: [
+            '.pageHeader a',
+          ],
+          cssProps: {
+            'color': `${themeColor}`,
+          },
         },
-      },
-      {
-        selectors: [
-          '.steps .active',
-          '.steps .completed',
-        ],
-        cssProps: {
-          'border-bottom-color': `${themeColor}`,
-          'color': `${themeColor}`,
+        {
+          selectors: [
+            '.steps .active',
+            '.steps .completed',
+          ],
+          cssProps: {
+            'border-bottom-color': `${themeColor}`,
+            'color': `${themeColor}`,
+          },
         },
-      },
-      {
-        selectors: [
-          '.cp-logo > a > img',
-        ],
-        cssProps: {
-          'filter': 'hue-rotate(75deg) brightness(200%)',
+        {
+          selectors: [
+            '.cp-logo > a > img',
+          ],
+          cssProps: {
+            'filter': 'hue-rotate(75deg) brightness(200%)',
+          },
         },
-      },
-      {
-        selectors: [
-          '.btn-next',
-        ],
-        cssProps: {
-          'background-color': 'white',
-          'background-image': `linear-gradient(${themeColorLight}, ${themeColor} 95%)`,
+        {
+          selectors: [
+            '.btn-next',
+          ],
+          cssProps: {
+            'background-color': 'white',
+            'background-image': `linear-gradient(${themeColorLight}, ${themeColor} 95%)`,
+          },
         },
-      },
-      {
-        selectors: [
-          '.btn-next[enabled="false"]',
-          '.btn-next:hover',
-          '.btn-next:focus',
-        ],
-        cssProps: {
-          'background-color': `${themeColor}`,
-          'background-image': 'none',
+        {
+          selectors: [
+            '.btn-next[enabled="false"]',
+            '.btn-next:hover',
+            '.btn-next:focus',
+          ],
+          cssProps: {
+            'background-color': `${themeColor}`,
+            'background-image': 'none',
+          },
         },
-      },
-    ]
+      ]
 
-    let css = ''
-    themeStyles.forEach(style => {
-      css += `${style.selectors.join(',')}{`
-      for (let prop in style.cssProps) {
-        css += `${prop}:${style.cssProps[prop]} !important;`
-      }
-      css += '}'
-    })
-    $(document.head).append(`<style>${css}</style>`)
+      let css = ''
+      themeStyles.forEach(style => {
+        css += `${style.selectors.join(',')}{`
+        for (let prop in style.cssProps) {
+          css += `${prop}:${style.cssProps[prop]} !important;`
+        }
+        css += '}'
+      })
+      $(document.head).append(`<style>${css}</style>`)
+    }
   }
 
   fixPageHeader() {
@@ -277,7 +279,10 @@ export default class PassLayoutFixer {
       title.html('Key/Options')
       const restoreDefaults = $('<a class="detail cart-action">Restore Defaults</a>')
       restoreDefaults.click(() => {
-        chrome.storage.sync.set(defaults, () => {
+        const defaultOptions = defaults
+        // don't reset showNewTheme option
+        defaultOptions.showNewTheme = this.options.showNewTheme
+        chrome.storage.sync.set(defaultOptions, () => {
           window.location.reload()
         })
       })

@@ -10,6 +10,7 @@ const defaults = {
   cancelledClasses: 'hidden',
   conflictingClasses: 'normal',
   staffClasses: 'normal',
+  showNewTheme: false, // "hidden" option, available in context menu
 }
 
 export default defaults
