@@ -24,6 +24,7 @@ chrome.storage.sync.get('showNewTheme', data => {
     'title': 'Use New Theme',
     'type': 'checkbox',
     'contexts': ['all'],
+    'documentUrlPatterns': ['https://pass.calpoly.edu/*'],
     'checked': data.showNewTheme,
     'onclick': (info, tab) => {
       chrome.tabs.sendMessage(tab.id, { action: 'toggleTheme', showNewTheme: info.checked })
