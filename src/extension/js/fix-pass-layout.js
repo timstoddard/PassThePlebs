@@ -69,7 +69,7 @@ export default class PassLayoutFixer {
             '.cp-logo > a > img',
           ],
           cssProps: {
-            'filter': 'hue-rotate(75deg) brightness(200%)',
+            'filter': 'hue-rotate(75deg) brightness(235%)',
           },
         },
         {
