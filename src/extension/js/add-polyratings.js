@@ -191,7 +191,7 @@ export default class PolyratingIntegrator {
     const modified = []
     const parts = name.split(' ')
     parts.forEach(part => {
-      if (/[a-z]{2,}/.test(part)) {
+      if (/[a-z]{2,}/i.test(part)) {
         modified.push(part)
       }
     })
