@@ -10,10 +10,12 @@
   },
   "main": "src/extension/js/index.js",
   "scripts": {
-    "build": "rimraf dist* && npm run pack-files && npm run refresh-ext && zip -r dist.zip dist",
+    "start": "onchange 'src/**/*' -w -- npm run dev",
+    "dev": "npm run build && npm run reload && zip -r dist.zip dist",
+    "build": "rimraf dist* && npm run pack-files",
     "pack-files": "webpack -p --config webpack/config.js && npm run move-files",
     "move-files": "cp src/manifest.json dist && mkdir dist/icons && cp media/icons/*.png dist/icons",
-    "refresh-ext": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
+    "reload": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "lint": "eslint .",
     "postinstall": "brew install chrome-cli"
   },
@@ -38,6 +40,7 @@
     "html-loader": "^0.4.4",
     "jquery": "^3.1.1",
     "node-sass": "^3.10.1",
+    "onchange": "^3.2.1",
     "postcss-loader": "^0.13.0",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.2",
