@@ -28,6 +28,10 @@
     "eqeqeq": "error",
     "no-multi-assign": "off",
     "semi": ["error", "never"],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "prefer-destructuring": ["error",
+      { "array": false, "object": true },
+      { "enforceForRenamedProperties": false }
+    ]
   }
 }

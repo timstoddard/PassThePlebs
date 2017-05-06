@@ -17,9 +17,9 @@ export default class PassExtension {
     })
 
     // add listener for custom context menu item
-    chrome.runtime.onMessage.addListener(request => {
-      if (request.action === 'toggleTheme') {
-        chrome.storage.sync.set({ 'showNewTheme': request.showNewTheme }, () => {
+    chrome.runtime.onMessage.addListener(({ action, showNewTheme }) => {
+      if (action === 'toggleTheme') {
+        chrome.storage.sync.set({ 'showNewTheme': showNewTheme }, () => {
           window.location.reload()
         })
       }

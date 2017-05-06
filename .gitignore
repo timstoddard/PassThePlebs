@@ -1,3 +1,6 @@
+# mac system files
+.DS_Store
+
 # node stuff
 node_modules
 npm-debug.log

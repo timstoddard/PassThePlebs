@@ -39,12 +39,21 @@ export default class PolyratingIntegrator {
         const dataForName = data[rawName]
         const nameElems = nameGroups[rawName]
         if (dataForName) {
-          const info = JSON.parse(dataForName)
-          if ((Date.now() - info.timestamp) / (1000 * 60) < 10) {
-            if (info.notFound || info.ambiguous) {
-              this.addLinkToSearchPage(nameElems, rawName, info.lastName, info.notFound)
+          const {
+            timestamp,
+            notFound,
+            ambiguous,
+            lastName,
+            bgColor,
+            href,
+            rating,
+            evals,
+          } = JSON.parse(dataForName)
+          if ((Date.now() - timestamp) / (1000 * 60) < 10) {
+            if (notFound || ambiguous) {
+              this.addLinkToSearchPage(nameElems, rawName, lastName, notFound)
             } else {
-              this.updateInstructorName(rawName, nameElems, info.bgColor, info.href, info.rating, info.evals)
+              this.updateInstructorName(rawName, nameElems, bgColor, href, rating, evals)
             }
           } else {
             this.generateNameCombos(nameElems, rawName)
@@ -209,7 +218,7 @@ export default class PolyratingIntegrator {
   }
 
   centeredTd(text) {
-    return `<td style="text-align:center">${text}</td>`
+    return `<td class="centeredTd">${text}</td>`
   }
 
   setInfo(rawName, info) {

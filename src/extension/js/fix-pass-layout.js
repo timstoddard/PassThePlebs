@@ -94,14 +94,13 @@ export default class PassLayoutFixer {
         },
       ]
 
-      let css = ''
-      themeStyles.forEach(style => {
-        css += `${style.selectors.join(',')}{`
+      const css = themeStyles.map(style => {
+        let styles = ''
         for (let prop in style.cssProps) {
-          css += `${prop}:${style.cssProps[prop]} !important;`
+          styles += `${prop}:${style.cssProps[prop]} !important;`
         }
-        css += '}'
-      })
+        return `${style.selectors.join(',')}{${styles}}`
+      }).join('')
       $(document.head).append(`<style>${css}</style>`)
     }
   }
@@ -146,15 +145,13 @@ export default class PassLayoutFixer {
   }
 
   updateRows(name, selector) {
-    if (this.options[name] === 'hidden') {
-      $(selector).each((i, elem) => {
+    $(selector).each((i, elem) => {
+      if (this.options[name] === 'hidden') {
         hideRow($(elem), false)
-      })
-    } else if (this.options[name] === 'gray') {
-      $(selector).each((i, elem) => {
+      } else if (this.options[name] === 'gray') {
         grayOutRow($(elem), false)
-      })
-    }
+      }
+    })
   }
 
   fixSectionHeaders() {
@@ -241,10 +238,10 @@ export default class PassLayoutFixer {
         })
 
         // add select all checkboxes to table headers
-        const selectAllCheckbox = $('<input class="selectAll" type="checkbox" style="margin-left:4px">')
+        const selectAllCheckbox = $('<input class="selectAll" type="checkbox">')
         const headerChildren = table.find('thead > tr').children()
-        selectAllCheckbox.click(e => {
-          const checked = e.target.checked
+        selectAllCheckbox.click(({ target }) => {
+          const { checked } = target
           checkboxes.each((i, elem) => {
             elem.checked = !checked
             $(elem).click()
@@ -273,8 +270,10 @@ export default class PassLayoutFixer {
 
   integrateRowOptions() {
     const sidebarLists = $('.sidebar > ul')
-    if (sidebarLists.length === 2) {
-      const key = $(sidebarLists[1])
+    if (sidebarLists.length >= 2) {
+      const keyElem = [...sidebarLists].find(list =>
+        $(list).find('.cart-list-divider').text() === 'Key')
+      const key = $(keyElem)
       const title = key.find('.cart-list-divider')
       title.html('Key/Options')
       const restoreDefaults = $('<a class="detail cart-action">Restore Defaults</a>')
