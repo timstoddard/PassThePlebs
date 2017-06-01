@@ -158,17 +158,27 @@ export default class PassLayoutFixer {
     $.ajax({
       dataType: 'json',
       url: 'removeCourse.json',
-      data: {
-        courseId: -1,
-      },
+      data: { courseId: -1 },
       cache: false,
       success: courses => {
         // add descriptions to the section headers
-        const headers = $('.select-course > h3')
-        courses.forEach((course, i) => {
-          const header = $(headers[i])
+        $('.select-course > h3').each((i, elem) => {
+          const header = $(elem)
           const headerContent = $(header.contents()[0])
           const headerText = headerContent.text().replace(/\s+/g, ' ').trim()
+
+          // make sure description matches the course
+          // (summer classes are sometimes out of order due
+          // to having several sessions that are grouped together)
+          const isCorrectCourse = ({ subject, catalogNumber }) => {
+            const regex = new RegExp(`^${subject} ${catalogNumber}`)
+            return regex.test(headerText)
+          }
+          const course = isCorrectCourse(courses[i])
+            ? courses[i]
+            : courses.find(course => isCorrectCourse(course))
+          
+          // add description to the header
           const courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
           headerContent.wrap('<a class="headerLink"></a>')
           headerContent.parent().click(() => {
@@ -204,9 +214,7 @@ export default class PassLayoutFixer {
         $.ajax({
           dataType: 'json',
           url: 'removeCourse.json',
-          data: {
-            courseId: id,
-          },
+          data: { courseId: id },
           cache: false,
           success: data => {
             if (data.length > 0) {
