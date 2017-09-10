@@ -25,6 +25,7 @@ export default class PassLayoutFixer {
     this.moveErrorList()
     this.fixSectionNotes()
     this.fixNoSchedulesGeneratedMessage()
+    this.makeSelectThisScheduleTextClickable()
   }
 
   addThemeColor() {
@@ -387,6 +388,15 @@ export default class PassLayoutFixer {
       } else {
         div.hide()
       }
+    })
+  }
+
+  makeSelectThisScheduleTextClickable() {
+    $('.small-schedule').each((i, elem) => {
+      const selectSchedule = $(elem).children().first()
+      selectSchedule.contents().first().wrap('<span class="selectSchedule__text"></span>')
+      selectSchedule.wrap('<label class="selectSchedule"></label>')
+      selectSchedule.replaceWith(selectSchedule.children())
     })
   }
 }
