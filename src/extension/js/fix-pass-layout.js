@@ -165,7 +165,7 @@ export default class PassLayoutFixer {
         // add descriptions to the section headers
         $('.select-course > h3').each((i, elem) => {
           const header = $(elem)
-          const headerContent = $(header.contents()[0])
+          const headerContent = header.contents().eq(0)
           const headerText = headerContent.text().replace(/\s+/g, ' ').trim()
 
           // make sure description matches the course
@@ -395,8 +395,15 @@ export default class PassLayoutFixer {
     $('.small-schedule').each((i, elem) => {
       const selectSchedule = $(elem).children().first()
       selectSchedule.contents().first().wrap('<span class="selectSchedule__text"></span>')
-      selectSchedule.wrap('<label class="selectSchedule"></label>')
+      selectSchedule.wrap('<custom-div class="selectSchedule"></custom-div>')
+      selectSchedule.wrap('<label class="selectSchedule__label"></label>')
       selectSchedule.replaceWith(selectSchedule.children())
+
+      const children = $(elem).children().first().children().first().children()
+      const child1 = children.eq(0).clone()
+      const child2 = children.eq(1).clone()
+      children.eq(0).replaceWith(child2)
+      children.eq(1).replaceWith(child1)
     })
   }
 }

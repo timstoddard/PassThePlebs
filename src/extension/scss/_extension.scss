@@ -121,20 +121,28 @@ email: tim.stoddard2@gmail.com
 }
 
 .selectSchedule {
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 5px;
-  transition: all 0.25s ease-out;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  &__label {
+    align-items: center;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    padding: 5px;
+    transition: all 0.25s ease-out;
+
+    &:hover {
+      background: rgb(235,235,235);
+    }
+
+    > * {
+      cursor: pointer;
+    }
+  }
 
   &__text {
-    margin-right: 5px;
-  }
-
-  &:hover {
-    background: rgb(235,235,235);
-  }
-
-  > * {
-    cursor: pointer;
+    margin-left: 5px;
   }
 }
