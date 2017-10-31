@@ -458,16 +458,14 @@ export default class PassLayoutFixer {
   makeSelectThisScheduleTextClickable() {
     $('.small-schedule').each((i, elem) => {
       const selectSchedule = $(elem).children().first()
-      selectSchedule.contents().first().wrap('<span class="selectSchedule__text"></span>')
       selectSchedule.wrap('<custom-div class="selectSchedule"></custom-div>')
       selectSchedule.wrap('<label class="selectSchedule__label"></label>')
       selectSchedule.replaceWith(selectSchedule.children())
 
       const children = $(elem).children().first().children().first().children()
-      const child1 = children.eq(0).clone()
-      const child2 = children.eq(1).clone()
-      children.eq(0).replaceWith(child2)
-      children.eq(1).replaceWith(child1)
+      const radioInput = children.eq(0)
+      const selectScheduleText = $('<span class="selectSchedule__text">Select this schedule</span>')
+      radioInput.after(selectScheduleText)
     })
   }
 }
