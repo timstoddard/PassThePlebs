@@ -52,6 +52,13 @@ body {
   }
 }
 
+.row-white,
+.row-gray {
+  td:first-child:not(.sectionNumber) {
+    background: rgb(255,255,255) !important;
+  }
+}
+
 .uscp-tag {
   margin-right: 6px;
 }

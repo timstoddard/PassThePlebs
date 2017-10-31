@@ -5,6 +5,10 @@
 import urlRegex from 'url-regex'
 import { hideRow, grayOutRow } from './row-utils'
 import defaults from '../../shared/defaults'
+import {
+  ALMOST_CLOSED_SECTIONS_MIN_VALUE,
+  ALMOST_CLOSED_SECTIONS_MAX_VALUE
+} from '../../shared/constants'
 
 export default class PassLayoutFixer {
   options;
@@ -21,7 +25,7 @@ export default class PassLayoutFixer {
     this.fixSectionHeaders()
     this.addRemoveButtons()
     this.addSelectAll()
-    this.integrateRowOptions()
+    this.integrateOptions()
     this.moveErrorList()
     this.fixSectionNotes()
     this.fixNoSchedulesGeneratedMessage()
@@ -143,6 +147,26 @@ export default class PassLayoutFixer {
         }
       })
     })
+
+    // highlight sections with less than X spots
+    if (this.options['highlightAlmostClosedSections'] === true) {
+      let value = this.options['highlightAlmostClosedSectionsThreshold']
+      if (value < ALMOST_CLOSED_SECTIONS_MIN_VALUE || value > ALMOST_CLOSED_SECTIONS_MAX_VALUE) {
+        value = defaults['highlightAlmostClosedSectionsThreshold']
+      }
+
+      $('.select-course > table > tbody > tr > .sectionNumber').each((i, elem) => {
+        const openSeatsElem = $(elem).next().next().next().next()
+        const reservedSeatsElem = openSeatsElem.next()
+        const openSeats = parseInt(openSeatsElem.text(), 10)
+        const reservedSeats = parseInt(reservedSeatsElem.text(), 10)
+        if (openSeats + reservedSeats < value) {
+          openSeatsElem.addClass('highlightAlmostClosedSection--left')
+          reservedSeatsElem.addClass('highlightAlmostClosedSection--right')
+          openSeatsElem.parent().addClass('highlightAlmostClosedSection')
+        }
+      })
+    }
   }
 
   updateRows(name, selector) {
@@ -178,7 +202,7 @@ export default class PassLayoutFixer {
           const course = isCorrectCourse(courses[i])
             ? courses[i]
             : courses.find(course => isCorrectCourse(course))
-          
+
           // add description to the header
           const courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
           headerContent.wrap('<a class="headerLink"></a>')
@@ -277,7 +301,7 @@ export default class PassLayoutFixer {
     selectAllCheckbox.prop('checked', allChecked)
   }
 
-  integrateRowOptions() {
+  integrateOptions() {
     const sidebarLists = $('.sidebar > ul')
     if (sidebarLists.length >= 2) {
       const keyElem = [...sidebarLists].find(list =>
@@ -308,9 +332,14 @@ export default class PassLayoutFixer {
         conflicting.after(this.createRadioOptions(options, 'conflictingClasses'))
         staff.after(this.createRadioOptions(options, 'staffClasses'))
 
-        const backgroundColors = this.createCheckboxOption(options, 'Show Background Colors', 'showBackgroundColors')
+        const backgroundColors = this.createCheckboxOption(options, 'Show PolyRating background colors', 'showBackgroundColors')
         staff.parent().next().after(backgroundColors)
         backgroundColors.wrap('<li class="clearfix">')
+
+        const { checkboxWrapper, editTrigger } = this.createCheckboxOptionWithNumber(options, 'Highlight sections with less than', 'open spot', 'open spots',  'highlightAlmostClosedSections', 'highlightAlmostClosedSectionsThreshold', ALMOST_CLOSED_SECTIONS_MIN_VALUE, ALMOST_CLOSED_SECTIONS_MAX_VALUE)
+        staff.parent().next().next().after(checkboxWrapper)
+        checkboxWrapper.wrap('<li class="clearfix">')
+        checkboxWrapper.after(editTrigger)
       })
     }
   }
@@ -355,6 +384,41 @@ export default class PassLayoutFixer {
     checkboxWrapper.append(checkbox)
     checkboxWrapper.append(`<span class="sidebarCheckboxLabel">${name}</span>`)
     return checkboxWrapper
+  }
+
+  createCheckboxOptionWithNumber(options, beforeNumberText, afterNumberTextSingular, afterNumberTextPlural, checkboxOptionName, numberOptionName, minValue, maxValue) {
+    const checkbox = $('<input type="checkbox" class="sidebarCheckboxInput">')
+    checkbox.prop('checked', options[checkboxOptionName])
+    checkbox.click(() => {
+      chrome.storage.sync.set({ [checkboxOptionName]: checkbox.prop('checked') })
+      window.location.reload()
+    })
+
+    const editTrigger = $('<div class="sidebarNumberEditTrigger">(edit number)</div>')
+    editTrigger.click(() => {
+      const enterANumber = `Please enter a number between ${ALMOST_CLOSED_SECTIONS_MIN_VALUE} and ${ALMOST_CLOSED_SECTIONS_MAX_VALUE}, inclusive`
+      let value = prompt(enterANumber)
+      while (value) {
+        const trimmedValue = value.trim()
+        if (/\d{1,2}/.test(trimmedValue) && trimmedValue >= minValue && trimmedValue <= maxValue) {
+          // save the value
+          chrome.storage.sync.set({
+            [checkboxOptionName]: true,
+            [numberOptionName]: parseInt(value, 10),
+          })
+          window.location.reload()
+          break
+        }
+        value = prompt(enterANumber)
+      }
+    })
+
+    const labelText = `${beforeNumberText} ${options[numberOptionName]} ${options[numberOptionName] === 1 ? afterNumberTextSingular : afterNumberTextPlural}`
+
+    const checkboxWrapper = $('<label class="sidebarCheckbox"></label>')
+    checkboxWrapper.append(checkbox)
+    checkboxWrapper.append(`<span class="sidebarCheckboxLabel">${labelText}</span>`)
+    return { checkboxWrapper, editTrigger }
   }
 
   moveErrorList() {

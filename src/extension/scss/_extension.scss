@@ -10,33 +10,48 @@ email: tim.stoddard2@gmail.com
   white-space: nowrap;
 }
 
-.sidebarRadio {
-  &List {
-    display: flex;
-    margin-top: 4px;
-  }
+.sidebar {
+  &Radio {
+    &List {
+      display: flex;
+      margin-top: 4px;
+    }
 
-  &Item {
-    cursor: pointer;
-    margin-right: 10px;
-    text-transform: capitalize;
-
-    > input {
+    &Item {
       cursor: pointer;
+      margin-right: 10px;
+      text-transform: capitalize;
+
+      > input {
+        cursor: pointer;
+      }
     }
   }
-}
 
-.sidebarCheckbox {
-  display: flex;
+  &Checkbox {
+    display: inline-block;
 
-  &Input {
-    cursor: pointer;
+    &Input {
+      cursor: pointer;
+    }
+
+    &Label {
+      cursor: pointer;
+      padding-left: 3px;
+    }
   }
 
-  &Label {
+  &NumberEditTrigger {
+    color: rgb(128,128,128);
     cursor: pointer;
-    padding-left: 3px;
+    display: inline-block;
+    font-size: 11px;
+    margin-top: 4px;
+    text-decoration: underline;
+
+    &:hover {
+      font-style: italic;
+    }
   }
 }
 
@@ -69,6 +84,26 @@ email: tim.stoddard2@gmail.com
     border-color: red;
     color: red;
     text-decoration: none;
+  }
+}
+
+$sectionAlmostClosedBackground: rgba(255,0,0,0.2);
+$sectionAlmostClosedBorder: 2px solid red;
+.highlightAlmostClosedSection {
+  background: $sectionAlmostClosedBackground !important;
+
+  &--left {
+    background: $sectionAlmostClosedBackground;
+    border-top: $sectionAlmostClosedBorder;
+    border-bottom: $sectionAlmostClosedBorder;
+    border-left: $sectionAlmostClosedBorder;
+  }
+
+  &--right {
+    background: $sectionAlmostClosedBackground;
+    border-top: $sectionAlmostClosedBorder;
+    border-bottom: $sectionAlmostClosedBorder;
+    border-right: $sectionAlmostClosedBorder;
   }
 }
 

@@ -20,13 +20,13 @@ export default class PolyratingIntegrator {
     // make an object with all the instructor names and associated <td> elements
     $('.select-course > table > tbody > tr > .sectionNumber').each((i, elem) => {
       const nameElem = $(elem).next().next().next()
-      const rawName = nameElem[0].innerText
+      const rawName = nameElem.text()
       if (rawName !== 'STAFF') {
         if (nameGroups[rawName]) {
           nameGroups[rawName].push(nameElem)
         } else {
           nameGroups[rawName] = [nameElem]
-          rawNames.push(nameElem[0].innerText)
+          rawNames.push(rawName)
         }
       } else {
         this.foundStaff(nameElem)
@@ -94,9 +94,9 @@ export default class PolyratingIntegrator {
         const polyratingPage = $($.parseHTML(response))
         const ratingElem = polyratingPage.find('.hidden-xs > span > .text-primary')
         if (ratingElem[0]) {
-          const rating = ratingElem[0].innerText
+          const rating = ratingElem.text()
           const profId = response.match(/profid=(\d+)/)[1]
-          const evals = ratingElem.next()[0].innerText.replace('uation', '')
+          const evals = ratingElem.next().text().replace('uation', '')
           const href = `http://polyratings.com/eval.php?profid=${profId}`
           const numericalRating = parseFloat(rating, 10)
           const bgColor = this.calculateBackgroundColor(numericalRating)
