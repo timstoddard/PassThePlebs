@@ -54,7 +54,7 @@ body {
 
 .row-white,
 .row-gray {
-  td:first-child:not(.sectionNumber) {
+  td:first-child:not(.sectionNumber):not([colspan]) {
     background: rgb(255,255,255) !important;
   }
 }
