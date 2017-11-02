@@ -148,7 +148,7 @@ export default class PassLayoutFixer {
       })
     })
 
-    // highlight sections with less than X spots
+    // highlight sections with fewer than X spots
     if (this.options['highlightAlmostClosedSections'] === true) {
       let value = this.options['highlightAlmostClosedSectionsThreshold']
       if (value < ALMOST_CLOSED_SECTIONS_MIN_VALUE || value > ALMOST_CLOSED_SECTIONS_MAX_VALUE) {
@@ -336,7 +336,7 @@ export default class PassLayoutFixer {
         staff.parent().next().after(backgroundColors)
         backgroundColors.wrap('<li class="clearfix">')
 
-        const { checkboxWrapper, editTrigger } = this.createCheckboxOptionWithNumber(options, 'Highlight sections with less than', 'open spot', 'open spots',  'highlightAlmostClosedSections', 'highlightAlmostClosedSectionsThreshold', ALMOST_CLOSED_SECTIONS_MIN_VALUE, ALMOST_CLOSED_SECTIONS_MAX_VALUE)
+        const { checkboxWrapper, editTrigger } = this.createCheckboxOptionWithNumber(options, 'Highlight sections with fewer than', 'open spot', 'open spots',  'highlightAlmostClosedSections', 'highlightAlmostClosedSectionsThreshold', ALMOST_CLOSED_SECTIONS_MIN_VALUE, ALMOST_CLOSED_SECTIONS_MAX_VALUE)
         staff.parent().next().next().after(checkboxWrapper)
         checkboxWrapper.wrap('<li class="clearfix">')
         checkboxWrapper.after(editTrigger)
