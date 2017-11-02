@@ -20,8 +20,8 @@ Modifying source
 * Clone or download repo
 * Run `npm install`, which will:
   * Install dependencies
-  * Install chrome-cli (used for reloading PASS in Chrome on save)
+  * (Optional) Install chrome-cli (used for reloading PASS in Chrome on save)
 * Edit away! The code will be built and the extension refreshed every time you save.
-  * Note: You will need the ['Run on Save' extension for VS code](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave), otherwise you must run `npm run build` every time you want to build the extension.
+  * Note: If you choose to install chrome-cli, you will need the ['Run on Save' extension for VS code](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave) (or similar extension/add-on for whatever IDE/editor you use), otherwise you must run `npm run build` every time you want to build the extension.
 
 Inspired by [this Chrome extension](https://github.com/RobertUrsua/BruinWalkChromeExtension)
