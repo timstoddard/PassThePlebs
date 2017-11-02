@@ -396,7 +396,7 @@ export default class PassLayoutFixer {
 
     const editTrigger = $('<div class="sidebarNumberEditTrigger">(edit number)</div>')
     editTrigger.click(() => {
-      const enterANumber = `Please enter a number between ${ALMOST_CLOSED_SECTIONS_MIN_VALUE} and ${ALMOST_CLOSED_SECTIONS_MAX_VALUE}, inclusive`
+      const enterANumber = `Please enter a number between ${minValue} and ${maxValue}, inclusive`
       let value = prompt(enterANumber)
       while (value) {
         const trimmedValue = value.trim()

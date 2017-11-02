@@ -29,7 +29,7 @@ email: tim.stoddard2@gmail.com
   }
 
   &Checkbox {
-    display: inline-block;
+    display: block;
 
     &Input {
       cursor: pointer;
@@ -44,7 +44,7 @@ email: tim.stoddard2@gmail.com
   &NumberEditTrigger {
     color: rgb(128,128,128);
     cursor: pointer;
-    display: inline-block;
+    display: block;
     font-size: 11px;
     margin-top: 4px;
     text-decoration: underline;
