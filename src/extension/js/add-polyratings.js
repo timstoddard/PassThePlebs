@@ -4,6 +4,22 @@
 
 import { hideRow, grayOutRow } from './row-utils'
 
+const KNOWN_TEACHERS_LACKING_POLYRATINGS = [
+  'Danowitz,Steven M', // BUS
+  'Groves,Adam Thomas', // CHEM
+  'Morey,Nisa Satumtira', // CHEM
+  'Hudson,Nancie Jeanne', // COMS
+  'Mulligan,Kyle John', // CSC
+  'Ryu,Dong yub', // CSC
+  'Siu,Christopher E', // CSC
+  'Dunn,Ian Thomas', // CSC
+  'Reno,Daniel Patrick', // ENGL
+]
+
+const KNOWN_FALSE_NEGATIVES = {
+  'Miller II,Charles R': 'Charles Miller', // BUS
+}
+
 export default class PolyratingIntegrator {
   showBackgroundColors;
   staffClassesOption;
@@ -66,19 +82,25 @@ export default class PolyratingIntegrator {
   }
 
   generateNameCombos(nameElems, rawName) {
-    const names = rawName.split(',')
-    const lastName = this.removeAllSingleLetters(names[0].trim())
-    const firstNames = this.removeAllSingleLetters(names[1].trim())
-    const firstNamesList = firstNames.split(' ')
-    const namesList = [lastName]
-    firstNamesList.forEach(name => {
-      namesList.push(this.urlFormat(`${name} ${lastName}`))
-    })
-    const fullName = this.urlFormat(`${firstNames} ${lastName}`)
-    if (namesList.indexOf(fullName) === -1) {
-      namesList.push(fullName)
+    if (KNOWN_TEACHERS_LACKING_POLYRATINGS.includes(rawName)) {
+      this.getDataAndUpdatePage(nameElems, rawName, [])
+    } else if (KNOWN_FALSE_NEGATIVES[rawName]) {
+      this.getDataAndUpdatePage(nameElems, rawName, [KNOWN_FALSE_NEGATIVES[rawName]])
+    } else {
+      const names = rawName.split(',')
+      const lastName = this.removeAllSingleLetters(names[0].trim())
+      const firstNames = this.removeAllSingleLetters(names[1].trim())
+      const firstNamesList = firstNames.split(' ')
+      const namesList = [lastName]
+      firstNamesList.forEach(name => {
+        namesList.push(this.urlFormat(`${name} ${lastName}`))
+      })
+      const fullName = this.urlFormat(`${firstNames} ${lastName}`)
+      if (namesList.indexOf(fullName) === -1) {
+        namesList.push(fullName)
+      }
+      this.getDataAndUpdatePage(nameElems, rawName, namesList)
     }
-    this.getDataAndUpdatePage(nameElems, rawName, namesList)
   }
 
   getDataAndUpdatePage(nameElems, rawName, namesList) {
