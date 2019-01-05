@@ -7,7 +7,8 @@
 export default class Experiments {
   start() {
     // this.addAllCourses()
-    this.makeLinkedLecturesAndLabsToggleTogether()
+    // this.makeLinkedLecturesAndLabsToggleTogether()
+    this.addAllCoursesByDepartment('ag')
   }
 
   addAllCourses() {
@@ -26,7 +27,7 @@ export default class Experiments {
     })
   }
 
-  addAllCoursesByDepartment() {
+  addAllCoursesByDepartment(department = '') {
     const counts = {
       expectedDeptCount: 0,
       deptCount: 0,
@@ -34,18 +35,23 @@ export default class Experiments {
       courseCount: 0,
     }
     $('#filterbox-list-view > li > select[data-filter="dept"] > option').each((i, elem) => {
-      counts.expectedDeptCount++
-      $.ajax({
-        dataType: 'json',
-        url: 'searchByDept.json',
-        data: {
-          deptId: elem.value,
-        },
-        cache: false,
-        success: courses => {
-          this.addAllCoursesForDepartment(courses, counts)
-        },
-      })
+      if (
+        (department && new RegExp(`^${department}[^a-z]`, 'i').test(elem.innerText)) ||
+        !department
+      ) {
+        counts.expectedDeptCount++
+        $.ajax({
+          dataType: 'json',
+          url: 'searchByDept.json',
+          data: {
+            deptId: elem.value,
+          },
+          cache: false,
+          success: courses => {
+            this.addAllCoursesForDepartment(courses, counts)
+          },
+        })
+      }
     })
   }
 
