@@ -5,19 +5,30 @@
 import { hideRow, grayOutRow } from './row-utils'
 
 const KNOWN_TEACHERS_LACKING_POLYRATINGS = [
-  'Danowitz,Steven M', // BUS
-  'Groves,Adam Thomas', // CHEM
-  'Morey,Nisa Satumtira', // CHEM
-  'Hudson,Nancie Jeanne', // COMS
-  'Mulligan,Kyle John', // CSC
-  'Ryu,Dong yub', // CSC
-  'Siu,Christopher E', // CSC
-  'Dunn,Ian Thomas', // CSC
-  'Reno,Daniel Patrick', // ENGL
+  // AEPS
+  'Smith,Dennis E',
+  // AERO = good
+  // AG
+  // TODO (plus all missing depts in this list)
+  // BUS
+  'Danowitz,Steven M',
+  // CHEM
+  'Groves,Adam Thomas',
+  'Morey,Nisa Satumtira',
+  // COMS
+  'Hudson,Nancie Jeanne',
+  // CSC
+  'Mulligan,Kyle John',
+  'Ryu,Dong yub',
+  'Siu,Christopher E',
+  'Dunn,Ian Thomas',
+  // ENGL
+  'Reno,Daniel Patrick',
 ]
 
 const KNOWN_FALSE_NEGATIVES = {
-  'Miller II,Charles R': 'Charles Miller', // BUS
+  // BUS
+  'Miller II,Charles R': 'Charles Miller',
 }
 
 export default class PolyratingIntegrator {
