@@ -38,8 +38,8 @@ module.exports = {
       },
       plugins: this.buildPlugins(),
       performance: {
-        hints: false
-      }
+        hints: false,
+      },
     }
     return merge(base, options)
   },

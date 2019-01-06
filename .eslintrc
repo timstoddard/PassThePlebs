@@ -26,6 +26,7 @@
         "functions": "ignore"
     }],
     "eqeqeq": "error",
+    "import/no-extraneous-dependencies": "off",
     "no-multi-assign": "off",
     "semi": ["error", "never"],
     "quotes": ["error", "single"],
