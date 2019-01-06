@@ -1,43 +1,64 @@
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const merge = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const autoprefixer = require('autoprefixer')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   createConfig(options) {
     const base = {
-      devtool: 'cheap-module-source-map',
+      mode: 'production',
+      devtool: 'eval', // fastest page reload time
       module: {
-        loaders: [
+        rules: [
           {
             test: /\.js$/,
-            // because uglifyjs can't handle the fact that the
-            // url-regex module needs to be a special snowflake
-            exclude: /node_modules(?!\/url-regex)/,
-            loader: 'babel',
+            exclude: /node_modules/,
+            loader: 'babel-loader',
             query: {
-              presets: ['es2015', 'stage-0'],
+              presets: ['env', 'stage-2'],
             },
           },
           {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('style-loader', ['css-loader', 'postcss-loader', 'sass-loader']),
+            use: [
+              MiniCssExtractPlugin.loader,
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  ident: 'postcss',
+                  plugins: [autoprefixer],
+                },
+              },
+              'sass-loader',
+            ],
           },
         ],
       },
-      postcss: () => [autoprefixer],
       plugins: this.buildPlugins(),
+      performance: {
+        hints: false
+      }
     }
-    return Object.assign(base, options)
+    return merge(base, options)
   },
   buildPlugins(plugins) {
     const basePlugins = [
-      new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false },
-        comments: false,
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true,
+        uglifyOptions: {
+          compress: {
+            warnings: true,
+          },
+          toplevel: true,
+          keep_classnames: true,
+        },
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
-      new webpack.optimize.DedupePlugin(),
-      new ExtractTextPlugin('index.css', { allChunks: true }),
+      new MiniCssExtractPlugin({ filename: 'index.css' }),
     ]
     if (plugins) {
       basePlugins.push(...plugins)
