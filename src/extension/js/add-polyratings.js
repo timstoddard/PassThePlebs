@@ -204,7 +204,7 @@ export default class PolyratingIntegrator {
       const domID = (new Array(10)).fill(null).map(_ => String.fromCharCode((Math.ceil(Math.random() * 26) + 96))).join('')
 
       const parseElement = document.createElement(`${domID}`)
-      parseElement.innerHTML = data.replace(/<(<link.*>)|(<img.*>)/g, '') // Stop dom element from trying to retrieve files
+      parseElement.innerHTML = data.replace(/(<link.*>)|(<img.*>)/g, '') // Stop dom element from trying to retrieve files
 
       // Ok defining data this specifically because if it fails will fall back to not-found in catch statement
       const rating = parseElement.getElementsByClassName('teacher-rating')[0].innerText
