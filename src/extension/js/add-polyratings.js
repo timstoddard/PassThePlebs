@@ -179,7 +179,7 @@ export default class PolyratingIntegrator {
     } else {
       const href = `http://polyratings.com/search.php?type=ProfName&terms=${lastName}&format=long&sort=name`
       nameElems.forEach(nameElem => {
-        const anchor = `<a href="${href}" target="_blank" class="ratingLinkno-">`
+        const anchor = `<a href="${href}" target="_blank" class="ratingLink">`
         nameElem.html(`${anchor + nameElem.html()}</a>`)
         nameElem.after(this.centeredTd(`${anchor}click here</a>`))
         this.updateAttachedRows(nameElem)
