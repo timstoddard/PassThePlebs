@@ -26,10 +26,7 @@ const CALPOLYRATINGSMAP = {
 }
 
 export default class PolyratingIntegrator {
-  showBackgroundColors;
-
-  staffClassesOption;
-
+  
   constructor(options) {
     this.showBackgroundColors = options.showBackgroundColors
     this.staffClassesOption = options.staffClasses
