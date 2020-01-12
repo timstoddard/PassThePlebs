@@ -1,38 +1,33 @@
 /**
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
-
 import { hideRow, grayOutRow } from './row-utils'
-
-const KNOWN_TEACHERS_LACKING_POLYRATINGS = [
-  // AEPS
-  'Smith,Dennis E',
-  // AERO = good
-  // AG
-  // TODO (plus all missing depts in this list)
-  // BUS
-  'Danowitz,Steven M',
-  // CHEM
-  'Groves,Adam Thomas',
-  'Morey,Nisa Satumtira',
-  // COMS
-  'Hudson,Nancie Jeanne',
-  // CSC
-  'Mulligan,Kyle John',
-  'Ryu,Dong yub',
-  'Siu,Christopher E',
-  'Dunn,Ian Thomas',
-  // ENGL
-  'Reno,Daniel Patrick',
-]
 
 const KNOWN_FALSE_NEGATIVES = {
   // BUS
   'Miller II,Charles R': 'Charles Miller',
 }
 
+// Maps calpolyratings to polyratings scale for color picker
+const CALPOLYRATINGSMAP = {
+  'A+': 4,
+  'A': 3.67,
+  'A-': 3.33,
+  'B+': 3,
+  'B': 2.67,
+  'B-': 2.33,
+  'C+': 2,
+  'C': 1.67,
+  'C-': 1.33,
+  'D+': 1,
+  'D': 0.67,
+  'D-': 0.33,
+  'F': 0,
+}
+
 export default class PolyratingIntegrator {
   showBackgroundColors;
+
   staffClassesOption;
 
   constructor(options) {
@@ -59,7 +54,6 @@ export default class PolyratingIntegrator {
         this.foundStaff(nameElem)
       }
     })
-
     // loop over all instructor names and get the associated polyrating data
     chrome.storage.local.get(rawNames, data => {
       rawNames.forEach(rawName => {
@@ -93,9 +87,7 @@ export default class PolyratingIntegrator {
   }
 
   generateNameCombos(nameElems, rawName) {
-    if (KNOWN_TEACHERS_LACKING_POLYRATINGS.includes(rawName)) {
-      this.getDataAndUpdatePage(nameElems, rawName, [])
-    } else if (KNOWN_FALSE_NEGATIVES[rawName]) {
+    if (KNOWN_FALSE_NEGATIVES[rawName]) {
       this.getDataAndUpdatePage(nameElems, rawName, [KNOWN_FALSE_NEGATIVES[rawName]])
     } else {
       const names = rawName.split(',')
@@ -107,7 +99,7 @@ export default class PolyratingIntegrator {
         namesList.push(this.urlFormat(`${name} ${lastName}`))
       })
       const fullName = this.urlFormat(`${firstNames} ${lastName}`)
-      if (namesList.indexOf(fullName) === -1) {
+      if (!namesList.includes(fullName)) {
         namesList.push(fullName)
       }
       this.getDataAndUpdatePage(nameElems, rawName, namesList)
@@ -141,12 +133,10 @@ export default class PolyratingIntegrator {
             // so add a link to the polyratings search page with their last
             // name as the search term
             this.addLinkToSearchPage(nameElems, rawName, nextName, false)
+          } else if (namesList.length > 0) {
+            this.getDataAndUpdatePage(nameElems, rawName, namesList)
           } else {
-            if (namesList.length > 0) {
-              this.getDataAndUpdatePage(nameElems, rawName, namesList)
-            } else {
-              this.addLinkToSearchPage(nameElems, rawName, nextName, true)
-            }
+            this.addLinkToSearchPage(nameElems, rawName, nextName, true)
           }
         }
       },
@@ -185,14 +175,11 @@ export default class PolyratingIntegrator {
 
   addLinkToSearchPage(nameElems, rawName, lastName, notFound) {
     if (notFound) {
-      nameElems.forEach(nameElem => {
-        nameElem.after(this.centeredTd('not found'))
-        this.updateAttachedRows(nameElem)
-      })
+      this.checkCalPolyRatings(rawName, nameElems)
     } else {
       const href = `http://polyratings.com/search.php?type=ProfName&terms=${lastName}&format=long&sort=name`
       nameElems.forEach(nameElem => {
-        const anchor = `<a href="${href}" target="_blank" class="ratingLink">`
+        const anchor = `<a href="${href}" target="_blank" class="ratingLinkno-">`
         nameElem.html(`${anchor + nameElem.html()}</a>`)
         nameElem.after(this.centeredTd(`${anchor}click here</a>`))
         this.updateAttachedRows(nameElem)
@@ -202,6 +189,34 @@ export default class PolyratingIntegrator {
       lastName,
       notFound,
       ambiguous: !notFound,
+    })
+  }
+
+  checkCalPolyRatings(rawname, nameElems) {
+    const [lastName, firstName] = rawname.split(/[, ]/)
+      .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
+
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+    const herf = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}/`
+
+    fetch(proxyUrl + herf).then(res => res.text()).then(data => {
+      // Generate random string for dom element to avoid conflict in parsing
+      const domID = (new Array(10)).fill(null).map(_ => String.fromCharCode((Math.ceil(Math.random() * 26) + 96))).join('')
+
+      const parseElement = document.createElement(`${domID}`)
+      parseElement.innerHTML = data.replace(/<(<link.*>)|(<img.*>)/g, '') // Stop dom element from trying to retrieve files
+
+      // Ok defining data this specifically because if it fails will fall back to not-found in catch statement
+      const rating = parseElement.getElementsByClassName('teacher-rating')[0].innerText
+      const evals = parseElement.getElementsByClassName('evals-span')[1].innerText
+
+      // If all data was recieved ok add to page
+      this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CALPOLYRATINGSMAP[rating]), herf, rating, evals)
+    }).catch(e => {
+      nameElems.forEach(nameElem => {
+        nameElem.after(this.centeredTd('not found'))
+        this.updateAttachedRows(nameElem)
+      })
     })
   }
 
@@ -217,7 +232,7 @@ export default class PolyratingIntegrator {
     }
   }
 
-  /*** UTILS ***/
+  /** * UTILS ** */
 
   updateAttachedRows(nameElem) {
     let nextRow = nameElem.parent().next()
