@@ -10,10 +10,11 @@
   },
   "main": "src/extension/js/index.js",
   "scripts": {
-    "start": "onchange 'src/**/*' -w -- npm run dev",
-    "dev": "npm run build && npm run reload && zip -r dist.zip dist",
-    "build": "rimraf dist* && npm run pack-files",
-    "pack-files": "webpack -p --config webpack/config.js && node ./build/copy-files",
+    "start": "onchange 'src/**/*' -w -- npm run build",
+    "build": "run-script-os",
+    "build:macos": "rimraf dist* && npm run pack-files && npm run reload",
+    "build:default": "rimraf dist* && npm run pack-files",
+    "pack-files": "webpack -p --config webpack/config.js && node build/zip",
     "reload": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "lint": "eslint --ext .js --ignore-pattern '/dist/*' --fix .",
     "postinstall": "brew install chrome-cli && brew upgrade chrome-cli"
@@ -29,6 +30,7 @@
     "babel-loader": "7.1.5",
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-2": "6.24.1",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "2.1.0",
     "eslint": "5.12.0",
     "eslint-config-airbnb-base": "13.1.0",
@@ -46,6 +48,8 @@
     "uglifyjs-webpack-plugin": "2.1.1",
     "webpack": "4.28.3",
     "webpack-cli": "3.2.0",
-    "webpack-merge": "4.2.1"
+    "archiver": "^3.1.1",
+    "run-script-os": "^1.0.7",
+    "webpack-merge": "^4.2.2"
   }
 }
