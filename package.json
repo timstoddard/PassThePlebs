@@ -13,7 +13,7 @@
     "start": "onchange 'src/**/*' -w -- npm run dev",
     "dev": "npm run build && npm run reload && zip -r dist.zip dist",
     "build": "rimraf dist* && npm run pack-files",
-    "pack-files": "webpack -p --config webpack/config.js && node ./build/coppy-files",
+    "pack-files": "webpack -p --config webpack/config.js && node ./build/copy-files",
     "reload": "chrome-cli open chrome://extensions && chrome-cli reload && chrome-cli close && chrome-cli reload",
     "lint": "eslint --ext .js --ignore-pattern '/dist/*' --fix .",
     "postinstall": "brew install chrome-cli && brew upgrade chrome-cli"
