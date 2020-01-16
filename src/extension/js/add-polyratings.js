@@ -9,7 +9,7 @@ const KNOWN_FALSE_NEGATIVES = {
 }
 
 // Maps calpolyratings to polyratings scale for color picker
-const CALPOLYRATINGSMAP = {
+const CAL_POLY_RATINGS_MAP = {
   'A+': 4,
   'A': 3.67,
   'A-': 3.33,
@@ -191,31 +191,33 @@ export default class PolyratingIntegrator {
 
   checkCalPolyRatings(rawname, nameElems) {
     const [lastName, firstName] = rawname.split(/[, ]/)
-      .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
+    .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
 
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
     const herf = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}/`
+    const reqOptions = {
+      method: 'GET',
+      action: 'xhttp',
+      url: proxyUrl + herf,
+    }
 
-    fetch(proxyUrl + herf).then(res => res.text()).then(data => {
-      // Generate random string for dom element to avoid conflict in parsing
-      const domID = (new Array(10)).fill(null).map(_ => String.fromCharCode((Math.ceil(Math.random() * 26) + 96))).join('')
+    chrome.runtime.sendMessage(reqOptions,response => {
+      try{
+        // Ok defining data this specifically because if it fails will fall back to not-found in catch statement
+        let calPolyratingPage = $($.parseHTML(response))
+        const rating = calPolyratingPage.find('button > span')[1].innerText
+        const evals = calPolyratingPage.find('button > small > ul > li > span')[2].innerText 
 
-      const parseElement = document.createElement(`${domID}`)
-      parseElement.innerHTML = data.replace(/(<link.*>)|(<img.*>)/g, '') // Stop dom element from trying to retrieve files
-
-      // Ok defining data this specifically because if it fails will fall back to not-found in catch statement
-      const rating = parseElement.getElementsByClassName('teacher-rating')[0].innerText
-      const evals = parseElement.getElementsByClassName('evals-span')[1].innerText
-
-      // If all data was recieved ok add to page
-      this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CALPOLYRATINGSMAP[rating]), herf, rating, evals)
-    }).catch(e => {
-      nameElems.forEach(nameElem => {
-        nameElem.after(this.centeredTd('not found'))
-        this.updateAttachedRows(nameElem)
-      })
-    })
-  }
+        // If all data was recieved ok add to page
+        this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CAL_POLY_RATINGS_MAP[rating]), herf, rating, evals)
+      }catch(e) {
+        nameElems.forEach(nameElem => {
+          nameElem.after(this.centeredTd('not found'))
+          this.updateAttachedRows(nameElem)
+        })
+    }
+  })
+}
 
   foundStaff(nameElem) {
     if (this.staffClassesOption === 'hidden') {
@@ -229,7 +231,7 @@ export default class PolyratingIntegrator {
     }
   }
 
-  /** * UTILS ** */
+  /*** UTILS ***/
 
   updateAttachedRows(nameElem) {
     let nextRow = nameElem.parent().next()
