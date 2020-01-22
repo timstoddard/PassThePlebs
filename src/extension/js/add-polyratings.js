@@ -209,7 +209,7 @@ export default class PolyratingIntegrator {
         const evals = calPolyratingPage.find('button > small > ul > li > span')[2].innerText 
 
         // If all data was recieved ok add to page
-        this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CAL_POLY_RATINGS_MAP[rating]), herf, rating, evals)
+        this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CAL_POLY_RATINGS_MAP[rating]), targetUrl, rating, evals)
       }catch(e) {
         nameElems.forEach(nameElem => {
           nameElem.after(this.centeredTd('not found'))
