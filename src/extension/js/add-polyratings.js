@@ -194,11 +194,11 @@ export default class PolyratingIntegrator {
     .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
 
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    const herf = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}/`
+    const targetUrl = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}/`
     const reqOptions = {
       method: 'GET',
       action: 'xhttp',
-      url: proxyUrl + herf,
+      url: proxyUrl + targetUrl,
     }
 
     chrome.runtime.sendMessage(reqOptions,response => {
