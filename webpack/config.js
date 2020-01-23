@@ -1,5 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const path = require('path')
 const utils = require('./utils')
 
 module.exports = [
@@ -8,12 +10,16 @@ module.exports = [
     entry: './src/extension/js',
     output: {
       filename: 'index.js',
-      path: `${__dirname}/../dist/bundle`,
+      path: path.join(__dirname,'/../dist/bundle'),
     },
     plugins: utils.buildPlugins([
       new webpack.ProvidePlugin({
         $: 'jquery',
       }),
+      new CopyPlugin([
+        {from:path.join(__dirname,'/../src/manifest.json'),to:path.join(__dirname,'/../dist')},
+        {from:path.join(__dirname,'/../media/icons/'),to:path.join(__dirname,'/../dist/icons'), ignore:['*.jsx','*.psd']},
+      ]),
     ]),
   }),
   // background
