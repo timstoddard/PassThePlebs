@@ -13,11 +13,8 @@ module.exports = {
         rules: [
           {
             test: /\.js$/,
-            exclude: /node_modules/,
             loader: 'babel-loader',
-            query: {
-              presets: ['env', 'stage-2'],
-            },
+            exclude: /node_modules/,
           },
           {
             test: /\.scss$/,
@@ -50,9 +47,7 @@ module.exports = {
         parallel: true,
         sourceMap: true,
         uglifyOptions: {
-          compress: {
-            warnings: true,
-          },
+          warnings: true,
           toplevel: true,
           keep_classnames: true,
         },

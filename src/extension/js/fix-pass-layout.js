@@ -231,7 +231,7 @@ export default class PassLayoutFixer {
   addRemoveButtons() {
     $('.cart-action[data-id]').each((i, elem) => {
       const id = $(elem).data('id')
-      const headerMap = $(`.select-course:nth-child(${i + 2}) .view-map`)
+      const headerMap = $(`.select-course:nth-of-type(${i + 2}) .view-map`)
       const removeButton = $('<a class="removeButton">X</a>')
       headerMap.before(removeButton)
       removeButton.click(() => {
