@@ -10,15 +10,22 @@ module.exports = [
     entry: './src/extension/js',
     output: {
       filename: 'index.js',
-      path: path.join(__dirname,'/../dist/bundle'),
+      path: path.join(__dirname, '/../dist/bundle'),
     },
     plugins: utils.buildPlugins([
       new webpack.ProvidePlugin({
         $: 'jquery',
       }),
       new CopyPlugin([
-        {from:path.join(__dirname,'/../src/manifest.json'),to:path.join(__dirname,'/../dist')},
-        {from:path.join(__dirname,'/../media/icons/'),to:path.join(__dirname,'/../dist/icons'), ignore:['*.jsx','*.psd']},
+        {
+          from: path.join(__dirname, '/../src/manifest.json'),
+          to: path.join(__dirname, '/../dist'),
+        },
+        {
+          from: path.join(__dirname, '/../media/icons/'),
+          to: path.join(__dirname, '/../dist/icons'),
+          ignore: ['*.jsx', '*.psd'],
+        },
       ]),
     ]),
   }),

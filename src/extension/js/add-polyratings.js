@@ -1,6 +1,7 @@
 /**
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
+
 import { hideRow, grayOutRow } from './row-utils'
 
 const KNOWN_FALSE_NEGATIVES = {
@@ -9,6 +10,7 @@ const KNOWN_FALSE_NEGATIVES = {
 }
 
 // Maps calpolyratings to polyratings scale for color picker
+/* eslint-disable quote-props */
 const CAL_POLY_RATINGS_MAP = {
   'A+': 4,
   'A': 3.67,
@@ -24,9 +26,9 @@ const CAL_POLY_RATINGS_MAP = {
   'D-': 0.33,
   'F': 0,
 }
+/* eslint-enable quote-props */
 
 export default class PolyratingIntegrator {
-  
   constructor(options) {
     this.showBackgroundColors = options.showBackgroundColors
     this.staffClassesOption = options.staffClasses
@@ -51,6 +53,7 @@ export default class PolyratingIntegrator {
         this.foundStaff(nameElem)
       }
     })
+
     // loop over all instructor names and get the associated polyrating data
     chrome.storage.local.get(rawNames, data => {
       rawNames.forEach(rawName => {
@@ -191,33 +194,34 @@ export default class PolyratingIntegrator {
 
   checkCalPolyRatings(rawname, nameElems) {
     const [lastName, firstName] = rawname.split(/[, ]/)
-    .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
+      .filter(name => name.length > 2 && name.split('I').length !== name.length + 1) // detects II and M.
 
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-    const targetUrl = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}/`
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com'
+    const targetUrl = `https://www.calpolyratings.com/${firstName.toLowerCase()}-${lastName.toLowerCase()}`
     const reqOptions = {
       method: 'GET',
       action: 'xhttp',
-      url: proxyUrl + targetUrl,
+      url: `${proxyUrl}/${targetUrl}`,
     }
 
-    chrome.runtime.sendMessage(reqOptions,response => {
-      try{
-        // Ok defining data this specifically because if it fails will fall back to not-found in catch statement
-        let calPolyratingPage = $($.parseHTML(response))
-        const rating = calPolyratingPage.find('button > span')[1].innerText
-        const evals = calPolyratingPage.find('button > small > ul > li > span')[2].innerText 
+    chrome.runtime.sendMessage(reqOptions, response => {
+      try {
+        const calPolyRatingPage = $($.parseHTML(response))
+        const rating = calPolyRatingPage.find('button > span')[1].innerText
+        const evals = calPolyRatingPage.find('button > small > ul > li > span')[2].innerText
 
         // If all data was recieved ok add to page
-        this.updateInstructorName(rawname, nameElems, this.calculateBackgroundColor(CAL_POLY_RATINGS_MAP[rating]), targetUrl, rating, evals)
-      }catch(e) {
+        this.updateInstructorName(rawname, nameElems,
+          this.calculateBackgroundColor(CAL_POLY_RATINGS_MAP[rating]),
+          targetUrl, rating, evals)
+      } catch (e) {
         nameElems.forEach(nameElem => {
           nameElem.after(this.centeredTd('not found'))
           this.updateAttachedRows(nameElem)
         })
-    }
-  })
-}
+      }
+    })
+  }
 
   foundStaff(nameElem) {
     if (this.staffClassesOption === 'hidden') {
@@ -231,7 +235,7 @@ export default class PolyratingIntegrator {
     }
   }
 
-  /*** UTILS ***/
+  /* UTILS */
 
   updateAttachedRows(nameElem) {
     let nextRow = nameElem.parent().next()
@@ -259,8 +263,8 @@ export default class PolyratingIntegrator {
   }
 
   calculateBackgroundColor(rating) {
-    const r = rating < 3 ? 255 : 255 * (4 - rating) / 4
-    const g = rating < 3 ? 255 * rating / 3 : 255
+    const r = rating < 3 ? 255 : (255 * (4 - rating)) / 4
+    const g = rating < 3 ? (255 * rating) / 3 : 255
     return `rgba(${Math.round(r)},${Math.round(g)},0,0.7)`
   }
 

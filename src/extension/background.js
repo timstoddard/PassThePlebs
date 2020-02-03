@@ -16,17 +16,18 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
     xhttp.send(request.data)
     return true // prevents the callback from being called too early on return
   }
+  return false
 })
 
 // context menu option
 chrome.storage.sync.get('showNewTheme', data => {
   chrome.contextMenus.create({
-    'title': 'Use New Theme',
-    'type': 'checkbox',
-    'contexts': ['all'],
-    'documentUrlPatterns': ['https://pass.calpoly.edu/*'],
-    'checked': data.showNewTheme,
-    'onclick': (info, tab) => {
+    title: 'Use New Theme',
+    type: 'checkbox',
+    contexts: ['all'],
+    documentUrlPatterns: ['https://pass.calpoly.edu/*'],
+    checked: data.showNewTheme,
+    onclick: (info, tab) => {
       chrome.tabs.sendMessage(tab.id, { action: 'toggleTheme', showNewTheme: info.checked })
     },
   })

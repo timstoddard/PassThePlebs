@@ -11,11 +11,9 @@ export default class OptionsForm {
   constructor() {
     this.showBackgroundColors = document.getElementById('showBackgroundColors')
     this.radioElems = {}
-    for (let name in defaults) {
-      if (name !== 'showBackgroundColors') {
-        this.radioElems[name] = document.querySelectorAll(`input[name="${name}"]`)
-      }
-    }
+    Object.keys(defaults).forEach(name => {
+      this.radioElems[name] = document.querySelectorAll(`input[name="${name}"]`)
+    })
   }
 
   init() {
@@ -25,13 +23,13 @@ export default class OptionsForm {
 
   loadStoredData() {
     chrome.storage.sync.get(defaults, options => {
-      for (let name in options) {
+      Object.keys(options).forEach(name => {
         if (name === 'showBackgroundColors') {
           this.showBackgroundColors.checked = options[name]
         } else {
           this.updateRadios(name, options[name])
         }
-      }
+      })
     })
   }
 
@@ -42,7 +40,7 @@ export default class OptionsForm {
     })
 
     // row options
-    for (let name in defaults) {
+    Object.keys(defaults).forEach(name => {
       if (name !== 'showBackgroundColors') {
         const radios = this.radioElems[name]
         for (let i = 0; i < radios.length; i++) {
@@ -52,20 +50,20 @@ export default class OptionsForm {
           })
         }
       }
-    }
+    })
 
     // restore defaults button
     document.getElementById('restoreDefaults')
       .addEventListener('click', () => {
         const data = {}
-        for (let name in defaults) {
+        Object.keys(defaults).forEach(name => {
           if (name === 'showBackgroundColors') {
             this.showBackgroundColors.checked = data[name] = defaults[name]
           } else {
             const defaultValue = data[name] = defaults[name]
             this.updateRadios(name, defaultValue)
           }
-        }
+        })
         chrome.storage.sync.set(data)
       })
   }

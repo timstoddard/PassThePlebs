@@ -2,6 +2,13 @@
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
 
+function uncheckCheckbox(row) {
+  const checkbox = row.find('input[type="checkbox"]:checked')
+  if (checkbox[0]) {
+    checkbox.click()
+  }
+}
+
 export function hideRow(row, checkRowsBelow) {
   // hide row
   const input = row.find('input[type="checkbox"]')
@@ -50,12 +57,5 @@ export function grayOutRow(row, checkRowsBelow) {
       row = row.next()
       colSpanTd = row.find('td:first-child[colspan]')[0]
     }
-  }
-}
-
-function uncheckCheckbox(row) {
-  const checkbox = row.find('input[type="checkbox"]:checked')
-  if (checkbox[0]) {
-    checkbox.click()
   }
 }
