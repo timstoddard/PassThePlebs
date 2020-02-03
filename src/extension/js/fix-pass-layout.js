@@ -1,6 +1,7 @@
 /**
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
+/* eslint-disable no-alert */
 
 import urlRegex from 'url-regex'
 import { hideRow, grayOutRow } from './row-utils'
@@ -36,6 +37,7 @@ export default class PassLayoutFixer {
     if (this.options.showNewTheme) {
       const themeColor = 'rgb(0,175,255)'
       const themeColorLight = 'rgba(0,175,255,0.6)'
+      /* eslint-disable quote-props */
       const themeStyles = [
         {
           selectors: [
@@ -98,12 +100,11 @@ export default class PassLayoutFixer {
           },
         },
       ]
+      /* eslint-enable quote-props */
 
       const css = themeStyles.map(style => {
-        let styles = ''
-        for (let prop in style.cssProps) {
-          styles += `${prop}:${style.cssProps[prop]} !important;`
-        }
+        const styles = Object.keys(style.cssProps)
+          .reduce((prev, prop) => `${prev} ${prop}:${style.cssProps[prop]} !important;`, '')
         return `${style.selectors.join(',')}{${styles}}`
       }).join('')
       $(document.head).append(`<style>${css}</style>`)
@@ -133,8 +134,8 @@ export default class PassLayoutFixer {
     // fix alternating white/gray rows
     $('.select-course > table > tbody').each((i, elem) => {
       let rowShouldBeGray = false // first <tr> should be white
-      $(elem).find('tr:visible').each((i, elem) => {
-        const row = $(elem)
+      $(elem).find('tr:visible').each((_, innerElem) => {
+        const row = $(innerElem)
         if (rowShouldBeGray && row.hasClass('row-white')) {
           row.removeClass('row-white').addClass('row-gray')
         } else if (!rowShouldBeGray && row.hasClass('row-gray')) {
@@ -149,10 +150,10 @@ export default class PassLayoutFixer {
     })
 
     // highlight sections with fewer than X spots
-    if (this.options['highlightAlmostClosedSections'] === true) {
-      let value = this.options['highlightAlmostClosedSectionsThreshold']
+    if (this.options.highlightAlmostClosedSections === true) {
+      let value = this.options.highlightAlmostClosedSectionsThreshold
       if (value < ALMOST_CLOSED_SECTIONS_MIN_VALUE || value > ALMOST_CLOSED_SECTIONS_MAX_VALUE) {
-        value = defaults['highlightAlmostClosedSectionsThreshold']
+        value = defaults.highlightAlmostClosedSectionsThreshold
       }
 
       $('.select-course > table > tbody > tr > .sectionNumber').each((i, elem) => {
@@ -201,7 +202,7 @@ export default class PassLayoutFixer {
           }
           const course = isCorrectCourse(courses[i])
             ? courses[i]
-            : courses.find(course => isCorrectCourse(course))
+            : courses.find(c => isCorrectCourse(c))
 
           // add description to the header
           const courseDescription = $(`<div class="courseDescription">${course.description}</div>`)
@@ -264,8 +265,8 @@ export default class PassLayoutFixer {
       const checkboxes = table.find('input[type="checkbox"]:not(.hiddenInput)')
       if (checkboxes.length > 0) {
         // restyle the checkboxes
-        checkboxes.each((i, elem) => {
-          const checkbox = $(elem)
+        checkboxes.each((_, innerElem) => {
+          const checkbox = $(innerElem)
           checkbox.removeClass('left')
           checkbox.parent().css('text-align', 'center')
         })
@@ -275,9 +276,9 @@ export default class PassLayoutFixer {
         const headerChildren = table.find('thead > tr').children()
         selectAllCheckbox.click(({ target }) => {
           const { checked } = target
-          checkboxes.each((i, elem) => {
-            elem.checked = !checked
-            $(elem).click()
+          checkboxes.each((_, innerElem) => {
+            innerElem.checked = !checked
+            $(innerElem).click()
           })
         })
         headerChildren.eq(0).append(selectAllCheckbox)
@@ -336,7 +337,17 @@ export default class PassLayoutFixer {
         staff.parent().next().after(backgroundColors)
         backgroundColors.wrap('<li class="clearfix">')
 
-        const { checkboxWrapper, editTrigger } = this.createCheckboxOptionWithNumber(options, 'Highlight sections with fewer than', 'open spot', 'open spots',  'highlightAlmostClosedSections', 'highlightAlmostClosedSectionsThreshold', ALMOST_CLOSED_SECTIONS_MIN_VALUE, ALMOST_CLOSED_SECTIONS_MAX_VALUE)
+        const {
+          checkboxWrapper,
+          editTrigger,
+        } = this.createCheckboxOptionWithNumber(
+          options,
+          'Highlight sections with fewer than',
+          'open spot',
+          'open spots',
+          'highlightAlmostClosedSections',
+          'highlightAlmostClosedSectionsThreshold',
+          ALMOST_CLOSED_SECTIONS_MIN_VALUE, ALMOST_CLOSED_SECTIONS_MAX_VALUE)
         staff.parent().next().next().after(checkboxWrapper)
         checkboxWrapper.wrap('<li class="clearfix">')
         checkboxWrapper.after(editTrigger)
@@ -386,7 +397,16 @@ export default class PassLayoutFixer {
     return checkboxWrapper
   }
 
-  createCheckboxOptionWithNumber(options, beforeNumberText, afterNumberTextSingular, afterNumberTextPlural, checkboxOptionName, numberOptionName, minValue, maxValue) {
+  createCheckboxOptionWithNumber(
+    options,
+    beforeNumberText,
+    afterNumberTextSingular,
+    afterNumberTextPlural,
+    checkboxOptionName,
+    numberOptionName,
+    minValue,
+    maxValue,
+  ) {
     const checkbox = $('<input type="checkbox" class="sidebarCheckboxInput">')
     checkbox.prop('checked', options[checkboxOptionName])
     checkbox.click(() => {

@@ -19,12 +19,12 @@ module.exports = [
       new CopyPlugin([
         {
           from: path.join(__dirname, '/../src/manifest.json'),
-          to: path.join(__dirname,'/../dist'),
+          to: path.join(__dirname, '/../dist'),
         },
         {
           from: path.join(__dirname, '/../media/icons/'),
-          to: path.join(__dirname,'/../dist/icons'),
-          ignore:['*.jsx','*.psd'],
+          to: path.join(__dirname, '/../dist/icons'),
+          ignore: ['*.jsx', '*.psd'],
         },
       ]),
     ]),

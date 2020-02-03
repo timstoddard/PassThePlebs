@@ -1,8 +1,7 @@
 /**
  * @author Tim Stoddard <tim.stoddard2@gmail.com>
  */
-
-/* eslint-disable no-console */
+/* eslint-disable no-alert,no-console */
 
 export default class Experiments {
   start() {
@@ -35,10 +34,10 @@ export default class Experiments {
       courseCount: 0,
     }
     $('#filterbox-list-view > li > select[data-filter="dept"] > option').each((i, elem) => {
-      if (
-        (department && new RegExp(`^${department}[^a-z]`, 'i').test(elem.innerText)) ||
-        !department
-      ) {
+      const isMatchingDepartment = department
+        ? new RegExp(`^${department}[^a-z]`, 'i').test(elem.innerText)
+        : true
+      if (isMatchingDepartment) {
         counts.expectedDeptCount++
         $.ajax({
           dataType: 'json',
@@ -78,11 +77,12 @@ export default class Experiments {
   addCourse(course, counts) {
     counts.courseCount++
     console.log(`Added ${course.subject} ${course.catalogNumber}.`)
-    if (counts.deptCount === counts.expectedDeptCount &&
-      counts.courseCount === counts.expectedCourseCount) {
+    const countsMatchExpectedCounts = counts.deptCount === counts.expectedDeptCount
+      && counts.courseCount === counts.expectedCourseCount
+    if (countsMatchExpectedCounts) {
       console.log('done')
       setTimeout(() => {
-        if (confirm('Reload?')) {
+        if (confirm('Reload?')) { // eslint-disable-line no-restricted-globals
           window.location.reload()
         }
       })
@@ -91,17 +91,17 @@ export default class Experiments {
 
   makeLinkedLecturesAndLabsToggleTogether() {
     // mark relevant checkboxes
-    $('.no-bg > tbody').each((i, elem) => {
+    $('.no-bg > tbody').each((_, elem) => {
       const sectionNumbers = $(elem).find('.sectionNumber')
       for (let i = 0; i < sectionNumbers.length - 1; i++) {
-        let classType = this.getClassTypeFromSectionNumber(sectionNumbers[i])
-        let nextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 1])
-        let nextNextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 2])
+        const classType = this.getClassTypeFromSectionNumber(sectionNumbers[i])
+        const nextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 1])
+        const nextNextClassType = this.getClassTypeFromSectionNumber(sectionNumbers[i + 2])
         if (classType === 'LEC' && nextClassType === 'LAB' && nextNextClassType !== 'LAB') {
-          let classCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[i]))
+          const classCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[i]))
           // being a sneaky snake and incrementing `i` here, since we don't need
           // to check the next row now that we know it's already been hooked up
-          let nextClassCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[++i]))
+          const nextClassCheckbox = $(this.getCheckboxFromSectionNumber(sectionNumbers[++i]))
 
           // add event listeners
           // TODO: need to find way to fix circular logic (recurison?)
